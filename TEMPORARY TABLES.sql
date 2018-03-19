@@ -42,4 +42,31 @@ SELECT * FROM #Person_Details
 
 SELECT name FROM tempdb..sysobjects 
 
+/*
+Using 'SELECT INTO' Syntax you do not need to define the columns.  The columns are defined 
+behind the scenes. 
+*/
+USE AdventureWorks2014
+SELECT P.FirstName,
+       P.LastName
+INTO #TempPerson
+FROM Person.Person AS P
+
+SELECT TOP 10 * FROM #TempPerson
+
+/*
+Table Variable - Just like TempTables, a Table variable is also created in TempDB.  The scope
+of a table variable is the batch, stored procedure, or statement block in which it is declared.
+They can be passed as parameters between procedures.
+*/
+Declare @TempPerson table(FirstName nvarchar (30), LastName nvarchar(30))
+
+Insert @TempPerson
+Select FirstName,
+       LastName
+FROM Person.Person 
+
+SELECT TOP 10 * 
+FROM @TempPerson
+
 
