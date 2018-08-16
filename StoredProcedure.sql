@@ -1,5 +1,10 @@
 /*
 Stored Procedure
+Wise Owl Tutorial
+https://www.youtube.com/watch?v=fjNsRV4zLdc&index=1&list=PLNIs-AWhQzcleQWADpUgriRxebMkMmi4H
+
+Parameters
+https://www.youtube.com/watch?v=Vs-atxMs4mw&index=2&list=PLNIs-AWhQzcleQWADpUgriRxebMkMmi4H
 
 EXEC spFilmList 150, 180, 'star'  - Can be done after the Stored Procedure is executed
 EXEC spFileList @MinLength=150, @MaxLength=180, @Title='star'  - Alternate way of writing parameters
@@ -9,7 +14,8 @@ USE Movies
 GO -- Begins new batch statments
 CREATE PROC spFilmList
       (
-	     @MinLength AS INT = 0,     -- Providing a Default Value will automatically make the parameter optional.   You can also set the Defualt values to 'NULL'.     
+	     @MinLength AS INT = 0,     -- Providing a Default Value will automatically make the parameter optional.  
+		                            -- You can also set the Defualt values to 'NULL'.     
 		 @MaxLength AS INT
 		 @Title AS VARCHAR(MAX)     -- Defines Maxium length of characters
 		 @FilmCount INT OUTPUT      -- Output parmameter

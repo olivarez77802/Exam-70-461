@@ -1,4 +1,11 @@
 /*
+Manage Transactions
+  - Mark a transaction; understanding begin tran, commit, and rollback; implicit versus explicit
+    transactions; isolation levels; scope and type of locks; trancount.
+	https://www.microsoft.com/en-us/learning/exam-70-461.aspx
+
+
+
 Transactions
 
 A transaction is a group of database commands that change the data stored in a database.  A transaction, is treated as a single unit.
@@ -15,7 +22,10 @@ Transaction processing follows these steps:
    else
        commit the transaction
 
-If you execute the below statements -  Other users will not be able to see updated data unti the 'End transaction' has been done.
+ISOLATION LEVEL
+  - SQL's default isolation level is 'Read committed'.  This means read only committed data.
+
+If you execute the below statements -  Other users will not be able to see updated data untiL the 'End transaction' has been done.
 This is because SQL Isolation Level is read committed meaning only read committed data.  To read uncommitted data you would have 
 to issue the below command:
 SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
