@@ -2,7 +2,7 @@
 CTE - Common Table Expressions
 
 A CTE can be thought of as a temporary result set that is defined within the execution
-scope of a signle SELECT, INSERT, UPDATE,DELETE, or CREATE VIEW Statement.  A CTE is similar
+scope of a single SELECT, INSERT, UPDATE,DELETE, or CREATE VIEW Statement.  A CTE is similar
 to a derived table in that it is not stored as an object and lasts only for the duration of 
 the query.
 
@@ -19,6 +19,9 @@ then the UPDATE is allowed.
 
 if a CTE is based on multiple tables, and if the UPDATE statement affects more than 1 base
 table, then the UPDATE is not allowed.
+
+Microsoft DOC
+https://docs.microsoft.com/en-us/sql/t-sql/queries/with-common-table-expression-transact-sql?view=sql-server-2017
 */
 
 -- USE AdventureWorks2014

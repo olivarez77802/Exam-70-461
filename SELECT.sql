@@ -18,6 +18,26 @@ _  -  Specifies exacly one characters
 [] -  Any character with in the brackets
 [^] - Not any character with in the brackets
 
+--------------------------------------------------------------------------------------------
+Elements of a SELECT Statement
+1. SELECT - Defines which columns to return
+2. FROM - Defines table to query
+3. WHERE - Filters returned data using a predicate  --- May not be used with Aggregate Functions
+4. GROUP BY - Arranges rows by groups - Used with Aggregate Functions
+5. HAVING - Filters groups by predicate
+6. ORDER BY - Sorts the results
+
+Logical Order - The order in which a query is written is not the order
+                in which it is evaluated in SQL Server.
+
+5. SELECT   <select list>
+1. FROM     <table source>
+2. WHERE    <search condition>
+3. GROUPBY  <group by list>
+4. HAVING   <search condition>
+6. ORDER BY <order by list>
+
+--------------------------------------------------------------------------------------------
 Examples
 
 SELECT DISTINCT City from tblPerson

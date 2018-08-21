@@ -33,4 +33,6 @@ ELSE
 
 https://www.youtube.com/watch?v=xgpyqxKuta0&index=55&list=PL08903FB7ACA1C2FB
 
+Microsoft TRY/ CATCH
+https://docs.microsoft.com/en-us/sql/t-sql/language-elements/try-catch-transact-sql?view=sql-server-2017
 */
