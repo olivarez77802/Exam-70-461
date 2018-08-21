@@ -2,6 +2,19 @@
 Derived Tables
 
 Dervied Tables are available only in the context of the current query.
+
+Select DeptName, TotalEmployees
+from
+   (
+     Select DeptName, DepartmentId, COUNT(*) as TotalEmployees
+	 from tblEmployee
+	 join tblDepartment
+	 on tblEmployee.DepartmentId = tblDepartment.DeptId
+	 group by DeptName, DepartmentId
+
+    )
+as EmployeeCount
+Where TotalEmployees >= 2
 */
 
 SELECT
