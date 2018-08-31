@@ -107,6 +107,21 @@ Displaying Query Statistics
   https://app.pluralsight.com/player?course=sql-server-2012-querying-pt1&author=christopher-harrison&name=sql-server-2012-querying-pt1-m10&clip=0&mode=live
 
 
+  sys.stats and sys.stats_columns system views are useful for retrieving high-level information; however,
+  they provide no insight into actual distribution statistics.
 
+      SELECT s.stats_id StatsID,
+             s.name StatsName, 
+             sc.stats_column_id StatsColID, 
+             c.name ColumnName 
+      FROM sys.stats s 
+      INNER JOIN sys.stats_columns sc
+            ON s.object_id = sc.object_id AND s.stats_id = sc.stats_id
+      INNER JOIN sys.columns c
+            ON sc.object_id = c.object_id AND sc.column_id = c.column_id 
+       WHERE OBJECT_NAME(s.object_id) = 'Employee'
+       ORDER BY s.stats_id, sc.column_id;
+
+    DBCC SHOW_STATISTICS (table, index)  <-- Provide Distribution Statistics
 
 */

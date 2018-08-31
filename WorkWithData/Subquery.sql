@@ -3,16 +3,17 @@ Subquery - Can be put on the WHERE or the FROM Line
 
 A Query within a query 
 
-Uses
+Advantages - Uses
 -- Breaks down complex logic
 -- Simplifies reading
 -- Sneak "in" operations otherwise not allowed. e.g use an aggregate function on a where clause
 
-Can often be replaced by a join
+DisAdvantages - Can often be replaced by a join
 -- Joins may perform faster
 -- SQL Server will frequently rewrite subqueries as joins
 Most readable query is frequently best
 
+***************************************************************************************************************************
 FROM Line
 -- Create a 'dynamic' table
 -- Useful for breaking down queries
@@ -26,6 +27,8 @@ INNER JOIN (SELECT ProductSubcategoryID, AVG(Listprice) AS 'AverageListPrice'
 			GROUP BY ProductSubcategoryID) AS ap
 		ON P.SubcategoryID = ap.SubcategoryID
 
+****************************************************************************************************************************
+
 WHERE Line  - Most common place to put subquery
 -- Useful for comparing values to other tables
 -- Find orders containing a particular product category
@@ -37,7 +40,8 @@ IN
 
 EXISTS
 -- Returns true if subquery returns values
--- Frequently used with correlated queries
+-- Frequently used with correlated queries.  Corelated subqueries - passes column from main (outer) query into subquery 
+                                             to simulate join.
 
 ALL
 -- Compares column values to all items returned in a subquery
@@ -67,5 +71,10 @@ FROM PersonContact AS C
 WHERE EXIST IN (SELECT soh.ContactID
                 FROM Sales.SalesOderHeader AS soh
 				WHERE soh.Contactid = c.Contactid);
+
+PluralSight
+https://app.pluralsight.com/player?course=sql-server-2012-querying-pt1&author=christopher-harrison&name=sql-server-2012-querying-pt1-m06&clip=0&mode=live
+
+https://www.w3schools.com/sql/sql_exists.asp
 
 */
