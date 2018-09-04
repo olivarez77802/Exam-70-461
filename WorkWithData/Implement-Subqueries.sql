@@ -1,4 +1,7 @@
 /*
+Implement sub-queries
+ - Identify problematic elements in query plans; pivot and unpivot; apply operator; cte statement; with statement
+
 Subquery - Can be put on the WHERE or the FROM Line
 
 A Query within a query 
