@@ -1,4 +1,4 @@
-/*
+]/*
 SQL Server Concurrent Transactions
 
 Common concurrency problems
@@ -9,10 +9,20 @@ Common concurrency problems
 
 SQL Server Transaction Isolation Levels / Concurrency problem XREF
 * Read uncommitted - Dirty Reads; Lost Updates; Nonrepeatable reads; Phantom Reads
-* Read committed - Lost Update; Nonrepeatable reads; Phantom Reads
+* Read committed (default) - Lost Update; Nonrepeatable reads; Phantom Reads
 * Repeatable read - Phantom reads
 * Snapshot        - None - No Concurrency side effects
 * Serializable    - None - No Concurrency side effects
+
+Set transaction isolation level read uncommitted
+Set transaction isolation level read committed
+set transaction isolation level repeatable read
+set transaction isolation level snapshot
+set transaction isolation level serializable
+
+Database Level
+Alter database xxxxxxx SET READ_COMMITTED_SNAPSHOT ON
+Alter database xxxxxxx SET ALLOW_SNAPSHOT_ISOLATION ON
 
 https://www.youtube.com/watch?v=TWv2jpmxaf8&list=PL08903FB7ACA1C2FB&index=70
 
@@ -110,18 +120,49 @@ commit transaction
 Insert into tblEmployees values (2, "Marcus")
 
 The first transaction gives a result of 2 rows, the second transaction gives a result of 3 rows.  This is because
-of phanom read.  Transactin 2 executes immediately.   The default is read committed.  To fix the phantom read problem
-we will have to set the isolation leve to serializable and snapshot.  The other isolation levels have the phantom
+of phantom read.  Transactin 2 executes immediately.   The default is read committed.  To fix the phantom read problem
+we will have to set the isolation level to serializable and snapshot.  The other isolation levels have the phantom
 read problem.  Need to change transaction 1 so that the command 'set transaction isolation level serializable' is set
 to solve the problem.   Once this is done transaction 2 will be blocked until Transaction 1 has committed.
 
 https://www.youtube.com/watch?v=_UQ9Pu2W7Zg&index=74&list=PL08903FB7ACA1C2FB
 
 
+<<<<<<< HEAD
 MICROSOFT DOC - DATABASE SET Options
 https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-database-transact-sql-set-options?view=sql-server-2017
 
 MICROSOFT DOC - Locking and Row Versioning Basics
 https://docs.microsoft.com/en-us/sql/2014-toc/sql-server-transaction-locking-and-row-versioning-guide?view=sql-server-2014#Lock_Basics
+=======
+Differences between Serializable and Snapshot Isolation Levels
+- Serializable isolation is implemented by acquiring locks which means the resources are locked for the duration
+  of the current transaction.  This isolation level does not have any concurrency side effects but at the cost
+  of significant reduction in concurrency.
+
+- Snapshot isolation doesn't acuqire locks, it maintains versioning in Tempdb.  Since, snapshot isolation does not
+  lock resources, it can significantly increase the number of concurrent transactions while providing the same 
+  level of data consistency as serializable isolation does.
+
+-----------------
+Snapshot 
+-----------------
+--Transaction 1
+Set transaction isolation level serializable
+Begin Transaction
+Update tblInventory set ItemsInStock = 5 where Id = 1
+waitfor delay '00:00:10'
+Commit Transaction
+-- Transaction 2
+-- Enable snapshot isolation for the database
+Alter database SampleDB SET ALLOW_SNAPSHOT_ISOLATION ON
+-- Set transaction isolation level snapshot
+Update tblInventory set ItemsInStock = 8 where Id = 1
+
+Transaction 2 is blocked while Transaction 1 is in progress.  When Transaction 1 completes,
+Transaction 2 fails with an error.
+
+  https://www.youtube.com/watch?v=9NVu17LjPSA&index=75&list=PL08903FB7ACA1C2FB
+>>>>>>> aed1adb018c9a14ac81a6440ad8cd7388527bacb
 
 */
