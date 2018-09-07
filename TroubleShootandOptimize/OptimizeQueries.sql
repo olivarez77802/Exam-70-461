@@ -11,6 +11,8 @@ Displaying Query Statistics
   Statistic Basics
   https://www.red-gate.com/simple-talk/sql/performance/sql-server-statistics-basics/
 
+  Index Metadata and Statistics Update Date for SQL Server
+  https://www.mssqltips.com/sqlservertip/1550/index-metadata-and-statistics-update-date-for-sql-server/
 
   PAGES and Extents
   https://www.youtube.com/watch?v=CMqYr5U8Z3A
@@ -106,6 +108,12 @@ Displaying Query Statistics
   QUERY OPTIMIZATION
   https://app.pluralsight.com/player?course=sql-server-2012-querying-pt1&author=christopher-harrison&name=sql-server-2012-querying-pt1-m10&clip=0&mode=live
 
+  **************************
+  Working Statistic Examples
+  ***************************
+  Employee is a table in SO-ESI-SQL2 (dev) Database TAMUSDW01
+
+  -- Example 1  - Tables (sys.stats, sys.stats_columns)
 
   sys.stats and sys.stats_columns system views are useful for retrieving high-level information; however,
   they provide no insight into actual distribution statistics.
@@ -122,6 +130,14 @@ Displaying Query Statistics
        WHERE OBJECT_NAME(s.object_id) = 'Employee'
        ORDER BY s.stats_id, sc.column_id;
 
-    DBCC SHOW_STATISTICS (table, index)  <-- Provide Distribution Statistics
+-- Example 2   Table sys.indexes
 
+	SELECT name AS index_name,
+	   STATS_DATE(OBJECT_ID, index_id) AS statistics_update_date
+	FROM sys.indexes
+	WHERE OBJECT_ID = OBJECT_ID('dbo.Employee');
+
+-- Example 3
+	DBCC SHOW_STATISTICS (table, index)  <-- Provide Distribution Statistics
+	DBCC SHOW_STATISTICS ('Employee', PK_Employee)  
 */

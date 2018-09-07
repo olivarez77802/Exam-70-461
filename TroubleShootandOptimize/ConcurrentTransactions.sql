@@ -16,6 +16,9 @@ SQL Server Transaction Isolation Levels / Concurrency problem XREF
 
 https://www.youtube.com/watch?v=TWv2jpmxaf8&list=PL08903FB7ACA1C2FB&index=70
 
+Microsoft Docs - TRANSACTION ISOLATION LEVEL
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-transaction-isolation-level-transact-sql?view=sql-server-2017
+
 Dirty Read
 * A dirty read happens when one transaction is permitted to read data that has been modified
   by another transaction that has not yet been committed.  In most cases this would not cause
@@ -113,5 +116,12 @@ read problem.  Need to change transaction 1 so that the command 'set transaction
 to solve the problem.   Once this is done transaction 2 will be blocked until Transaction 1 has committed.
 
 https://www.youtube.com/watch?v=_UQ9Pu2W7Zg&index=74&list=PL08903FB7ACA1C2FB
+
+
+MICROSOFT DOC - DATABASE SET Options
+https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-database-transact-sql-set-options?view=sql-server-2017
+
+MICROSOFT DOC - Locking and Row Versioning Basics
+https://docs.microsoft.com/en-us/sql/2014-toc/sql-server-transaction-locking-and-row-versioning-guide?view=sql-server-2014#Lock_Basics
 
 */
