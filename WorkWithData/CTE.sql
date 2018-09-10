@@ -22,6 +22,8 @@ table, then the UPDATE is not allowed.
 
 Microsoft DOC
 https://docs.microsoft.com/en-us/sql/t-sql/queries/with-common-table-expression-transact-sql?view=sql-server-2017
+
+See Rank.sql for more examples using CTE's.
 */
 
 -- USE AdventureWorks2014

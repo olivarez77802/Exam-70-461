@@ -8,4 +8,8 @@ Implement Aggregate queries
  MIN(), MAX()
  https://www.w3schools.com/sql/sql_min_max.asp
 
+ Analytic Functions
+ https://docs.microsoft.com/en-us/sql/t-sql/functions/analytic-functions-transact-sql?view=sql-server-2017
+
+
 */
