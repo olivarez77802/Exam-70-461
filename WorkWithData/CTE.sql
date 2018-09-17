@@ -1,6 +1,45 @@
 /*
 CTE - Common Table Expressions
+https://docs.microsoft.com/en-us/sql/t-sql/queries/with-common-table-expression-transact-sql?view=sql-server-2017
 
+
+Different ways Tables can be created or ways to simulate a table:
+CTE , #TempTable , Derived Query, Table Value Function, Subqueries
+
+CTE                           #TempTable               Derived Query 
+--------------------          ----------------------   ---------------------------
+- Only lasts for              - last for session       - Only lasts for duration of query
+  duration of query                                    - Basically a subquery, except it is always
+                                                         in the FROM clause.  The reason it is called   
+- Must be used immed-	                                 derived is because it functions as a table. 
+  iately after query
+
+- Require a semicolon
+  on the SQL Statement
+  preceding CTE
+
+Temp Table
+----------------------
+- Lasts for a session
+
+Derived Query
+----------------------
+- Only lasts for duration of query
+- Basically a subquery, except it is always in the FROM Clause.  The reason it is called
+  derived is because it functions as a table.
+
+Table Valued Function
+----------------------
+- Can be used with APPLY operator to simulate an INNER JOIN or OUTER JOIN
+
+Subqueries
+----------
+- Subqueries are used in JOIN and WHERE Clause.  Predicates are used
+  when used with WHERE Clause.
+
+
+
+__________________________________________________________________________________________
 A CTE can be thought of as a temporary result set that is defined within the execution
 scope of a single SELECT, INSERT, UPDATE,DELETE, or CREATE VIEW Statement.  A CTE is similar
 to a derived table in that it is not stored as an object and lasts only for the duration of 

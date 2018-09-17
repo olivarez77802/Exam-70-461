@@ -25,6 +25,7 @@ Query data by using SELECT statements
 
  - write effecient; technically complex SQL Queries, including all types of joins versus the use of derived
    tables.
+   SELECT.sql
    DERIVED_TABLES.sql
 
  - Determine what code may or may not execute based on tables provided
