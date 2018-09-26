@@ -3,6 +3,9 @@
   - Create indexed views; create views without using the bulit in tools;
     CREATE, ALTER, DROP
 
+
+  - Indexed Views
+    https://docs.microsoft.com/en-us/sql/relational-databases/views/create-indexed-views?view=sql-server-2017 
  
   Disadvantages
   - Cannot issue a DML Command (INSERT, UPDATE, DELETE) on multiple base tables

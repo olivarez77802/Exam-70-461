@@ -3,6 +3,10 @@ Derived Tables
 
 Dervied Tables are available only in the context of the current query.
 
+A Derived Table is basically a subquery, exception it is always in the FROM Clause.
+The reasons it is called a derived table is because it essentially functions as a 
+table as far as the entire query is concerned.
+
 Select DeptName, TotalEmployees
 from
    (

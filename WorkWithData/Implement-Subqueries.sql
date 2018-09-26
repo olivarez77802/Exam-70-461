@@ -2,6 +2,10 @@
 Implement sub-queries
  - Identify problematic elements in query plans; pivot and unpivot; apply operator; cte statement; with statement
 
+Note: Compare with derived table.  A derived table is basically q subquery, except it is always in the FROM Clause
+of an SQL Statement.  The reason it is called a derived table is because it essentially functions as a table.
+See DERIVED_TABLES.sql
+
 Subquery - Can be put on the WHERE or the FROM Line
 
 A Query within a query 

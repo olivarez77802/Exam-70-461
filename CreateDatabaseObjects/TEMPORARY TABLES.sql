@@ -33,7 +33,11 @@ Global temporary table names have to be unique unlike local temporary tables.
 
 */
 
-CREATE TABLE #Person_Details(Id int, Name nvarchar(20))
+CREATE TABLE #Person_Details
+(
+  Id int, 
+  Name nvarchar(20)
+)
 INSERT INTO #Person_Details VALUES (1, 'Mike')
 INSERT INTO #Person_Details VALUES (2, 'John')
 INSERT INTO #Person_Details VALUES (3, 'Todd')
