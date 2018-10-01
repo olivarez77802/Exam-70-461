@@ -29,7 +29,7 @@ Query data by using SELECT statements
  - Implement logic which uses dynamic SQL and system metadata
    ??? Create module
 
- - write effecient; technically complex SQL Queries, including all types of joins versus the use of derived
+ - write efficient; technically complex SQL Queries, including all types of joins versus the use of derived
    tables.
    SELECT.sql
    DERIVED_TABLES.sql
@@ -38,7 +38,7 @@ Query data by using SELECT statements
    ??? Create module
 
  - Given a table with constraints, determine which statement set would load a table.
-   ??? Create module
+   Constraints.sql 
 
  - Use and understand different data access technologies
     ??? Create module

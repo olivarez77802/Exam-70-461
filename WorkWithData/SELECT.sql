@@ -37,6 +37,15 @@ Logical Order - The order in which a query is written is not the order
 4. HAVING   <search condition>
 6. ORDER BY <order by list>
 
+DATEPART, DATEADD, DATEDIFF Functions
+Select DATEPART(weekday, '2012-08-30 19:45:31.793') -- returns 5
+SELECT DATEPART(MONTH, '2012-08-30 19:45:31.793')   -- returns 8
+SELECT DATENAME(weekday, '2012-08-30 19:45:31.793') -- returns Thursday
+SELECT DATEADD(DAY, 20, '2012-08-30 19:45:31.793') -- Returns 2012-09-19 19:45:31.793
+SELECT DATEDIFF(MONTH, '11/30/2005', '01/31/2006') - Returns 2
+
+https://www.youtube.com/watch?v=eYsizQVa_EU&index=27&list=PL08903FB7ACA1C2FB
+
 --------------------------------------------------------------------------------------------
 Examples
 
@@ -51,3 +60,39 @@ SELECT * FROM tblPerson Where City LIKE 'L%'
 
 
 */
+
+-- Example - Get Age
+SELECT dbo.fnComputeAge('11/30/2005')
+
+Alter function fnComputeAge(@DOB DateTime)
+returns nvarchar(50)
+AS
+BEGIN
+DECLARE @tmpdate datetime, @years int, @months int, @days int
+
+SELECT @tmpdate = @DOB
+SELECT @years = DATEDIFF(YEAR, @tmpdate, GETDATE()) -
+                CASE
+				   WHEN (MONTH(@DOB) > MONTH(GETDATE())) OR
+				        (MONTH(@DOB) = MONTH(GETDATE()) AND DAY(@DOB) > DAY(GETDATE()))
+				   THEN 1 ELSE 0
+				END
+
+SELECT @tmpdate = DATEADD(YEAR, @years, @tmpdate)
+
+SELECT @months = DATEDIFF(MONTH, @tmpdate, GETDATE()) -
+                 CASE
+				    WHEN DAY(@DOB) > DAY(GETDATE())
+					THEN 1 ELSE 0
+				 END
+
+SELECT @tmpdate = DATEADD (MONTH, @months, @tmpdate)
+
+SELECT @days = DATEDIFF(DAY, @tmpdate, GETDATE())
+
+Declare @Age nvarchar(50)
+Set @Age = CAST(@years as nvarchar(4)) + ' Years ' + CAST(@months as nvarchar(2)) + ' Months ' + Cast(@days as nvarchar(2)) + ' Days Old '
+return @Age
+-- SELECT @years AS Years, @months AS Months, @days as Days
+END
+
