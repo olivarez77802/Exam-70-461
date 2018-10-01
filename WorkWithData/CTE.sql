@@ -6,12 +6,12 @@ https://docs.microsoft.com/en-us/sql/t-sql/queries/with-common-table-expression-
 Different ways Tables can be created or ways to simulate a table:
 CTE , #TempTable , Derived Query, Table Value Function, Subqueries
 
-CTE                           #TempTable               Derived Query 
---------------------          ----------------------   ---------------------------
-- Only lasts for              - last for session       - Only lasts for duration of query
-  duration of query                                    - Basically a subquery, except it is always
-                                                         in the FROM clause.  The reason it is called   
-- Must be used immed-	                                 derived is because it functions as a table. 
+CTE                            
+--------------------          
+- Only lasts for                  
+  duration of query               
+                                     
+- Must be used immed-	           
   iately after query
 
 - Require a semicolon
@@ -37,7 +37,9 @@ Subqueries
 - Subqueries are used in JOIN and WHERE Clause.  Predicates are used
   when used with WHERE Clause.
 
-
+Table Variable
+--------------
+- See TRS dbo.fncGetPayHistoryDaysHoursWorkedAsOf
 
 __________________________________________________________________________________________
 A CTE can be thought of as a temporary result set that is defined within the execution
@@ -83,4 +85,7 @@ as
 Select *
 FROM ITBL  
 WHERE VAC_HOURS > 0 
+
+
+
 

@@ -6,6 +6,9 @@ Implement Data Types
 W3Schools Data Types
 https://www.w3schools.com/sql/sql_datatypes.asp
 
+SQL Data Types
+https://www.w3resource.com/sql/data-type.php
+
 
 Data Types in SQL
 https://www.youtube.com/watch?v=6E1tZg6qAvI&list=PL_RGaFnxSHWr_6xTfF2FrIw-NAOo3iWMy&index=6

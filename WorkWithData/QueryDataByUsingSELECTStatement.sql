@@ -12,6 +12,12 @@ Query data by using SELECT statements
 
  - Write and perform queries effeciently using the new (SQL 2005/8) code items such as synonyms
    https://docs.microsoft.com/en-us/sql/t-sql/statements/create-synonym-transact-sql?view=sql-server-2017
+
+   Synonyms using SSMS
+   https://www.youtube.com/watch?v=qRzLupYLGQg
+
+   Practical uses for Synonyms
+   http://www.sqlservercentral.com/articles/Synonyms/115072/
    
  - Joins
    Joins.sql

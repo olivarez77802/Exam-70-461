@@ -22,6 +22,7 @@ If the user want to excplicitly drop the temporary table, he can do so using DRO
 Another way to show tempory tables is to use the below select
 SELECT name FROM tempdb..sysobjects 
 
+
 GLOBAL Temporary Tables
 To create a Global Temporary table, prefix the name of the table with 2 pound(##)
 symbols.
