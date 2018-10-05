@@ -8,6 +8,12 @@ Displaying Query Statistics
   * SET STATISTICS TIME 
   * SET STATTSTICS IO
 
+  UPDATE STATISTICS table_or_indexed_view_name
+  https://docs.microsoft.com/en-us/sql/t-sql/statements/update-statistics-transact-sql?view=sql-server-2017
+
+  DBCC FREEPROCCACHE    (Command issued after upating statistics, may not want to do in a production environment)
+  https://docs.microsoft.com/en-us/sql/t-sql/database-console-commands/dbcc-freeproccache-transact-sql?view=sql-server-2017
+  
   Statistic Basics
   https://www.red-gate.com/simple-talk/sql/performance/sql-server-statistics-basics/
 

@@ -6,6 +6,10 @@ https://www.youtube.com/watch?v=fjNsRV4zLdc&index=1&list=PLNIs-AWhQzcleQWADpUgri
 Parameters
 https://www.youtube.com/watch?v=Vs-atxMs4mw&index=2&list=PLNIs-AWhQzcleQWADpUgriRxebMkMmi4H
 
+Database Engine Stored Procedures
+https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/database-engine-stored-procedures-transact-sql?view=sql-server-2017
+
+
 EXEC spFilmList 150, 180, 'star'  - Can be done after the Stored Procedure is executed
 EXEC spFileList @MinLength=150, @MaxLength=180, @Title='star'  - Alternate way of writing parameters
 EXEC spFileList @MaxLength=180, @Title='star'  - Uses Default Value for MinLength since it is optional 
