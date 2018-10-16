@@ -199,6 +199,15 @@ COMMIT TRANSACTION
   When @@TRANCOUNT is finally decrememented to 0, then entire transaction is committed.
 https://docs.microsoft.com/en-us/sql/t-sql/language-elements/commit-transaction-transact-sql?view=sql-server-2017
 
-*/
+
+Differences between Serializable and Snapshot isolation Levels
+Serializable isolation is implemented by acquiring locks which means the resources are locked for the duration
+of the current transaction.  This isolation level does not have any concurrency side effects but at the cost of
+significant reduction in concurrency.
+
+Snapshot isolation doesn't acquire locks, it maintains versioning in Tempdb.  Since, snapshot isolation does 
+not lock resources, it can significantly increase the number of concurrent transactions while providing the 
+same level of data consistency as serializable isolation does.   
+https://www.youtube.com/watch?v=9NVu17LjPSA
 
 */
