@@ -79,7 +79,7 @@ SELECT * FROM OPENROWSET(
 -- Sample schema of C:\invoice.xsd
 -- Notice targetNamespace will be used in XML File to connect schema.
 -- xmlns - short for XML Namespace, define the elements and data types used in this schema
--- xsd, tns - short hand for the namespaces, prefixes xds, tns can be used in schema to 
+-- xsd, tns - short hand for the namespaces, prefixes xsd, tns can be used in schema to 
 --            refer to the namespace.
 -- elementFormDefault="qualified"  - indicates that any elements used by the XML instance document
 --                                   which were declared must be namespace qualified.

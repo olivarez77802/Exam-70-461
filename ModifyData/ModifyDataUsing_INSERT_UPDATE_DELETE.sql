@@ -11,6 +11,13 @@ Different ways of Updating Tables
    Update is possible because INLINE TABLE does not define a table so the base table is used 
    whereas MULTI Statemement tables acutally defines a table that is separate from base table.
 
+2.  If a CTE is created on one base table, then it is possible to UPDATE the CTE, which will in
+     turn update the underlying base table.
+    If a CTE is based on more than one table, and if the UPDATE affects only one base table, 
+    then the UPDATE is allowed.
+	If a CTE is based on multiple tables, and if the UPDATE statement affects more than 1 base
+    table, then the UPDATE is not allowed.
+
 
 OUTPUT Clause
 https://docs.microsoft.com/en-us/sql/t-sql/queries/output-clause-transact-sql?view=sql-server-2017

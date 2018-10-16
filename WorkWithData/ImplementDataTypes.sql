@@ -14,7 +14,7 @@ Data Types in SQL
 https://www.youtube.com/watch?v=6E1tZg6qAvI&list=PL_RGaFnxSHWr_6xTfF2FrIw-NAOo3iWMy&index=6
 https://www.youtube.com/watch?v=7fOdo8PhPaw&index=7&list=PL_RGaFnxSHWr_6xTfF2FrIw-NAOo3iWMy
 
-<<<<<<< HEAD
+
 
 CAST and CONVERT
 Syntax of CAST and CONVERT functions
@@ -56,7 +56,15 @@ PRINT
 RAISERROR
 CHECKPOINT
 https://docs.microsoft.com/en-us/sql/t-sql/language-elements/variables-transact-sql?view=sql-server-2017
->>>>>>> 76faa7012bfa8e6e43b505635c9fd765d5f59374
 
+A variable can also have a value assigned by being referenced in a select list. 
+If a variable is referenced in a select list, it should be assigned a scalar value or 
+the SELECT statement should only return one row. For example:
+
+DECLARE @EmpIDVariable int;
+
+SELECT @EmpIDVariable = MAX(EmployeeID)
+FROM HumanResources.Employee;
+GO
 
 */
