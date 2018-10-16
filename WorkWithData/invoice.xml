@@ -1,0 +1,17 @@
+<!-- Things to notice about invoice.xml
+     namespace prefix is 'inv'
+     namespace declaration inv="urn:www-company-com:invoices"
+     xmlns - short for XML Namespace
+     urn is short for Uniform Resource Name -->
+
+<inv:Invoice xmlns:inv="urn:www-company-com:invoices" >
+ <inv:InvoiceID>1000</inv:InvoiceID>
+ <inv:CustomerName>Jane Smith</inv:CustomerName>
+ <inv:LineItems>
+   <inv:LineItem>
+     <inv:Sku>134</inv:Sku>
+     <inv:Description>Cola</inv:Description>
+	   <inv:Price>0.95</inv:Price>
+   </inv:LineItem>
+ </inv:LineItems>
+</inv:Invoice>
