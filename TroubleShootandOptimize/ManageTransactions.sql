@@ -4,7 +4,25 @@ Manage Transactions
     transactions; isolation levels; scope and type of locks; trancount.
 	https://www.microsoft.com/en-us/learning/exam-70-461.aspx
 
+Log File Information
+http://www.techbrothersit.com/2015/03/how-to-delete-huge-data-from-sql-server.html
 
+
+BEGIN TRANSACTION - Marks the starting point of an explicit, local transaction.  Explicit transactions start with
+the BEGIN TRANSACTION statement and end with the COMMIT and ROLLBACK statement.
+https://docs.microsoft.com/en-us/sql/t-sql/language-elements/begin-transaction-transact-sql?view=sql-server-2017
+
+TRANSACTIONS
+SQL Server operates in the following transaction modes:
+1. Autocommit transactions - Each individual statement is a transaction. (A Behind the scenes BEGIN and COMMIT is done)
+2. Explicit transactions - Each transaction is explicitly started with the 'BEGIN TRANSACTION' statement
+   and explicitly ended with a 'COMMIT' or 'ROLLBACK' statement.
+3. Implicit transactions - A new transaction is implicitly started when the prior transaction completes, but
+   each transaction is explicitly completed with a COMMIT or ROLLBACK statement.
+https://docs.microsoft.com/en-us/sql/t-sql/language-elements/transactions-transact-sql?view=sql-server-2017
+
+AUTOCOMMIT Mode
+https://www.youtube.com/watch?v=J9VP5CILdP4
 
 Transactions
 

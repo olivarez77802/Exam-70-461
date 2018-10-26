@@ -7,6 +7,9 @@ Modify Data by using INSERT, UPDATE, and DELETE Statements
 
 Different ways of Updating Tables
 
+1. INSERT INTO dbo.Table1 (eid, name, address)
+   VALUES (1, 'Joe', '123 Some Street')
+
 1. INLINE TABLE Value Function (Updates not possible with Multi-Statement Table Value Function)
    Update is possible because INLINE TABLE does not define a table so the base table is used 
    whereas MULTI Statemement tables acutally defines a table that is separate from base table.
@@ -17,6 +20,13 @@ Different ways of Updating Tables
     then the UPDATE is allowed.
 	If a CTE is based on multiple tables, and if the UPDATE statement affects more than 1 base
     table, then the UPDATE is not allowed.
+
+3.  Views can be updated in some cases..see CreateDatabaseObjects/CreateandAlterViews.sql
+    UPDATE CUSTOMERS_VIEW
+    SET AGE = 35
+    WHERE name = 'Ramesh';
+    This would ultimately update the base table CUSTOMERS and the same would reflect in the view itself.
+ 
 
 
 OUTPUT Clause

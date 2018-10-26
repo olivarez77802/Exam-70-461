@@ -11,6 +11,12 @@ SYNTAX
 CREATE TABLE with Constraints
 https://www.w3schools.com/sql/sql_constraints.asp
 
+SQL Constraints
+
+Constraints could be either on a column level or a table level.  The column level constraints are applied to
+one column, whereas the table level constraints are applied to the whole table.
+https://www.tutorialspoint.com/sql/sql-constraints.htm
+
 -------------------------------------------------------------------------------------------------------------
 
 Types of Contraints

@@ -11,4 +11,14 @@ https://www.codeproject.com/Articles/34142/Understanding-Set-based-and-Procedura
 
 SQL Server Cursor Analysis - When to use (or not use) cursors
 https://www.mssqltips.com/sqlservertip/1599/sql-server-cursor-example/
+
+Examples
+GO  
+UPDATE HumanResources.Employee   
+SET JobTitle = N'Executive'  
+WHERE NationalIDNumber = 123456789  
+IF @@ROWCOUNT = 0  
+PRINT 'Warning: No rows were updated';  
+GO  
+
 */

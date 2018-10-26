@@ -21,10 +21,6 @@ UNION ALL - Will include all rows including duplicates.  Output is not sorted.
 
 Note: For UNION and UNION ALL to work the Number, DataTypes, and the order of the columns in the select statement should be the same.
 
-*/
-
-/*
-
 ROLLUP - Used to do AGGREGATE Operation on Multiple Levels in a heirarchy. 
 So it will automatically give you the subtotals and Grand Totals.
 
@@ -32,7 +28,7 @@ UNION ALL and GROUP SETS could also be used, however, the ROLLUP verb is the eas
 to achieve Subtotals and Grand Totals.
 
 
-*/
+
 USE AdventureWorks2014
 SELECT E.Gender
 	  ,E.MaritalStatus	
@@ -269,6 +265,28 @@ SELECT E.Gender
   JOIN HumanResources.Employee AS E
   ON P.BusinessEntityID = E.BusinessEntityID
   GROUP BY E.Gender, E.MaritalStatus
+
+
+*/
+/*
+HAVING Clause
+Syntax
+
+  SELECT
+  FROM  
+  WHERE 
+  GROUP BY
+  HAVING
+  ORDER BY
+
+The HAVING clause must follow the GROUP BY clause in a query and must also precede the ORDER BY clause if used.
+
+SELECT ID, NAME, AGE, ADDRESS, SALARY
+FROM CUSTOMERS
+GROUP BY age
+HAVING COUNT(age) >= 2;
+
+https://www.tutorialspoint.com/sql/sql-having-clause.htm
 
 
 */

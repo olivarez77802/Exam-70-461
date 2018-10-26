@@ -110,6 +110,15 @@ Displaying Query Statistics
 	   DECLARE @parameterDefinitions nvarchar(500) = '@LastName nvarchar(50)';
 	   EXECUTE sp_executesql @sql, @parameterDefinitions, @Lastname = 'Harrison';
 
+  Dynamic versus Parameterized
+  Advantages and Disadvantages of Dynamic SQL and Stored Procedures
+  - Separating database logic from business logic - Stored procedure Advantage; Dynamic SQL Disadvantage change requires change to client code
+  - Network traffic - Stored Procedure Advantage; Dynamic SQL DisAdvatage requires entire SQL statement to be sent
+  - SQL Injection attacks - Stored Procedure Advantage (Stored procedure prevents SQL Injection); Dynamic SQL open doors for SQL Injection
+  - Cached query plans reuse - Stored Procedure Advantages - reuses stored procedures; Dynamic SQL Disadvantage does not reuse
+  - Maintenance - Stored Procedure Advantage; 
+  - Implement flexible logic - Dynamic SQL Advantage
+  https://www.youtube.com/watch?v=imSuP9vSjfk&index=147&list=PL08903FB7ACA1C2FB
    
   QUERY OPTIMIZATION
   https://app.pluralsight.com/player?course=sql-server-2012-querying-pt1&author=christopher-harrison&name=sql-server-2012-querying-pt1-m10&clip=0&mode=live
