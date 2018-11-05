@@ -3,6 +3,8 @@ Implement Data Types
   - Use appropriate data; understand the uses and limitations of each data type; impact of GUID(newid,
     newsequentialid) on database performance, when to use what data type for columns
 
+
+
 1. Helpful Web Links
 2. NVARCHAR Data Type
 3. CAST and CONVERT Differences
@@ -10,6 +12,7 @@ Implement Data Types
 5. Variables
 6. TRY_PARSE  - converting from string to date/time and number data types.
 7. TRS_CONVERT 
+8. Fixed versus Dynamic Types
 
 
 
@@ -42,9 +45,9 @@ N- Unicode
 VAR - Variable Length
 CHAR - Character
 
-****************************
-CAST and CONVERT Differences
-****************************
+***********************************
+CAST, CONVERT, TRY_CAST Differences
+***********************************
 CAST and CONVERT
 Syntax of CAST and CONVERT functions
 
@@ -142,4 +145,20 @@ https://www.c-sharpcorner.com/UploadFile/manas1/tryparse-tryconvert-and-trycast-
 Styles
 https://www.experts-exchange.com/articles/12315/SQL-Server-Date-Styles-formats-using-CONVERT.html
 
+***************************
+Fixed versus Dynamic Types
+***************************
+Fixed Types
+- CHAR, NCHAR, BINARY
+Updates will not require row to physically expand, therefore, no data shifting is required. Fixed
+types are good to use when updates occur frequently, they have less overhead.
+
+Dynamic Types
+- VARCHAR, NVARCHAR, VARBINARY
+Variable types use the storage for what you enter, plus a couple of bytes for offset information. So for
+widely varying size of strings, if you use variable types you can save a lot of storage.  The less 
+storage used, the less there is for a query to read, and the faster the query can perform.  So variable
+types are usually preferable when read performance is a priority.
+
+Attained form Safari BOoks
 */

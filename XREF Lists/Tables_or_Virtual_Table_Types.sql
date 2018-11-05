@@ -48,6 +48,17 @@ Temp Table
 ************************************
 - Lasts for a session
 
+CREATE TABLE #Person_Details
+(
+  Id int, 
+  Name nvarchar(20)
+)
+INSERT INTO #Person_Details VALUES (1, 'Mike')
+INSERT INTO #Person_Details VALUES (2, 'John')
+INSERT INTO #Person_Details VALUES (3, 'Todd')
+
+SELECT * FROM #Person_Details
+
 **********************************************************
 Table Variable
 - Table is created and dropped automatically with each run
