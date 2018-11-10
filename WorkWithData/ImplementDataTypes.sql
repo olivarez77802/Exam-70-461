@@ -6,14 +6,14 @@ Implement Data Types
 
 
 1. Helpful Web Links
-2. NVARCHAR Data Type
-3. CAST and CONVERT Differences
-4. Date and Time Styles
-5. Variables
-6. TRY_PARSE  - converting from string to date/time and number data types.
-7. TRS_CONVERT 
-8. Fixed versus Dynamic Types
-
+2. Regular Character Types versus Unicode Character Types 
+3. CAST, CONVERT, and PARSE 
+4. TRY_CAST, TRY_CONVERT, and TRY_PARSE  
+5. Date and Time Styles
+6. Variables
+7. Fixed versus Dynamic Types
+8. Data Type Precedence
+9. GUID - Globally Unique Identifier
 
 
 
@@ -37,17 +37,30 @@ Data Types in SQL
 https://www.youtube.com/watch?v=6E1tZg6qAvI&list=PL_RGaFnxSHWr_6xTfF2FrIw-NAOo3iWMy&index=6
 https://www.youtube.com/watch?v=7fOdo8PhPaw&index=7&list=PL_RGaFnxSHWr_6xTfF2FrIw-NAOo3iWMy
 
-*******************
-NVARCHAR Data Type
-*******************
-NVARCHAR 
-N- Unicode
-VAR - Variable Length
-CHAR - Character
+*******************************************************
+Regular Character Types versus Unicode Character Types 
+******************************************************
+Regular Character Types  - Uses one byte of storage per character and supports only one language besides English.
+Delimited with single quotation marks, as in 'abc'.
+- CHAR
+- VARCHAR
+
+Unicode Character Types - Uses two bytes of storage per character and supports multiple langauages.  Storage
+                          requirements are mitigated with Unicode compression.
+Delimited with a capital N and then single quotation marks, as in N'abc'.
+- NVARCHAR   N- Unicode VAR - Variable Length  CHAR - Character
+- NCHAR
+
+When defining attributes that represent the same thing accross different tables- especially ones that will
+later be used as join columns, it is important to be consistent with the types.  Otherwise, when comparing
+one attribute to another, SQL Server has to apply implicit conversion of one attribute types to the other, 
+and this could have negative performance implications, like preventing the effecient use of indexes.
 
 ***********************************
-CAST, CONVERT, TRY_CAST Differences
+CAST, CONVERT, and PARSE 
 ***********************************
+CAST, CONVERT, and PARSE will fail if the value is not convertible.  Use TRY_ if you don't want it to fail.
+
 CAST and CONVERT
 Syntax of CAST and CONVERT functions
 
@@ -61,11 +74,61 @@ concern and if you want to use the script with other database applications, use 
 want DateTime datatypes to be converted using sytles with convert function.
 Note:  The general guideline is to use CAST(), unless you want to take advantage of the style
 functionality in CONVERT().
+3. CONVERT has a third argument representing the style of the conversion
 
 Select Id, Name, DateOfBirth, CAST(DateOfBirth as nvarchar(11)) as ConvertedDOB from tblEmployees
 
 Select Id, Name, DateOfBirth, CONVERT(nvarchar, DateOfBirth) as ConvertedDOB from tblEmployees
 https://www.youtube.com/watch?v=8GHUfb5k-a8&index=28&list=PL08903FB7ACA1C2FB
+
+The following code fails
+   SELECT CAST('abc' AS INT);
+The below code reurns a NULL
+   SELECT TRY_CAST('abc' AS INT);
+
+********************************
+TRY_CAST, TRY_CONVERT, TRY_PARSE
+********************************
+TRY_CAST, TRY_CONVERT, TRY_PARSE will return NULL if the value is not convertible.
+
+-- TRY_PARSE(..)
+Translates to the requested data type, or returns null if the cast fails.  
+Use TRY_PARSE only for converting from string to date/time and number data types.
+
+DECLARE @ fakeDate AS varchar(10);  
+DECLARE @ realDate AS VARCHAR(10);  
+SET @fakeDate = 'iamnotadate';  
+SET @realDate = '13/09/2015;  
+SELECT TRY_PARSE(@fakeDate AS DATE); --NULL  
+SELECT TRY_PARSE(@realDate AS DATE); -- 2015-09-13  
+SELECT TRY_PARSE(@realDate AS DATE USING 'Fr-FR'); -- 2015-09-13  
+https://docs.microsoft.com/en-us/sql/t-sql/functions/try-parse-transact-sql?view=sql-server-2017#arguments
+
+https://www.c-sharpcorner.com/UploadFile/manas1/tryparse-tryconvert-and-trycast-in-sql-server/
+
+-- TRY_CONVERT(..)
+
+Converts value to specified data type and if conversion fails it returns NULL. 
+For example, source value in string format and we need date/integer format. Then this will help us to achieve the same.
+
+Syntax: TRY_CONVERT ( data_type [ ( length ) ], expression [, style ] )
+Data_type - The datatype into which to convert. Here length is an optional parameter which helps to get result in specified length.
+Expression - The value to be convert
+Style - It is an optional parameter which determines formatting. 
+Suppose you want date format like “May, 18 2013” then you need pass style as 111. More on style visit here.
+Examples:
+DECLARE @sampletext AS VARCHAR(10);  
+SET @sampletext = '123456';  
+DECLARE @ realDate AS VARCHAR(10);  
+SET @realDate = '13/09/2015’;  
+SELECT TRY_CONVERT(INT, @sampletext); -- 123456  
+SELECT TRY_CONVERT(DATETIME, @sampletext); -- NULL  
+SELECT TRY_CONVERT(DATETIME, @realDate, 111); -- Sep, 13 2015  
+https://www.c-sharpcorner.com/UploadFile/manas1/tryparse-tryconvert-and-trycast-in-sql-server/
+
+Styles
+https://www.experts-exchange.com/articles/12315/SQL-Server-Date-Styles-formats-using-CONVERT.html
+
 
 ********************
 Date and Time Styles
@@ -104,46 +167,6 @@ SELECT @EmpIDVariable = MAX(EmployeeID)
 FROM HumanResources.Employee;
 GO
 
-***************
-TRY_PARSE(..)
-***************
-Translates to the requested data type, or returns null if the cast fails.  
-Use TRY_PARSE only for converting from string to date/time and number data types.
-
-DECLARE @ fakeDate AS varchar(10);  
-DECLARE @ realDate AS VARCHAR(10);  
-SET @fakeDate = 'iamnotadate';  
-SET @realDate = '13/09/2015;  
-SELECT TRY_PARSE(@fakeDate AS DATE); --NULL  
-SELECT TRY_PARSE(@realDate AS DATE); -- 2015-09-13  
-SELECT TRY_PARSE(@realDate AS DATE USING 'Fr-FR'); -- 2015-09-13  
-https://docs.microsoft.com/en-us/sql/t-sql/functions/try-parse-transact-sql?view=sql-server-2017#arguments
-
-https://www.c-sharpcorner.com/UploadFile/manas1/tryparse-tryconvert-and-trycast-in-sql-server/
-
-*************
-TRY_CONVERT(..)
-*************
-Converts value to specified data type and if conversion fails it returns NULL. 
-For example, source value in string format and we need date/integer format. Then this will help us to achieve the same.
-
-Syntax: TRY_CONVERT ( data_type [ ( length ) ], expression [, style ] )
-Data_type - The datatype into which to convert. Here length is an optional parameter which helps to get result in specified length.
-Expression - The value to be convert
-Style - It is an optional parameter which determines formatting. 
-Suppose you want date format like “May, 18 2013” then you need pass style as 111. More on style visit here.
-Examples:
-DECLARE @sampletext AS VARCHAR(10);  
-SET @sampletext = '123456';  
-DECLARE @ realDate AS VARCHAR(10);  
-SET @realDate = '13/09/2015’;  
-SELECT TRY_CONVERT(INT, @sampletext); -- 123456  
-SELECT TRY_CONVERT(DATETIME, @sampletext); -- NULL  
-SELECT TRY_CONVERT(DATETIME, @realDate, 111); -- Sep, 13 2015  
-https://www.c-sharpcorner.com/UploadFile/manas1/tryparse-tryconvert-and-trycast-in-sql-server/
-
-Styles
-https://www.experts-exchange.com/articles/12315/SQL-Server-Date-Styles-formats-using-CONVERT.html
 
 ***************************
 Fixed versus Dynamic Types
@@ -161,4 +184,60 @@ storage used, the less there is for a query to read, and the faster the query ca
 types are usually preferable when read performance is a priority.
 
 Attained form Safari BOoks
+
+*****************************
+Data Type Precedence
+****************************
+The data type with the lower precedence is converted to the data type with the higher precedence.
+Int has higher precededence than VARCHAR.  
+SELECT '1' + 1    - gives 2 instead of '11'
+
+https://docs.microsoft.com/en-us/sql/t-sql/data-types/data-type-precedence-transact-sql?view=sql-server-2017
+
+****************************************
+GUID - Globally Unique Identifier
+****************************************
+Advantages:
+- A GUID is unique across tables, databases and servers
+- Useful if your consolidating records from multiple SQL Servers into a single table
+
+Disadvantages
+- Size is 16 bytes, where as INT is only 4 bytes
+- One of the largest datatypes in SQL Server
+- An index built on a GUID is larger and slower
+- Hard to read compared to INT
+
+Summary: Only use a GUID when you really need a globally unique identifier.  In all other cases it is
+better to use an INT data type.
+
+Nonsequential GUIDs - You can generate nonsequential global unique identifiers to be stored in an attribute
+of a UNIQUEIDENTIFIER type.  You can use the T-SQL Function NEWID to generate a new GUID, possible invoking
+it with a default expression attached to the column. The GUIDs are guarenteed to be unique.
+
+Sequential GUIDs - You can generate sequential GUIDs within the machine by using the T-SQL function
+NEWSEQUENTIALID.
+
+SELECT NEWID() creates a GUID that is guaranteed to be unique across tables, databases, and servers.
+
+
+-- Not guaranteed to be unique
+CREATE Table USACustomers
+(
+   ID int primary key identity,
+   Name nvarchar(50)
+)
+
+-- GUID Guarenteed to be unique
+Create TABLE USACustomers
+(
+  ID uniqueidentifer primary key default newid(),
+  Name nvarchar(50)
+)
+GO
+INSERT INTO USACustomer Values (default, 'Tom')
+INSERT INTO USACustomer Values (default,'Mike')
+
+https://www.youtube.com/watch?v=SJJ8EmfO2Fg&index=136&list=PL08903FB7ACA1C2FB
 */
+
+SELECT '1' + 1

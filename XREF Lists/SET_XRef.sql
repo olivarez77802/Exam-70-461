@@ -45,101 +45,8 @@ CONCAT_NULL_YIELDS_NULL
 NUMERIC_ROUNDABORT
 XACT_ABORT
 
-**********************************************************************************************
-DEFAULTS
-**********************************************************************************************
--- SET ANSI_NULLS ON
--- Specifies ISO compliant behavior of the Equals(=) and Not Equals(<>) comparison operators when they are used
--- with null values
-
--- Create table t1 and insert values.  
-CREATE TABLE #t1 (a INT NULL);  
-INSERT INTO #t1 values (NULL),(0),(1);
-SELECT * FROM #t1  
-GO  
-DECLARE @SQL NVARCHAR (MAX)
-SET @SQL = 
-'     
-DECLARE @varname int;   
-SET @varname = NULL; 
-
-SELECT a  
-FROM #t1   
-WHERE a = @varname;  
-
-SELECT a   
-FROM #t1   
-WHERE a <> @varname;  
-
-SELECT a   
-FROM #t1   
-WHERE a IS NULL;
-'  
--- End Dynamic
-EXECUTE sp_executesql @sql
 
 
--- Print message and perform SELECT statements.  
-PRINT 'Testing default setting';  
-DECLARE @varname int;   
-SET @varname = NULL;  
-
-SELECT a  
-FROM #t1   
-WHERE a = @varname;  
-
-SELECT a   
-FROM #t1   
-WHERE a <> @varname;  
-
-SELECT a   
-FROM #t1   
-WHERE a IS NULL;  
-GO  
-
--- SET ANSI_NULLS to ON and test.  
-PRINT 'Testing ANSI_NULLS ON';  
-SET ANSI_NULLS ON;  
-GO  
-DECLARE @varname int;  
-SET @varname = NULL  
-
-SELECT a   
-FROM #t1   
-WHERE a = @varname;  
-
-SELECT a   
-FROM #t1   
-WHERE a <> @varname;  
-
-SELECT a   
-FROM #t1   
-WHERE a IS NULL;  
-GO  
-
--- SET ANSI_NULLS to OFF and test.  
-PRINT 'Testing SET ANSI_NULLS OFF';  
-SET ANSI_NULLS OFF;  
-GO  
-DECLARE @varname int;  
-SET @varname = NULL;  
-SELECT a   
-FROM #t1   
-WHERE a = @varname;  
-
-SELECT a   
-FROM #t1   
-WHERE a <> @varname;  
-
-SELECT a   
-FROM #t1   
-WHERE a IS NULL;  
-GO  
-
--- Drop table t1.  
-DROP TABLE #t1;  
-
-*/
 -- @@OPTIONS - Gets the settings for the current session
 -- When run this command returns an integer that represents the bit values.
 -- To make further sense of these values you can run the bitwise code below that
@@ -163,3 +70,103 @@ IF ( (2048 & @options) = 2048 ) PRINT 'ANSI_NULL_DFLT_OFF'
 IF ( (4096 & @options) = 4096 ) PRINT 'CONCAT_NULL_YIELDS_NULL' 
 IF ( (8192 & @options) = 8192 ) PRINT 'NUMERIC_ROUNDABORT' 
 IF ( (16384 & @options) = 16384 ) PRINT 'XACT_ABORT'
+
+**********************************************************************************************
+DEFAULTS
+**********************************************************************************************
+--
+-- SET ANSI_WARNINGS
+--
+When set to ON, if Null values appear in aggregates functions, such as SUM, AVG, MAX, MIN,
+STDDEV, or COUNT, a warning is generated. When set to OFF, no warning is issued.
+
+When set to ON, the divide by zero arithmetic overflow errors cause the statement to be rolled
+back and an error message is generated.  When set to OFF, the divide by ZERO and arithmetic
+overflows errors cause null values to be returned.
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-ansi-warnings-transact-sql?view=sql-server-2017
+
+------------------------- END ANSI_WARNINGS ---------------------------------------------------
+--
+-- ANSI_PADDING
+--
+Controls the way column stores values shorter than the defined size of the column, and the way
+the column stores values that have trailing blanks in char, varchar, binary, and varbinary data.
+
+'ON' SETTING - Trailing blanks in character values inserted into varchar columns are NOT trimmed.
+'OFF' Setting ' - Trailing blanks in character values inserted into a varchar columnn are trimmed.
+
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-ansi-padding-transact-sql?view=sql-server-2017
+
+------------------------- END ANSI_PADDING -----------------------------------------------------
+--
+-- SET ANSI_NULLS ON
+-- Specifies ISO compliant behavior of the Equals(=) and Not Equals(<>) comparison operators 
+-- when they are used with null values	
+--
+
+-- Create table t1 and insert values.  
+DROP TABLE #t1
+CREATE TABLE #t1 (a INT NULL);  
+INSERT INTO #t1 values (NULL),(0),(1);
+DECLARE @TYPE NVARCHAR (20)
+DECLARE @SQL1 NVARCHAR (MAX)
+SET @SQL1 =
+'SELECT * FROM #t1'  
+-- EXECUTE sp_executesql @SQL1
+ 
+DECLARE @SQL2 NVARCHAR (MAX)
+SET @SQL2 = 
+'     
+DECLARE @varname int;   
+SET @varname = NULL; 
+
+SELECT a, @TYPE AS [SET TYPE]  
+FROM #t1   
+WHERE a = @varname;  
+
+SELECT a, @TYPE AS  [SET TYPE]  
+FROM #t1   
+WHERE a <> @varname;  
+
+SELECT a, @TYPE AS [SET TYPE]  
+FROM #t1   
+WHERE a IS NULL;
+'  
+-- End Dynamic
+
+-- Print message and perform SELECT statements.  
+--PRINT 'Testing default setting';
+--SET @TYPE = 'Default'
+--EXECUTE sp_executesql @sql2, N'@TYPE NVARCHAR(20)', @TYPE
+   
+---- SET ANSI_NULLS to ON and test.  
+PRINT 'Testing ANSI_NULLS ON';  
+SET ANSI_NULLS ON;  
+SET @TYPE = 'ANSI_NULLS ON'
+EXECUTE sp_executesql @sql2, N'@TYPE NVARCHAR(20)', @TYPE
+
+-- SET ANSI_NULLS to OFF and test.  
+PRINT 'Testing SET ANSI_NULLS OFF';  
+SET ANSI_NULLS OFF;  
+SET @TYPE = 'ANSI_NULLS OFF'
+EXECUTE sp_executesql @sql2, N'@TYPE NVARCHAR(20)', @TYPE
+
+-- Drop table t1.  
+DROP TABLE #t1;  
+GO
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-ansi-nulls-transact-sql?view=sql-server-2017
+---------------------------------- END ANSI_NULLS ------------------------------------------
+--
+-- SET ARITHABORT
+--
+Terminates a QUERY when an overflow or divide-by-zero error occurs during execution.  You should
+always SET ARITHABORT ON.
+
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-arithabort-transact-sql?view=sql-server-2017
+
+---------------------------------- END ARITHABORT -----------------------------------------------------
+--
+-- QUOTED_IDENTIFIER
+--
+
+*/
