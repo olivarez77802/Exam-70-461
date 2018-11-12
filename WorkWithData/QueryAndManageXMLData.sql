@@ -9,10 +9,13 @@ Syntax for comment.  Less than sign, Exclamation Mark, two dashes follow by two 
 
 XML was designed to describe data not to display data
   (HTML was designed to display data).
+XML was designed to store and transport data.
+XML was designed to be both machine and human readable.
+XML is often used to separate data from presentation.
 
 <?xml version="1.0" encoding="UTF-8"?> 
 Declaration - 1st line of xml document.  It is optional, but if it appears it must be at the top.
-
+The Declaration is also called the XML Prolog.  The XML Prolog does not have a closing tag!
 <root>
   <child>
     <subchild>...</subchild>
@@ -22,8 +25,19 @@ XML Documents will only have one root element
 Root Elements are also called parent elements
 
 <name>Samual Clinton</name>
-tag - <name> (Start Tag) and </name> (End Tag)
+tag - <name> (Start Tag) and </name> (End Tag).  Tags are case sensitive.
+The tag <name> is different from the tag <Name>
+Element names are case-sensitive
+Element names must start with a letter or underscore
+Element names cannot start with the letters xml (or XML, or Xml, etc)
+Element names can contain letters, digits, hyphens, underscores, and periods
+Element names cannot contain spaces
 Element - Both the tag and the value 'Samual Clinton'
+
+-- Empty XML Element.  Two forms produce identical results.
+<element></element>
+- or
+<element /> 
 
 <book xyz="a">
 xyz- attribute name  "a" - attribute value
