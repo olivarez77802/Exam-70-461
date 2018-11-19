@@ -28,20 +28,12 @@ When dealing with indexes on computed columns and indexed views, four of the def
 - ANSI_WARNINGS
 - QUOTED_IDENTIFIER
 
-Take a look at what all of these set options do and how they can affect your session
+Additional SET Options to Review 
 DISABLE_DEF_CNST_CHK
 IMPLICIT_TRANSACTIONS
 CURSOR_CLOSE_ON_COMMIT
-ANSI_WARNINGS
-ANSI_PADDING
-ANSI_NULLS
-ARITHABORT
 ARITHIGNORE
-QUOTED_IDENTIFIER
 NOCOUNT
-ANSI_NULL_DFLT_ON
-ANSI_NULL_DFLT_OFF
-CONCAT_NULL_YIELDS_NULL
 NUMERIC_ROUNDABORT
 XACT_ABORT
 
@@ -168,5 +160,131 @@ https://docs.microsoft.com/en-us/sql/t-sql/statements/set-arithabort-transact-sq
 --
 -- QUOTED_IDENTIFIER
 --
+The following example shows that the SET QUOTED_IDENTIFIER setting must be ON, and the keywords in table names 
+must be in double quotation marks to create and use objects that have reserved keyword names.
+
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-quoted-identifier-transact-sql?view=sql-server-2017
+SET QUOTED_IDENTIFIER OFF  
+GO  
+-- An attempt to create a table with a reserved keyword as a name  
+-- should fail.  
+CREATE TABLE "select" ("identity" INT IDENTITY NOT NULL, "order" INT NOT NULL);  
+GO  
+
+SET QUOTED_IDENTIFIER ON;  
+GO  
+
+-- Will succeed.  
+CREATE TABLE "select" ("identity" INT IDENTITY NOT NULL, "order" INT NOT NULL);  
+GO  
+
+SELECT "identity","order"   
+FROM "select"  
+ORDER BY "order";  
+GO  
+
+DROP TABLE "SELECT";  
+GO  
+
+SET QUOTED_IDENTIFIER OFF;  
+GO  
+------------------------------ END QUOTED_IDENTIFIER --------------------------------------------------
+--
+-- ANSI_NULL_DFLT_ON
+--
+
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-ansi-null-dflt-on-transact-sql?view=sql-server-2017
+
+USE AdventureWorks2012;  
+GO  
+
+-- The code from this point on demonstrates that SET ANSI_NULL_DFLT_ON  
+-- has an effect when the 'ANSI null default' for the database is false.  
+-- Set the 'ANSI null default' database option to false by executing  
+-- ALTER DATABASE.  
+ALTER DATABASE AdventureWorks2012 SET ANSI_NULL_DEFAULT OFF;  
+GO  
+-- Create table t1.  
+CREATE TABLE t1 (a TINYINT) ;  
+GO   
+-- NULL INSERT should fail.  
+INSERT INTO t1 (a) VALUES (NULL);  
+GO  
+
+-- SET ANSI_NULL_DFLT_ON to ON and create table t2.  
+SET ANSI_NULL_DFLT_ON ON;  
+GO  
+CREATE TABLE t2 (a TINYINT);  
+GO   
+-- NULL insert should succeed.  
+INSERT INTO t2 (a) VALUES (NULL);  
+GO  
+---------------------------- END ANSI_NULL_DFLT_ON ----------------------------------------------------------------
+--
+-- CONCAT_NULL_YIELDS_NULL
+--
+Controls whether concatenation results are treated as null or empty string values.
+
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-concat-null-yields-null-transact-sql?view=sql-server-2017
+
+When SET CONCAT_NULL_YIELDS_NULL is ON, concatenating a null value with a string yields a NULL result.
+For example, SELECT 'abc' + NULL yields NULL. When SET CONCAT_NULL_YIELDS_NULL is OFF, 
+concatenating a null value with a string yields the string itself (the null value is treated as an empty string). 
+For example, SELECT 'abc' + NULL yields abc.
+*/
+PRINT 'Setting CONCAT_NULL_YIELDS_NULL ON';  
+GO  
+-- SET CONCAT_NULL_YIELDS_NULL ON and testing.  
+SET CONCAT_NULL_YIELDS_NULL ON;  
+GO  
+SELECT 'abc' + NULL ;  
+GO  
+
+-- SET CONCAT_NULL_YIELDS_NULL OFF and testing.  
+SET CONCAT_NULL_YIELDS_NULL OFF;  
+GO  
+SELECT 'abc' + NULL;   
+GO  
+-------------------------- END CONCAT_NULL_YIELDS_NULL ---------------------------------------------------------
+-- END DEFAULTS
+----------------------------------------------------------------------------------------------------------------
+/*
+--
+--  XACT_ABORT
+--
+The THROW statement honors SET XACT_ABORT.
+RAISERROR does not. New applications should use THROW instead of RAISERROR.
+
+Specifies whether SQL Server automatically rolls back the current transaction when a Transact-SQL statement
+raises a run-time error.
+
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-xact-abort-transact-sql?view=sql-server-2017 
+
+SET XACT_ABORT OFF;  
+GO  
+BEGIN TRANSACTION;  
+INSERT INTO t2 VALUES (1);  
+INSERT INTO t2 VALUES (2); -- Foreign key error.  
+INSERT INTO t2 VALUES (3);  
+COMMIT TRANSACTION;  
+GO  
+SET XACT_ABORT ON;  
+GO  
+BEGIN TRANSACTION;  
+INSERT INTO t2 VALUES (4);  
+INSERT INTO t2 VALUES (5); -- Foreign key error.  
+INSERT INTO t2 VALUES (6);  
+COMMIT TRANSACTION;  
+GO  
+-- SELECT shows only keys 1 and 3 added.   
+-- Key 2 insert failed and was rolled back, but  
+-- XACT_ABORT was OFF and rest of transaction  
+-- succeeded.  
+-- Key 5 insert error with XACT_ABORT ON caused  
+-- all of the second transaction to roll back.  
+SELECT *  
+    FROM t2;  
+GO  
+--------------------------------- END XACT_ABORT ------------------------------------------
 
 */
