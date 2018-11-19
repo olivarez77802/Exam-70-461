@@ -20,9 +20,10 @@ Declaration - 1st line of xml document.  It is optional, but if it appears it mu
 </root>
 XML Documents will only have one root element
 Root Elements are also called parent elements
+XML Fragments - A document has a single root node.  A document without the root node is called a fragment.
 
 <name>Samual Clinton</name>
-tag - <name> (Start Tag) and </name> (End Tag)
+tag (or MetaData) - <name> (Start Tag) and </name> (End Tag)
 Element - Both the tag and the value 'Samual Clinton'
 
 <book xyz="a">
@@ -52,6 +53,9 @@ XML Schema
 - XML Schemas are decomposed when stored.  They do not store annotations
   or comments.  If you want to store annotations or comments then you must
   store then in a separate XML Column.
+
+When you check whether an XML Document complies with a schema, you validate the document.
+A document with a predefined schema is said to be typed XML Document.
 
 -- Query all of the Schema Collections that are defined or have been built in.
 SELECT * FROM sys.xml_schema_collections
