@@ -28,20 +28,12 @@ When dealing with indexes on computed columns and indexed views, four of the def
 - ANSI_WARNINGS
 - QUOTED_IDENTIFIER
 
-Take a look at what all of these set options do and how they can affect your session
+Additional SET Options to Review 
 DISABLE_DEF_CNST_CHK
 IMPLICIT_TRANSACTIONS
 CURSOR_CLOSE_ON_COMMIT
-ANSI_WARNINGS
-ANSI_PADDING
-ANSI_NULLS
-ARITHABORT
 ARITHIGNORE
-QUOTED_IDENTIFIER
 NOCOUNT
-ANSI_NULL_DFLT_ON
-ANSI_NULL_DFLT_OFF
-CONCAT_NULL_YIELDS_NULL
 NUMERIC_ROUNDABORT
 XACT_ABORT
 
