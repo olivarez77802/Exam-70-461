@@ -16,6 +16,7 @@ XML is often used to separate data from presentation.
 <?xml version="1.0" encoding="UTF-8"?> 
 Declaration - 1st line of xml document.  It is optional, but if it appears it must be at the top.
 The Declaration is also called the XML Prolog.  The XML Prolog does not have a closing tag!
+
 <root>
   <child>
     <subchild>...</subchild>
@@ -73,7 +74,7 @@ XML Schema
   store then in a separate XML Column.
 
 When you check whether an XML Document complies with a schema, you validate the document.
-A document with a predefined schema is said to be typed XML Document.
+A document with a predefined schema is said to be a Typed XML Document.
 
 -- Query all of the Schema Collections that are defined or have been built in.
 SELECT * FROM sys.xml_schema_collections
