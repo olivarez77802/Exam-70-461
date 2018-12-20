@@ -134,7 +134,7 @@ https://www.experts-exchange.com/articles/12315/SQL-Server-Date-Styles-formats-u
 Date and Time Styles
 ********************
 
-Date and Time Styles
+Cast and Convert
 https://docs.microsoft.com/en-us/sql/t-sql/functions/cast-and-convert-transact-sql?view=sql-server-2017
 
 --To get just the date part from DateTime
