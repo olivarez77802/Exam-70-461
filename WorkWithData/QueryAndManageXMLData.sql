@@ -311,6 +311,10 @@ https://app.pluralsight.com/library/courses/sql-server-xml/table-of-contents
 BULK INSERT
 https://docs.microsoft.com/en-us/sql/t-sql/statements/bulk-insert-transact-sql?view=sql-server-2017
 
+RAW, AUTO, PATH
+XML RAW -  Element name is named 'row'
+XML AUTO - Table names are your Elements
+XML PATH - Looks more like traditional XML with 'row' as ROOT and Table Columns are child elements.
 */
 USE AdventureWorks2014
 -- Auto - Automatically; Defaults to type nvarchar
