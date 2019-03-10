@@ -42,178 +42,17 @@ Element - Both the tag and the value 'Samual Clinton'
 -- Empty XML Element.  Two forms produce identical results.
 <element></element>
 - or
-<element /> 
+<element />   or <element Gender="M" Age="40" />
 
 <book xyz="a">
 xyz- attribute name  "a" - attribute value
 Attribute - specifies a single property for an element.  It consists of a 
 name and a value separated by an equal sign.
 
-XML type limitations
-- XML type is not treated like character types
-- Does not support comparison (except to NULL)
-- No equality comparison
-- No ORDER BY, GROUP BY
-- No built in functions except ISNULL and COALESCE
-- Cannot be used as a KEY Column
-- Cannot be used in a UNIQUE Constraint
-- Cannot be declared with COLLATE
--- Uses XML encodings
--- Always stored as UNICODE UCS-2
-
-XML Schema
-- Schema - Way of constraining the name of tags and order of tags.
-- XML Schema used by XML data types must be in database.
-- Create XML SCHEMA COLLECTION
-  Requires literal schemas (literal strings or XML Variable)
-- Collection name associated with XML Instance
-  column, parameter, or variable
-- XML Schemas are decomposed when stored.  They do not store annotations
-  or comments.  If you want to store annotations or comments then you must
-  store then in a separate XML Column.
-
-When you check whether an XML Document complies with a schema, you validate the document.
-A document with a predefined schema is said to be typed XML Document.
-
--- Query all of the Schema Collections that are defined or have been built in.
-SELECT * FROM sys.xml_schema_collections
--- All of the built in Types
-SELECT * FROM sys.xml_schema_types
--- Which columns use schema collection
-SELECT * FROM sys.column_xml_schema_collection_usages
-
-Example Schema Syntax
-CREATE XML SCHEMA COLLECTION invcol
-AS '<xs:schema ...
-     targetNamespace = "urn:invoices">
-	 ...
-	</xs:schema>'
-CREATE TABLE Invoices (
-int id IDENTITY PRIMARY KEY,
-       invoice XML(invcol)
-)
-
-Example of Loading a Schema Collection from a File
-DECLARE @x XML
-SET @x = (
-SELECT * FROM OPENROWSET(
- BULK 'C:\invoice.xsd',
-        SINGLE_BLOB
-) AS x
-
--- Sample schema of C:\invoice.xsd
--- Notice targetNamespace will be used in XML File to connect schema.
--- xmlns - short for XML Namespace, define the elements and data types used in this schema
--- xsd, tns - short hand for the namespaces, prefixes xsd, tns can be used in schema to 
---            refer to the namespace.
--- elementFormDefault="qualified"  - indicates that any elements used by the XML instance document
---                                   which were declared must be namespace qualified.
-<xsd:schema xmlns: xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns:tns="urn:www-company-com:invoices"
-			targetNamespace="urn:wwww-company.com:invoices"
-			elementFormDefault="qualified">
- 
--- Load XML Schema from a file
-USE Development
-DECLARE @x XML
-SET @x = 
-(
-SELECT * FROM OPENROWSET(
-     BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\invoice.xsd',
-	   SINGLE_BLOB) AS x
-)
-
-
--- Example of using variable to create an XML Schema Collection
-CREATE XML SCHEMA COLLECTION InvoiceType AS @x
-GO
-
-
--- Using SCHEMA Collection
--- 'document' restricts to documents only (one root node) versus Fragments(more than one root element)
-CREATE TABLE invoice_docs (
-invoiceid INTEGER PRIMARY KEY IDENTITY,
-invoice XML(document InvoiceType)
-)
-GO
-
--- Check schema information
-SELECT * FROM sys.xml_schema_collections
-SELECT * FROM sys.xml_schema_namespaces
-SELECT * FROM sys.column_xml_schema_collection_usages
-
--- Insert an Invoice
-INSERT INTO invoice_docs(invoice)
-SELECT * FROM OPENROWSET(
-BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\invoice.xml',
-SINGLE_BLOB) AS x
-GO
-
--- If you try to Insert will give error because it doesn't follow Schema Definition
-USE Development
-INSERT INTO invoice_docs(invoice)
-SELECT * FROM OPENROWSET(
-BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\invoice2.xml',
-SINGLE_BLOB) as x
-GO
-
--- Sku number has to be between 100 and 999 
-USE DEVELOPMENT
-insert invoice_docs values('
-<inv:Invoice xmlns:inv="urn:www-company-com:invoices">
-  <inv:InvoiceID>1000</inv:InvoiceID>
-  <inv:CustomerName>Jane Smith</inv:CustomerName>
-  <inv:LineItems>
-    <inv:LineItem>
-      <inv:Sku>1134</inv:Sku>
-      <inv:Description>ColaK/inv:Description>
-      <inv:Price>0.95</inv:Price>
-    </inv:LineItem>
-  </inv:LineItems>
-</inv:Invoice>
-')
-
--- Errors because it does not have root element
-insert invoice_docs values('
-   <inv:LineItem xmlns:inv="urn:www-company-com:invoices">
-      <inv:Sku>124</inv:Sku>
-	  <inv:Description>Cola</inv:Descripition>
-	  <inv:Price>0.95</inv:Price>
-   </inv:LineItem>
-   ')
-
--- check schema information
-SELECT * FROM sys.xml_schema_collections
-SELECT * FROM sys.xml_schema_namespaces
-SELECT * FROM sys.xml_schema_elements
-SELECT * FROM sys.xml_schema_attributes
-SELECT * FROM sys.xml_schema_types
-SELECT * FROM sys.column_xml_schema_collection_usages
-SELECT * FROM sys.parameter_xml_schema_collection_usages
-
-USE Development
-DECLARE @x XML
-SET @x = 
-(
-SELECT * FROM OPENROWSET(
-     BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\invoice_v2.xsd',
-	   SINGLE_BLOB) AS x
-)
-
--- Adding _v2 schema to existing collection
-ALTER XML SCHEMA COLLECTION InvoiceType ADD @x
-GO
-
--- Insert into Schema that accepts V1 and V2 schemas 
-USE Development
-INSERT INTO invoice_docs(invoice)
-SELECT * FROM OPENROWSET(
-BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\invoice3.xml',
-SINGLE_BLOB) AS x
-GO
 
 XQUERY Tutorial
 https://www.w3schools.com/xml/xquery_intro.asp
+See \Exam70-461\WorkWithData\XML\XQuery.sql
 
 USE Development
 SELECT *
@@ -234,6 +73,13 @@ FROM invoice_docs
 
 -- XQuery Language Reference
 -- https://docs.microsoft.com/en-us/sql/xquery/xquery-language-reference-sql-server?view=sql-server-2017
+-- You can also include comments in your XQuery expressions. 
+-- The syntax for a comment is text between parentheses and colons: (: this is a comment :). 
+-- XQuery is a standard language for browsing XML instances and returning XML.
+-- It is much richer than XPathexpressions, an older standard, which you can use for simple navigation only.
+-- With XQuery, you can navigate as with XPath; however, you can also loop over nodes, 
+-- shape the returned XML instance, and much more.
+--
 USE Development
 SELECT invoice.query('
 (: this is a valid XQuery :)
@@ -244,31 +90,7 @@ FROM invoice_docs
 
 
 
-XML Indexes
-- Optimizes XQuery Operations on the column
-- Primary XML index must be created first, before any additional XML indexes can be created
-- Table must have a clustered index.. XML column cannot be the clustured index
-- Primary XML index provides cardinality estimates for the query optimizer.
-https://docs.microsoft.com/en-us/sql/relational-databases/xml/xml-indexes-sql-server?view=sql-server-2017
 
-Example:
-CREATE TABLE xml_tab (
-  id integer primary key,
-  doc xml)
-GO
-CREATE PRIMARY XML INDEX xml_idx on xml_tab (doc)
-GO
-
-XML Primary Index Details
-- Node table is materialized
--- Base table clustered index, plus 12 columns
--- Column metadata visible with join of sys.indexes and sys.columns
--- Clustered index on
-   primary key (of base table)
-   id (node_id of the node table)
--- Most of the same create/alter options as SQL Index
--- Only available on columns (not variables)
--- Space Utilization is 2-5 times original data
 
 XML Tutorial
 https://www.w3schools.com/xml/default.asp
@@ -312,10 +134,24 @@ https://docs.microsoft.com/en-us/sql/t-sql/statements/bulk-insert-transact-sql?v
 
 */
 USE AdventureWorks2014
--- Auto - Automatically; Defaults to type nvarchar
+-- RAW - Every row is under a signal element named 'row'.
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Raw
+
+-- Auto - Automatically; Defaults to type nvarchar.  AUTO gives you nice XML Documents with nested elements.
 SELECT TOP 5 *
 FROM HumanResources.Employee
 FOR XML Auto
+
+-- ELEMENTS - Can be used with AUTO and RAW to give you elements.
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Raw, ELEMENTS 
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML AUTO, ELEMENTS 
+
 -- Type set it to XML DataType
 SELECT TOP 5 *
 FROM HumanResources.Employee
@@ -336,7 +172,7 @@ SELECT TOP 5 *
 FROM HumanResources.Employee
 FOR XML Auto, TYPE, ELEMENTS, ROOT('RootName')
 
--- Modify Column names
+-- Modify Column names, Modify Root Name
 SELECT BusinessEntityID AS myBusinessEntityID
       ,OrganizationNode as myorgnode
       ,LoginID AS myLoginID
@@ -361,6 +197,8 @@ FOR XML RAW('myEmployees'), TYPE, ELEMENTS, Root('myRoot')
 -- XML Namespaces
 -- https://docs.microsoft.com/en-us/sql/relational-databases/xml/add-namespaces-to-queries-with-with-xmlnamespaces?view=sql-server-2017
 --
+-- Notice!! WITH XMLNAMESPACES is put before the 'SELECT'.
+--
 WITH XMLNAMESPACES ('uri' as ns1)  
 SELECT ProductID as 'ns1:ProductID',  
        Name      as 'ns1:Name',   
@@ -368,6 +206,39 @@ SELECT ProductID as 'ns1:ProductID',
 FROM Production.Product  
 WHERE ProductID=316 or ProductID=317  
 FOR XML RAW ('ns1:Prod'), ELEMENTS  
+--
+-- Note!!  ORDER BY Clause is Very Important!  Without 'ORDER BY' Clause the order of elements
+--         is unpredicatable.  Note that the 'ORDER BY' Clause is after 'FROM' and before 'FOR XML'
+-- Also, the listing of the columns in the SELECT Statement is also important.  SQL uses column order 
+-- to determine the nesting of elements.
+-- You might be vexed by the fact that you have to take care of column order; in a relation,
+-- the order of columns and rows is not important. Nevertheless, you have to realize that the
+-- result of your query is not a relation; it is text in XML format, and parts of your query 
+-- are used for formatting the text.
+--
+WITH XMLNAMESPACES ('uri' as ns1)  
+SELECT ProductID as 'ns1:ProductID',  
+       Name      as 'ns1:Name',   
+       Color     as 'ns1:Color'  
+FROM Production.Product  
+ORDER BY 'ns1:ProductID'
+FOR XML RAW ('ns1:Prod'), ELEMENTS 
+--
+--  The PATH mode uses standard XML XPath expressions to define the elements and attributes
+--  of the XML you are creating.
+-- 
+--  PATH - In PATH mode, column names and aliases serve as XPath expressions.
+--  XPath expressions define the path to the element in the XML generated. 
+--  Path is expressed in a hierarchical way; levels are delimited with the slash (/) character. 
+--  BY default, every column becomes an element; if you want to generate attribute-centric XML, 
+--  prefix the alias name with the “at” (@) character.  Quoted from Safari Books.
+--
+--  XML XPATH
+--  https://www.w3schools.com/xml/xml_xpath.asp
+--
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML PATH 
 
 --- Example of doing a Bulk Import
 --- SINGLE_BLOB - Tells SQL Server to figure out the encoding, SINGLE_BLOB avoids encoding problems.
