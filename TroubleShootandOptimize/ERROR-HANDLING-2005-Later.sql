@@ -31,8 +31,30 @@ retrieve more information about the error that occurred.  These functions return
 NULL if they are executed outside the scope of the CATCH block.  TRY/CATCH cannot be 
 used in a user-defined functions.
 
+RAISEERROR('Error Message',ErrorSeverity,ErrorState)
+Create and return custom errors
+Severity level = 16(indicates general errors that can be corrected by the user)
+State=Number between 1 & 255. RAISERROR only generates errors with state from 1 thru 127.
 
 https://www.youtube.com/watch?v=VLDirfx_OQg&index=56&list=PL08903FB7ACA1C2FB
+
+ERROR_LINE
+https://docs.microsoft.com/en-us/sql/t-sql/functions/error-line-transact-sql?view=sql-server-2017
+ERROR_PROCEDURE
+https://docs.microsoft.com/en-us/sql/t-sql/functions/error-procedure-transact-sql?view=sql-server-2017
+
+RAISERROR()
+
+
+Severity
+  The error is returned to the caller if RAISERROR is run:
+  - Outside the scope of any TRY block.
+  - With the severity of 10 or lower in a TRY block.
+  - With a severity of 20 OR higher that terminates the database connection.
+State
+  Is an integer from 0 thru 255. Negative values default to 1. Values larger than 255 should
+  not be used.
+https://docs.microsoft.com/en-us/sql/t-sql/language-elements/raiserror-transact-sql?view=sql-server-2017
 
 
 */

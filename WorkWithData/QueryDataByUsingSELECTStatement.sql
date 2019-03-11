@@ -73,8 +73,9 @@ Elements of a SELECT Statement
 1. SELECT - Defines which columns to return
 2. FROM - Defines table to query
 3. WHERE - Filters returned data using a predicate  --- May not be used with Aggregate Functions
+           'Where' filtering cluase is evaluated per row - not per group.
 4. GROUP BY - Arranges rows by groups - Used with Aggregate Functions
-5. HAVING - Filters groups by predicate
+5. HAVING - Filters groups by predicate.  Filters by group.
 6. ORDER BY - Sorts the results
 
 Logical Order - The order in which a query is written is not the order
@@ -87,6 +88,10 @@ Logical Order - The order in which a query is written is not the order
 4. HAVING   <search condition>
 6. ORDER BY <order by list>
 
+A typical mistake made by people who don't understand logical query processing is attempting to
+refer in the 'WHERE' clause to a column alias defined in the 'SELECT' clause.  This isn't allowed
+because the 'WHERE' clause is evaluated before the 'SELECT' clause.
+
 DATEPART, DATEADD, DATEDIFF Functions
 Select DATEPART(weekday, '2012-08-30 19:45:31.793') -- returns 5
 SELECT DATEPART(MONTH, '2012-08-30 19:45:31.793')   -- returns 8
@@ -95,6 +100,13 @@ SELECT DATEADD(DAY, 20, '2012-08-30 19:45:31.793') -- Returns 2012-09-19 19:45:3
 SELECT DATEDIFF(MONTH, '11/30/2005', '01/31/2006') - Returns 2
 
 https://www.youtube.com/watch?v=eYsizQVa_EU&index=27&list=PL08903FB7ACA1C2FB
+
+SELECT DISTINCT - 
+https://www.w3schools.com/sql/sql_distinct.asp
+- Below query will give you DISTINCT country, region, and city (not just DISTINCT Country).
+SELECT DISTINCT country, region, city
+FROM HR.Employees;
+
 
 --------------------------------------------------------------------------------------------
 Examples
