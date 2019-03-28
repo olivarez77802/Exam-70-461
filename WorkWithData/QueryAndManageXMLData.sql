@@ -27,9 +27,6 @@ Root Elements are also called parent elements
 XML Fragments - A document has a single root node.  A document without the root node is called a fragment.
 
 <name>Samual Clinton</name>
-<<<<<<< HEAD
-tag (or MetaData) - <name> (Start Tag) and </name> (End Tag)
-=======
 tag - <name> (Start Tag) and </name> (End Tag).  Tags are case sensitive.
 The tag <name> is different from the tag <Name>
 Element names are case-sensitive
@@ -37,7 +34,6 @@ Element names must start with a letter or underscore
 Element names cannot start with the letters xml (or XML, or Xml, etc)
 Element names can contain letters, digits, hyphens, underscores, and periods
 Element names cannot contain spaces
->>>>>>> d116f2fa07b1848aff4ea4bad4b761257bfabb60
 Element - Both the tag and the value 'Samual Clinton'
 
 -- Empty XML Element.  Two forms produce identical results.
