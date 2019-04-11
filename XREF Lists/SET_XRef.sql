@@ -248,7 +248,16 @@ GO
 -------------------------- END CONCAT_NULL_YIELDS_NULL ---------------------------------------------------------
 -- END DEFAULTS
 ----------------------------------------------------------------------------------------------------------------
+--
+-- SET NOCOUNT ON
+--
 /*
+You can embed the setting of NOCOUNT to ON inside the stored procedure to remove messages like (3 row(s) affected)
+being returned every time the procedure executes.   Placing a 'SET NOCOUNT ON' at the beginning of every stored 
+procedure prevents the procedure from returning that message to the client.  In addition, SET NOCOUNT ON can improve
+the performance of frequently executed stored procedures because there is less network communications required when
+the 'rows affected' message is not returned to the client.
+*/
 --
 --  XACT_ABORT
 --

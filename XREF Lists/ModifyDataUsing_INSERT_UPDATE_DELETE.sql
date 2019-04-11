@@ -43,7 +43,8 @@ the ShoppingCartItem table:
 
 -- End OUTPUT Clause
 
-@@ROWCOUNT   - Returns the number of rows affected by last statement
+@@ROWCOUNT   - Returns the number of rows affected by last statement.  @@ROWCOUNT will get set back to zero by
+any additional statement.  Compare to @@ERROR in ERROR-HANDLING.sql
 USE AdventureWorks2012;  
 GO  
 UPDATE HumanResources.Employee   

@@ -1,4 +1,6 @@
 /*
+See Also WorkWithFunctions.sql
+
 Different ways Tables can be created or ways to simulate a table:
 1. CTE 
 2  #TempTable    - Last only for session
@@ -8,10 +10,12 @@ Different ways Tables can be created or ways to simulate a table:
 6. Multi statement table valued function
 7. Subqueries
 8. Temp Tables in Dynamic SQL
+9. Table Variables versus Multi Statement table valued function
+
 
 
 ********************
-CTE                            
+1. CTE                            
 ********************          
 - Only lasts for                  
   duration of query               
@@ -43,10 +47,13 @@ WHERE VAC_HOURS > 0
 
 
 ************************************
-Temp Table
+2. Temp Table
  - Only Lasts as long as the session
 ************************************
 - Lasts for a session
+- If you create a temporary table in one stored procedure (Proc1), that temporary table is visible to all
+  other stored procedures called from Proc1.   However, that temporary table is not visible to any other
+  procedures that call Proc1.
 
 CREATE TABLE #Person_Details
 (
@@ -60,8 +67,9 @@ INSERT INTO #Person_Details VALUES (3, 'Todd')
 SELECT * FROM #Person_Details
 
 **********************************************************
-Table Variable
-- Table is created and dropped automatically with each run
+3. Table Variable
+- Table is created and dropped automatically with each run so it does not last the whole session like the temp table
+  You won't have to drop the Table Variable if you decide to re-run.
 - Using a Table Variable results in few recomilations of a stored procedure compared to a tempory table.
 - Table Variable requires less locking and logging resources, because table variables have limited scope
   and are not part of the persistent database, transaction rollbacks do not affect them.
@@ -72,7 +80,6 @@ Table Variable
 - Table Variables cannot have indexes
 
 - See TRS dbo.fncGetPayHistoryDaysHoursWorkedAsOf
-**********************************************************
 
 DECLARE @TempPeople TABLE
 ( 
@@ -176,6 +183,44 @@ BEGIN
 END
 https://www.youtube.com/watch?v=ZQvItdzB8to&list=PL08903FB7ACA1C2FB&index=149
 
+****************************************************************
+9. Table Variables versus Multi Statement table valued function
+****************************************************************
+---------------
+Table Variable
+---------------
 
+DECLARE @TempPeople TABLE
+( 
+   PersonName VARCHAR(MAX),
+   PersonDOB  DATETIME
+)
+INSERT INTO @TempPeople
+
+SELECT ActorName,
+       ActorDOB
+FROM tblActor
+WHERE ActorDOB < '1950-01-01'
+
+SELECT * FROM @TempPeople
+
+-------------------------------------
+Multi Statement Table valued function
+--------------------------------------
+--
+-- Uses a Table Variable
+--
+CREATE FUNCTION fn_MSTVF_GetEmployees()
+RETURNS @TABLE Table(JobTitle nvarchar(40), Birthdate DATE, Gender nvarchar(10))
+AS
+BEGIN
+INSERT INTO @TABLE
+SELECT 
+      JobTitle
+      ,[BirthDate]
+      ,Gender
+FROM [AdventureWorks2014].[HumanResources].[Employee]
+RETURN
+END 
 
 */

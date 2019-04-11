@@ -11,7 +11,7 @@ WHERE XREF - Different ways of using WHERE Clause
 8. HAVING used with WHERE
 9. WHERE used in DERIVED Query
 10. WHERE used in SubQuery
-
+11. WHERE used with a SCALAR UDF (User defined function)
 https://docs.microsoft.com/en-us/sql/t-sql/queries/where-transact-sql?view=sql-server-2017
 
 **********************************************
@@ -37,6 +37,9 @@ SELECT EmployeeKey, LastName
 FROM DimEmployee
 WHERE EmployeeKey Between 100 and 200;
 
+SELECT orderid, unitprice, qty
+FROM Sales.Orderdetails
+WHERE qty BETWEEN @Lowqty AND @Highqty
 *************************************************
 INSERT using WHERE
 *************************************************
@@ -109,6 +112,7 @@ WHERE sub.resolution = 'NONE'
 
 ************************
 WHERE used with SubQuery
+SQL EXISTS Operator - https://www.w3schools.com/sql/sql_exists.asp
 ************************
 SELECT C.Firstname,
        C.Lastname,
@@ -130,5 +134,13 @@ INSERT tbl_A (col, col2)
 SELECT col, col2   
 FROM tbl_B   
 WHERE NOT EXISTS (SELECT col FROM tbl_A A2 WHERE A2.col = tbl_B.col);  
+
+****************************
+WHERE used with a Scalar UDF
+****************************
+A scalar UDF in the WHERE clause that restricts a result set is executed once
+for every row in the referenced table.
+See WorkWithFunctions.sql
+
 
 */

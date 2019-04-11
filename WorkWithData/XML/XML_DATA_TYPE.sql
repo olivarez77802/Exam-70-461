@@ -1,4 +1,9 @@
 /*
+
+XML Datatypes and Columns
+https://docs.microsoft.com/en-us/sql/relational-databases/xml/xml-data-type-and-columns-sql-server?view=sql-server-2017
+
+
 Although XML could be stored as simple text, plain text representation means having no knowledge
 of the structure built into an XML document. You could decompose the text, store it in multiple
 relational tables, and use relational technologies to manipulate the data. Relational structures
@@ -23,4 +28,58 @@ The methods support querying (the query() method), retrieving atomic values (the
 checking existence (the exist() method), modifying sections within the XML data (the modify() method) 
 as opposed to overwriting the whole thing, and shredding XML data into multiple rows in a result 
 set (the nodes() method).
+
+
+XML Data Type Methods  
+An XML data type includes five methods that accept XQuery as a parameter
+1. query() method 
+2. value() method 
+3. exist() method
+4. modify() method
+5. nodes() method 
+
 */
+
+-----
+DECLARE @X AS XML
+SET @X = N'
+<CustomersOrders>
+ <Customer custid="1">
+  <!-- Comment 111 -->
+  <companyname>Customer NRZBB</companyname>
+  <Order orderid="10692">
+   <orderdate>2007-10-13T00:00:00</orderdate>
+  </Order>
+  <Order orderid="10702">
+    <orderdate>2008-03-16T00:00:00</orderdate>
+  </Order>
+  <Order orderid="10952">
+    <orderdate>2008-03-16T00:00:00</orderdate>
+  </Order>
+  </Customer>
+  <Customer custid="2">
+    <!-- Comment 222 -->
+	<companyname> Customer MLTDN</companyname>
+	<Order orderid="10308">
+	  <orderdate>2006-09-18T00:00:00</orderdate>
+	</Order>
+	<Order orderid="10952">
+	   <orderdate>2008-03-04T00:00:00</orderdate>
+	</Order>
+  </Customer>
+  </CustomersOrders>';
+-- Query that gets Customer nodes with child nodes
+SELECT @X.query('CustomersOrders/Customer/*')
+AS [1. Principal nodes];
+-- Query to return ALL nodes
+SELECT @X.query('CustomersOrders/Customer/node()')
+AS [2. All nodes]
+-- Query to retun comment nodes only
+SELECT @X.query('CustomersOrders/Customer/comment()')
+AS [3. Comment nodes]
+-- Return all orders for customer 2
+SELECT @X.query('//Customer[@custid=2]/Order')
+AS [4. Customer 2 orders]
+-- Return all orders with order number 10952
+SELECT @X.query('//Order[@orderid=10952]')
+AS [5. Orders with orderid=10952]

@@ -1,22 +1,87 @@
 /*
+See Also Tables_or_Virtual_Table_Types.sql
+
 Work with functions
 * Understand deterministic, non-determininistic; scalar and table values; apply built in scalar
   functions; create and alter user-defined functions (UDFs)
+
+Deterministic versus Non-Deterministic
+- Deterministic Functions - Always return the same result anytime they are called provided 
+  the database state has not changed.  All aggregate functions are deterministic functions. 
+  Examples: SQUARE(); POWER(); SUM();AVG() and COUNT().
+- Non-Deterministic Functions - May return different results anytime they are called.  
+  GETDATE() and CURRENTTIMESTAMP()
+- RAND() may be determininistic if you provide the seed value.  RAND() will be non-deterministic
+  if you do not provide seed value.
   
-There are 3 types of User Defined Functions
-1. Scalar Functions              - returns a single value
-2. Inline table-valued functions
-3. Multi-statement table valued functions
+There are 3 types of (UDF) User Defined Functions
+1. Scalar Functions                       - returns a single value
+2. Inline table-valued functions          - returns a table
+3. Multi-statement table valued functions - The RETURN statement just ends the function and is not used to send data back. 
+
+Scalar Functions versus Stored Procedures
+-- You cannot use Stored Procedures in a SELECT or WHERE Clause
+-- Scalar Functions do allow you to use in a SELECT or WHERE Clause 
+
+UDF Performance Considerations
+How a function is used can have a dramatic impact on the performance of the queries that you execute.
+Specifically, scalar UDFs need to be very efficient because they are executed once for every row in a 
+result set or sometimes for an entire table.   A scalare UDF in the SELECT list, when applied to column
+values, is executed for every single row retrieved.   A scalar UDF in the WHERE clause that restricts
+a result set is executed once for every row in the referenced table.
+
+--------------------------------------------------------------------------------------------------------------
+Difference in:
+Stored Procedure, Scalar Function, Inline Table Function, Table Variable, Multistatement Table Value Function
+-------------------------------------------------------------------------------------------------------------- 
+Functions / Procedures with Return Statements:
+1. Stored Procedure - RETURN.  A stored procedure ends when the T-SQL batch ends, but you can cause the procedure
+                               to exit by using the RETURN command.
+-- Two Return Statements.  1st one is RETURNS second one is RETURN
+2. Scalar Function - Second RETURN is at bottom RETRUN datatype.
+3. Inline Table - RETURNS TABLE AS RETURN - Both RETURN(S) on same line
+4. Mulistatement - RETURNS @TABLE  - Second RETURN at the end.  Nothing followed by RETURN.
+
+-- Scalar
+CREATE Function FnTemp (Parameters Type)
+RETURN datatype
+AS 
+BEGIN
+ ..
+ ..
+ RETURN datatype
+END
+
+-- Inline Table
+CREATE FUNCTION FnTemp(Parameters Type)
+RETURNS TABLE
+(
+..
+)
+
+-- Table Variable
+DECLARE @TempTable TABLE
+(
+  Variables Types
+)
+INSERT INTO @TempTable
+SELECT.. FROM...
+
+-- Multi Statement Table
+CREATE FUNCTION fnTemp
+RETURNS @TempTable (Paramters Type)
+INSERT INTO @TempTable
+SELECT .. FROM ..
+
+
+
+---------------
+Scalar Function
+---------------
 
 Scalar functions 
   -- may or may not have parameters, but always return a single (scalar) value.
   -- Can be used both in the SELECT and the WHERE Clause
-  
-Stored Procedures
-   -- You cannot use Stored Procedures in a SELECT or WHERE Clause 
- 
--- Scalar Function
-To create a function use the following syntax
 
 CREATE FUNCTION Function_name (@Parameter1 DataType, @Parameter2 DataType,,, @ParmeterN DataType)  
 RETURNS return_datatype
@@ -27,9 +92,39 @@ BEGIN
 
 END
 
- 
-INLINE TABLE 
+Example 2.   
 
+ SELECT SQUARE(3) AS SQR
+
+ When you execute the below it will automatically store dbo.CalcuateAge under the
+ SSMS directory Database/Programmability/Functions/Scalar-valued functions
+
+
+ Scalar Function
+
+CREATE FUNCTION CalculateAge(@DOB Date)
+RETURNS INT
+BEGIN
+DECLARE @Age INT
+
+SET @Age = DATEDIFF(YEAR, @DOB, GETDATE()) - 
+           CASE
+		     WHEN (MONTH(@DOB) > MONTH(GETDATE())) OR
+			      (MONTH(@DOB) = MONTH(GETDATE()) AND DAY(@DOB) > DAY(GETDATE()))
+			 THEN 1
+			 ELSE 0
+		   END
+ RETURN @Age
+ END
+
+SELECT dbo.CalculateAge('11/17/1965') AS AGE
+
+-- Sp_helptext CalculateAge     -- Can be used to display contents of function
+
+
+------------- 
+INLINE TABLE 
+--------------
 INLINE TABLE FUNCTIONS returns a TABLE 
 
 1. We specify TABLE as the return type, instead of any scalar data type
@@ -47,9 +142,21 @@ INLINE TABLE FUNCTIONS returns a TABLE
 https://www.youtube.com/watch?v=hs4mReAzESc&list=PL08903FB7ACA1C2FB&index=31
 
 
+CREATE FUNCTION Sales.fn_FilteredExtension
+(
+  @lowqty AS SMALLINT,
+  @highqty AS SMALLINT
+ )
+RETURNS TABLE AS RETURN
+(
+    SELECT orderid, unitprice, qty
+    FROM Sales.OrderDetails
+    WHERE qty BETWEEN @lowqty AND @highqty
+);
 
-
+---------------------------------------
 MULTI STATEMENT TABLE VALUED FUNCTIONS 
+---------------------------------------
 
 Differences  between INLINE versus MULTI Statement value Functions
 1. In an Inline Table Valued function, the RETURNS clause cannot contain the structure
@@ -68,32 +175,6 @@ Differences  between INLINE versus MULTI Statement value Functions
 https://www.youtube.com/watch?v=EgYW7tsNP6g&list=PL08903FB7ACA1C2FB&index=32
 */
 
--- SELECT SQUARE(3) AS SQR
-
--- When you execute the below it will automatically store dbo.CalcuateAge under the
--- directory FUNCTIONS/Scalar-valued functions
---
-
--- Scalar Function
-
---CREATE FUNCTION CalculateAge(@DOB Date)
---RETURNS INT
---BEGIN
---DECLARE @Age INT
-
---SET @Age = DATEDIFF(YEAR, @DOB, GETDATE()) - 
---           CASE
---		     WHEN (MONTH(@DOB) > MONTH(GETDATE())) OR
---			      (MONTH(@DOB) = MONTH(GETDATE()) AND DAY(@DOB) > DAY(GETDATE()))
---			 THEN 1
---			 ELSE 0
---		   END
--- RETURN @Age
--- END
-
-SELECT dbo.CalculateAge('11/17/1965') AS AGE
-
--- Sp_helptext CalculateAge     -- Can be used to display contents of function
 
 
 -- MULTI STATEMENT TABLE Valued Function

@@ -3,8 +3,6 @@ Implement Data Types
   - Use appropriate data; understand the uses and limitations of each data type; impact of GUID(newid,
     newsequentialid) on database performance, when to use what data type for columns
 
-
-
 1. Helpful Web Links
 2. Regular Character Types versus Unicode Character Types 
 3. CAST, CONVERT, and PARSE 
@@ -45,7 +43,7 @@ Delimited with single quotation marks, as in 'abc'.
 - CHAR
 - VARCHAR
 
-Unicode Character Types - Uses two bytes of storage per character and supports multiple langauages.  Storage
+Unicode Character Types - Uses two bytes of storage per character and supports multiple languages.  Storage
                           requirements are mitigated with Unicode compression.
 Delimited with a capital N and then single quotation marks, as in N'abc'.
 - NVARCHAR   N- Unicode VAR - Variable Length  CHAR - Character
@@ -64,7 +62,7 @@ CAST, CONVERT, and PARSE will fail if the value is not convertible.  Use TRY_ if
 CAST and CONVERT
 Syntax of CAST and CONVERT functions
 
-CAST (expression AS data_type [(length)]
+CAST (expression AS data_type [(length)])
 CONVERT (data_type [(length)], expression [, style])
 
 Differences between CAST and Convert
@@ -234,10 +232,19 @@ Create TABLE USACustomers
   Name nvarchar(50)
 )
 GO
-INSERT INTO USACustomer Values (default, 'Tom')
+INSERT INTO USACustomer Values (default,'Tom')
 INSERT INTO USACustomer Values (default,'Mike')
 
 https://www.youtube.com/watch?v=SJJ8EmfO2Fg&index=136&list=PL08903FB7ACA1C2FB
 */
-
-SELECT '1' + 1
+/*
+Data Type Precedence
+http://msdn.microsoft.com/en-us/library/ms190309.aspx 
+When using expressions that involve operands of different types, SQL Server usually
+converts the one that has lower data type precedence to the one with the higher.  One 
+operand is INT and the other is VARCHAR, you will find that INT precedes VARCHAR; hence
+SQL converts the VARCHAR value of '1' to the INT Value of 1, and the result of the expression
+is therefore 2 and not the string '11'. 
+SELECT 1 + '1'
+*/
+SELECT 1 + '1'

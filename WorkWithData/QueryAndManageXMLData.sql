@@ -72,14 +72,6 @@ XML Schema
 When you check whether an XML Document complies with a schema, you validate the document.
 A document with a predefined schema is said to be a Typed XML Document.
 
-XML Data Type Methods
-An XML data type includes five methods that accept XQuery as a parameter
-1. query() method 
-2. value() method 
-3. exist() method
-4. modify() method
-5. nodes() method 
-
 -- Query all of the Schema Collections that are defined or have been built in.
 SELECT * FROM sys.xml_schema_collections
 -- All of the built in Types
@@ -368,9 +360,6 @@ https://docs.microsoft.com/en-us/sql/t-sql/statements/create-xml-schema-collecti
 Microsoft XML Index
 https://docs.microsoft.com/en-us/sql/t-sql/statements/create-xml-index-transact-sql?view=sql-server-2017
 
-XML Datatypes and Columns
-https://docs.microsoft.com/en-us/sql/relational-databases/xml/xml-data-type-and-columns-sql-server?view=sql-server-2017
-
 Using XML and XQuery Effectively with SQL Server
 https://app.pluralsight.com/library/courses/sql-server-xml/table-of-contents
 
@@ -482,12 +471,3 @@ SELECT * FROM OPENROWSET(
    SINGLE_BLOB) AS x;  
 
 
------
-DECLARE @X AS XML
-SET @X = N'
-<CustomersOrders>
- <Customer custid="1">
-  <!-- Comment 111 -->
-  <companyname>Customer NRZBB</companyname>
-
-  '
