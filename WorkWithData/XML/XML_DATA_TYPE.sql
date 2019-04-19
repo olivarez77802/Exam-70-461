@@ -23,4 +23,12 @@ The methods support querying (the query() method), retrieving atomic values (the
 checking existence (the exist() method), modifying sections within the XML data (the modify() method) 
 as opposed to overwriting the whole thing, and shredding XML data into multiple rows in a result 
 set (the nodes() method).
+
+-------------------------------------------
+Using the XML Data Type for Dynamic Schema
+-------------------------------------------
+You create the schema collection by using the 'CREATE XML SCHEMA COLLECTION' T-SQL Statement.
+Creating the schema is a task that should not be taken lightly.  If you make an error in the
+schema, some invalid data might be accepted and some valid data might be rejected.
+ 
 */

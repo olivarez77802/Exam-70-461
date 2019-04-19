@@ -70,7 +70,7 @@ SELECT @@ROWCOUNT
 USING SET in a CASE Statement
 ******************************
 
-SE AdventureWorks2012;  
+USE AdventureWorks2012;  
 GO  
 CREATE FUNCTION dbo.GetContactInformation(@BusinessEntityID int)  
     RETURNS @retContactInformation TABLE   

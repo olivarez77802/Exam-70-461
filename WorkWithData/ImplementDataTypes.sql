@@ -37,6 +37,21 @@ Data Types in SQL
 https://www.youtube.com/watch?v=6E1tZg6qAvI&list=PL_RGaFnxSHWr_6xTfF2FrIw-NAOo3iWMy&index=6
 https://www.youtube.com/watch?v=7fOdo8PhPaw&index=7&list=PL_RGaFnxSHWr_6xTfF2FrIw-NAOo3iWMy
 
+Fixed Types versus Dynamic Types
+Fixed- CHAR, NCHAR, BINARY
+Dynamic - VARCHAR, NVARCHAR, VARBINARY.
+
+Fixed Typs. Attributes that get updated frequently, where update performance is a priority, you should consider
+fixed types.  Fixed types use the storage for the indicated size.  This means that updates will not
+require the row to physically expand.
+
+Dynamic or Variable Types - use the storage for what you enter, plus a couple of bytes for offset information.
+So for widely varying sizes of strings, if you use variable types you can save a lot of storage.
+
+With character strings, there's also the question of using regular character types (CHAR, VARCHAR) versus
+Unicode types (NCHAR, NVARCHAR).   Using Unicode types makes your code more universal.
+
+
 *******************************************************
 Regular Character Types versus Unicode Character Types 
 ******************************************************
@@ -59,6 +74,10 @@ and this could have negative performance implications, like preventing the effec
 ***********************************
 CAST, CONVERT, and PARSE 
 ***********************************
+To force a literal to be of a certain type, you may need to apply explicit conversions with functions like
+CAST, CONVERT, PARSE, or TRY_CAST, TRY_CONVERT, and TRY_PARSE.
+
+
 CAST, CONVERT, and PARSE will fail if the value is not convertible.  Use TRY_ if you don't want it to fail.
 
 CAST and CONVERT
@@ -81,6 +100,9 @@ Select Id, Name, DateOfBirth, CAST(DateOfBirth as nvarchar(11)) as ConvertedDOB 
 Select Id, Name, DateOfBirth, CONVERT(nvarchar, DateOfBirth) as ConvertedDOB from tblEmployees
 https://www.youtube.com/watch?v=8GHUfb5k-a8&index=28&list=PL08903FB7ACA1C2FB
 
+The difference between functions without the TRY and their counterparts with the TRY is that
+those without the TRY fail if the value isn't convertible, whereas those with the TRY return
+NULL in such a case.  Example:
 The following code fails
    SELECT CAST('abc' AS INT);
 The below code reurns a NULL
@@ -137,6 +159,7 @@ Date and Time Styles
 Cast and Convert
 https://docs.microsoft.com/en-us/sql/t-sql/functions/cast-and-convert-transact-sql?view=sql-server-2017
 
+CONVERT has a third argument that represents the Style for the conversion.
 --To get just the date part from DateTime
 SELECT CONVERT(VARCHAR(10),GETDATE(), 101) -- Returns 09/02/2012
 

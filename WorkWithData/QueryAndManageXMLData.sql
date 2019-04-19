@@ -34,7 +34,6 @@ Element names must start with a letter or underscore
 Element names cannot start with the letters xml (or XML, or Xml, etc)
 Element names can contain letters, digits, hyphens, underscores, and periods
 Element names cannot contain spaces
->>>>>>> d116f2fa07b1848aff4ea4bad4b761257bfabb60
 Element - Both the tag and the value 'Samual Clinton'
 
 -- Empty XML Element.  Two forms produce identical results.
@@ -42,10 +41,12 @@ Element - Both the tag and the value 'Samual Clinton'
 - or
 <element />   or <element Gender="M" Age="40" />
 
+Gender="M" and Age="40" are attributes of Element.
+
 <book xyz="a">
 xyz- attribute name  "a" - attribute value
 Attribute - specifies a single property for an element.  It consists of a 
-name and a value separated by an equal sign.
+name and a value separated by an equal sign.  
 
 XML type limitations
 - XML type is not treated like character types
@@ -303,12 +304,12 @@ SELECT TOP 5 *
 FROM HumanResources.Employee
 FOR XML Raw
 
--- Auto - Automatically; Defaults to type nvarchar.  AUTO gives you nice XML Documents with nested elements.
+-- Auto - Automatically; Defaults to type nvarchar.  AUTO exchanges 'row' with Table Name. 
 SELECT TOP 5 *
 FROM HumanResources.Employee
 FOR XML Auto
 
--- ELEMENTS - Can be used with AUTO and RAW to give you elements.
+-- ELEMENTS - Can be used with AUTO and RAW to give you elements. Starts to look more like traditional XML.
 SELECT TOP 5 *
 FROM HumanResources.Employee
 FOR XML Raw, ELEMENTS 
