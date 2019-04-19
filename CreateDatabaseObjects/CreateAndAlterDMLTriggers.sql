@@ -1,4 +1,8 @@
 /*
+  See Also:
+     ModifyDataUsing_INSERT_UPDATE_DELETE.sql
+	 ERROR-HANDLING.sql
+
   Create and Alter DML Triggers
   - Inserted and deleted tables; nested triggers; types of triggers; update functions;
     handle multiple rows in a session; performance implications of triggers
@@ -16,7 +20,11 @@
 
   After triggers - fires after the triggering action. The INSERT, UPDATE, and DELETE
   statements, cause an after trigger to fire after the respective statements to complete
-  execution.
+  execution.  You can test the join between the inserted rows and the actual table, but
+  only after the insert has taken place- because this is an AFTER trigger!  AFTER triggers
+  can be nested - that is you can have a trigger on Table A that updates Table B.
+  After triggers must use THROW or RAISEERROR commands to cause the transaction of the DML command
+  to rollback.
 
   INSTEAD of triggers, fires instead of the triggering action.  The INSERT, UPDATE, and
   DELETE statements, causes an INSTEAD OF trigger to fire INSTEAD OF the respective 
@@ -28,10 +36,62 @@
   Instead of Delete  INSERTED table is always empty and the DELETED table contains the rows deleted
   Instead of Update  DELETED Table contains OLD data (before update) and Inserted table contains NEW data(Updated data) 
 
+  DML Trigger Functions.
+  You can use two functions in your trigger code to get information about what is going on:
+  1. UPDATE() - You can use this function to determine whether a particular column has been referenced by 
+     an insert or UPDATE statement.  Example:
+	         UPDATE Sales.OrderDetails
+			 SET qty = 99
+			 WHERE orderid = 10249 AND productid = 16;
+			 IF UPDATE(qty)
+			    PRINT 'Column qty affected';
+  2. COLUMNS_UPDATED() - You can use this fuction if youknow the sequence number of the column in the table.
+
   -- Examples
   *********************
-  INSERT TRIGGER
+  1. AFTER TRIGGERS
   *********************
+  -------------------------
+  AFTER TRIGGER - Using FOR
+  --------------------------
+  --
+  -- The AFTER is the default type of trigger when you specify FOR.  But you can replace FOR with either AFTER or 
+  -- INSTEAD OF to determine type of triggers.
+  --
+  CREATE TRIGGER TriggerName
+  ON [dbo].[TableName]
+  FOR DELETE, INSERT, UPDATE
+  AS
+  BEGIN
+  SET NOCOUNT ON
+  END
+  
+  Note! - When an INSERT, UPDATE, or DELETE occurs and no rows are affected, there is no point in proceeding with the trigger.
+  You can improve the performance of the trigger by testing whether @@ROWCOUNT is 0 in the very first line of the trigger. 
+  It must be the first line because @@ROWCOUNT will be set back to 0 by any additional statement.  When the AFTER trigger begins,
+  @@ROWCOUNT will contain the number of rows affected by the outer INSERT, UPDATE, or DELETE statement.
+
+  ---------------------------
+  AFTER TRIGGER - WITHOUT FOR
+  ---------------------------
+  IF OBJECT_ID(N'Sales.tr_SalesOrderDetailsDML', N'TR') IS NOT NULL
+     DROP TRIGGER Sales.tr_SalesOrderDetailsDML;
+  GO
+  CREATE TRIGGER Sales.tr_SalesOrderDetailsDML
+  ON Sales.OrderDetails
+  AFTER DELETE, INSERT, UPDATE
+  AS
+  BEGIN
+    IF @@ROWCOUNT = 0 RETURN;    -- Must be first statement
+	   SET NOCOUNT ON;
+	   SELECT COUNT(*) AS InsertedCount FROM Inserted;
+	   SELECT COUNT(*) AS DeletedCount FROM Deleted;
+  END;
+   
+  ----------------------
+  AFTER TRIGGER - INSERT
+  ----------------------
+
   CREATE TRIGGER tr_tblEmployee_ForInsert
   ON tblEmployee
   FOR INSERT
@@ -51,9 +111,9 @@
 	          CAST(GETDATE()) as nvarchar(20))
   END
 
-  **********************
-  DELETE TRIGGER
-  **********************
+  -----------------------
+  AFTER TRIGGER - DELETE
+  -----------------------
   CREATE TRIGGER tr_tblEmployee_ForDelete
   ON tblEmploye
   FOR DELETE
@@ -75,11 +135,12 @@
   END
   https://www.youtube.com/watch?v=k0S4P-a6d5w&index=43&list=PL08903FB7ACA1C2FB
 
-  *********************
-  UPDATE TRIGGER    - The After trigger for UPDATE event, makes use of
+  ---------------------------------------------------------------------
+  AFTER TRIGGER - UPDATE
+  UPDATE - The After trigger for UPDATE event, makes use of
   both the inserted and deleted tables.  The inserted table contains the 
   updated data and the deleted table contains the old data.
-  *********************
+  -----------------------------------------------------------------------
   CREATE TRIGGER tr_tblEmployee_ForUpdate
   on tblEmployee
   for Update
@@ -93,9 +154,9 @@
 
   https://www.youtube.com/watch?v=P_BREQy6bOo&list=PL08903FB7ACA1C2FB&index=44
 
-  *********************
-  INSTEAD OF INSERT - TRIGGER
-  *********************
+  *********************************
+  2. INSTEAD OF TRIGGERS -  INSERT 
+  *********************************
   -- Used when issuing a DML command using a view that tries to alter multiple
   -- base tables.
   CREATE TRIGGGER tr_vWEmployeeDetails_InsteadofInsert
@@ -108,9 +169,9 @@
   END
   https://www.youtube.com/watch?v=MseKoztMpoo&list=PL08903FB7ACA1C2FB&index=45
 
-  ****************************
-  INSTEAD OF UPDATE - TRIGGER
-  ****************************
+ -----------------------------
+  INSTEAD OF TRIGGER - UPDATE 
+ -----------------------------
   Create Trigger tr_vWEmployeeDetails_InsteadOfUpdate
   ON vWEmployeeDetails
   INSTEAD OF UPDATE
@@ -141,13 +202,13 @@
 
 		  Update tblEmployee set DepartmentId = @DeptId
 		  from inserted
-		  joint tblEmployee
+		  join tblEmployee
 		  on tblEmployee.Id = inserted.id
  END
 
- ***************************
- INSTEAD OF DELETE - Trigger
- ***************************
+ --------------------------- 
+ INSTEAD OF TRIGGER - DELETE 
+ ---------------------------- 
  Create Trigger tr_vWEmployeeDetails_InsteadofDelete
  on vWEmployeeDetails
  Instead of Delete

@@ -6,6 +6,7 @@ Different ways of setting a variable or declaring variable
 3.  Using SET with SELECT Statement
 4.  Accumulating Variables in a Variable
 5.  Loading Variable from Stored Procedure
+6.  Variables in a Stored Procedure
 
 Variables and Data Types
 Data Types
@@ -175,11 +176,45 @@ WHERE YEAR(ActorDOB) = 1970
 PRINT @NameList
 
 *****************************************
-Loading Variable from a Stored Procedure
+5. Loading Variable from a Stored Procedure
 *****************************************
 DECLARE @Count INT
 EXEC @Count = spFilmsInYear @Year = 2000
 SELECT @Count
+/*
+******************************************
+6. Loading Variables to a Stored Procedure
+*******************************************
+- It is best practice to name the parameters when you call a stored procedures.   Although passing parameter values by position
+  may be more compact, it is also more error prone.  If you pass parameters by name and the parameter order changes on the 
+  stored procedure, your call of the stored procedure will still work.
+
+EXEC spFilmList 150, 180, 'star'  - Can be done after the Stored Procedure is executed
+EXEC spFileList @MinLength=150, @MaxLength=180, @Title='star'  - Alternate way of writing parameters
+EXEC spFileList @MaxLength=180, @Title='star'  - Uses Default Value for MinLength since it is optional
+
+OUTPUT Keyword - Allows both input and OUTPUT.  OUTPUT Parameters are always optional parameters.
+
+CREATE PROC spFilmList
+      (
+	     @MinLength AS INT = 0,     -- Providing a Default Value will automatically make the parameter optional.  
+		                            -- You can also set the Defualt values to 'NULL'.     
+		 @MaxLength AS INT
+		 @Title AS VARCHAR(MAX)     -- Defines Maxium length of characters
+		 @FilmCount INT OUTPUT      -- Output parmameter
+	  )
+AS
+BEGIN  --  Not Required but nice to use (Same with END Statement)
+SELECT
+  FilmName,
+  FilmRunMinutes
+FROM 
+  tblFilm
+WHERE FileRunMinutes >= @MinLength  AND
+      FilmRunMinutes <= @MaxLength AND
+	  FilmName LIKE '%' + @Title + '%'
+ORDER BY FilmName ASC
+END
 
 
 */

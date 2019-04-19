@@ -22,7 +22,7 @@ BEGIN TRY and END TRY Blocks.  If there is an exception in the TRY block, the co
 immediately, jumps to the CATCH block.  If there is no exception, CATCH block will be
 skipped, and the statements, after the CATCH block are executed.
 
-Errors trapped by by a CATCH block are not returned to the calling appication.  If any
+Errors trapped by by a CATCH block are not returned to the calling application.  If any
 part of the error information must be returned to the application, the code in the CATCH
 block must do so by using RAISERROR() Function.
 
@@ -56,5 +56,25 @@ State
   not be used.
 https://docs.microsoft.com/en-us/sql/t-sql/language-elements/raiserror-transact-sql?view=sql-server-2017
 
+--------
+THROW() 
+---------
+https://docs.microsoft.com/en-us/sql/t-sql/language-elements/throw-transact-sql?view=sql-server-2017
 
+Syntax
+error_number - must be greater than or equal to 50000.
+message - string
+state - between 0 and 255
+
+THROW [ { error_number | @local_variable },  
+        { message | @local_variable },  
+        { state | @local_variable } ]   
+[ ; ]  
+
+THROW() - Raises an exception and transfers execution to a CATCH block of a TRY...CATCH block.
+The statement before the THROW statement must be followed by the semicolon(;) statement terminator.
+
+Note! - THROW; 
+THROW without parameters has to be nested inside a CATCH block.  THROW with paramters does not 
+have to be nested inside a CATCH block.
 */
