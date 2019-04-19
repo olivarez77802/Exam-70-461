@@ -54,7 +54,7 @@ END
 
 -- Inline Table
 CREATE FUNCTION FnTemp(Parameters Type)
-RETURNS TABLE
+RETURNS TABLE AS RETURN
 (
 ..
 )

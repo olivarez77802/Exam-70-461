@@ -130,6 +130,26 @@ Inline Table Valued Function
 - The table returned by the table valued function, can also be used in joins with other tables.
 - Function gets stored in Functions/Table-valued Functions
 
+CREATE FUNCTION HR.GetManagers(@empid AS INT) RETURNS TABLE
+AS 
+RETURN
+  WITH EmpsCTE AS
+   (
+     SELECT empid, mgrid, firstname, lastname, 0 AS distance
+	 FROM HR.Employees
+	 WHERE empid = @empid
+
+	 UNION ALL
+
+	 SELECT M.empid, M.mgrid, M.firstname, M.lastname, S.distance + 1 AS distance
+	 FROM EmpsCTE AS S
+	   JOIN HR.Employees AS M
+	     ON S.mgrid = M.empid
+   )
+   SELECT empid, mgrid, firstname, lastname, distance
+   FROM EmpsCTE;
+GO
+
 *************************************
 Multi Statement Table Valued Function
 *************************************
@@ -168,6 +188,9 @@ WHERE EXIST IN (SELECT soh.ContactID
                 FROM Sales.SalesOderHeader AS soh
 				WHERE soh.Contactid = c.Contactid);
 
+SELECT productid, productname, unitprice
+FROM Prodution.Products
+WHERE unitprice = (SELECT MIN(unitprice) FROM Production.Products);
 
 ***************************
 Temp Tables in Dynamic SQL

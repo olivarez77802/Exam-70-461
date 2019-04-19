@@ -88,25 +88,25 @@ Logical Order - The order in which a query is written is not the order
 4. HAVING   <search condition>
 6. ORDER BY <order by list>
 
-A typical mistake made by people who don't understand logical query processing is attempting to
+-A typical mistake made by people who don't understand logical query processing is attempting to
 refer in the 'WHERE' clause to a column alias defined in the 'SELECT' clause.  This isn't allowed
 because the 'WHERE' clause is evaluated before the 'SELECT' clause.
 
-DATEPART, DATEADD, DATEDIFF Functions
-Select DATEPART(weekday, '2012-08-30 19:45:31.793') -- returns 5
-SELECT DATEPART(MONTH, '2012-08-30 19:45:31.793')   -- returns 8
-SELECT DATENAME(weekday, '2012-08-30 19:45:31.793') -- returns Thursday
-SELECT DATEADD(DAY, 20, '2012-08-30 19:45:31.793') -- Returns 2012-09-19 19:45:31.793
-SELECT DATEDIFF(MONTH, '11/30/2005', '01/31/2006') - Returns 2
+- Note! - Due to SQL Optimization, a JOIN in the FROM statement may do filtering prior to the 
+  WHERE clause being processed.
 
-https://www.youtube.com/watch?v=eYsizQVa_EU&index=27&list=PL08903FB7ACA1C2FB
+A very common question is, “What’s the difference between the ON and the WHERE clauses, and does it matter if you specify your predicate
+in one or the other?” The answer is that for inner joins it doesn’t matter. Both clauses perform the same filtering purpose. Both filter 
+only rows for which the predicate evaluates to true and discard rows for which the predicate evaluates to false or unknown. In terms of 
+logical query processing, the WHERE is evaluated right after the FROM, so conceptually it is equivalent to concatenating the predicates
+with an AND operator. SQL Server knows this, and therefore can internally rearrange the order in which it evaluates the predicates in 
+practice, and it does so based on cost estimates.
 
 SELECT DISTINCT - 
 https://www.w3schools.com/sql/sql_distinct.asp
 - Below query will give you DISTINCT country, region, and city (not just DISTINCT Country).
 SELECT DISTINCT country, region, city
 FROM HR.Employees;
-
 
 --------------------------------------------------------------------------------------------
 Examples
@@ -157,7 +157,18 @@ return @Age
 -- SELECT @years AS Years, @months AS Months, @days as Days
 END
 
+***************
+LIKE Operator
+***************
+PERFORMANCE OF THE LIKE PREDICATE
 
+When the LIKE pattern starts with a known prefix—for example, col LIKE ‘ABC%’— SQL Server can potentially 
+efficiently use an index on the filtered column; in other words, SQL Server can rely on index ordering. 
+When the pattern starts with a wildcard—for example, col LIKE ‘%ABC%’—SQL Server cannot rely on index ordering anymore. 
+Also, when looking for a string that starts with a known prefix (say, ABC) make sure you use the LIKE predicate, 
+as in col LIKE ‘ABC%’, because this form is considered a search argument. Recall that applying manipulation to the
+filtered column prevents the predicate from being a search argument. For example, the form LEFT(col, 3) = ‘ABC’ 
+isn’t a search argument and will prevent SQL Server from being able to use an index efficiently.
 
 ***************
 EXCEPT Operator
@@ -236,7 +247,14 @@ Types of Joins
 * RIGHT JOIN - Returns all rows from the right table, even if there are no matches on the left table.
 * FULL JOIN - Returns rows when there is a match in one of the tables.
 * SELF JOIN - Used to join a table to itself as if the table where two tables.
-* CARTESIAN JOIN - Returns the Cartesian product of the sets of records from two or more joined tables.
+* CARTESIAN (CROSS) JOIN - Returns the Cartesian product of the sets of records from two or more joined tables.
+                           For example. if we have 10 rows in the Employee table and the Department table we
+						   have 4 rows.  A cross join between these 2 tables produces 40 rows. 
+						   Note! - A Cross Join will not have a 'ON' Clause.  Syntax:
+						   Select Name, Gender, Salary, DepartmentName
+						   FROM tblEmployee
+						   CROSS JOIN tblDepartment.
+ * OUTER JOINS - Match rows based on a predicate and return both matches and non-matches.
 
 https://www.tutorialspoint.com/sql/sql-using-joins.htm
 
