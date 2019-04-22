@@ -136,4 +136,10 @@ SQL says that NULLs should sort together, but leaves it to the implementation to
 sort them before or after non-NULL values. In SQL Server the decision was to sort them before non-NULLs 
 (when using an ascending direction).
 
+----------------------
+SET OPERATORS
+----------------------
+T-SQL supports three set operators: UNION, INTERSECT, and EXCEPT; it also suuports one multiset operator: UNION ALL.
+Set operators consider two NULLs as equal for the purpose of comparison.  This is quite unusual when compared to
+filtering clause like WHERE and ON.
 */
