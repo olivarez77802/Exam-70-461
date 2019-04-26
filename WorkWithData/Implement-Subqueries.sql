@@ -10,6 +10,13 @@ Implement sub-queries
 SUBQUERY
 ********************
 
+Subqueries can be self-contained—namely, independent of the outer query; or they can be correlated—namely,
+having a reference to a column from the table in the outer query. In terms of the result of the subquery,
+it can be scalar, multi-valued, or table-valued.
+
+Note that if what’s supposed to be a scalar subquery returns in practice more than one value, the code
+fails at run time. If the scalar subquery returns an empty set, it is converted to a NULL.
+
 Note: Compare with derived table.  A derived table is basically q subquery, except it is always in the FROM Clause
 of an SQL Statement.  The reason it is called a derived table is because it essentially functions as a table.
 See DERIVED_TABLES.sql
@@ -189,6 +196,22 @@ Select *
 FROM ITBL  
 WHERE VAC_HOURS > 0 
 
+If you need to define multiple CTEs, you simply separate them by commas.
 
+WITH C1 AS
+(
+  SELECT ...
+  FROM T1
+  WHERE ...
+),
+C2 AS 
+(
+  SELECT
+  FROM  C1
+  WHERE ...
+)
+SELECT ...
+FROM C2
+WHERE ...;
 
 */

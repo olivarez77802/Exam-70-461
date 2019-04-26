@@ -38,7 +38,7 @@ Functions / Procedures with Return Statements:
 1. Stored Procedure - RETURN.  A stored procedure ends when the T-SQL batch ends, but you can cause the procedure
                                to exit by using the RETURN command.
 -- Two Return Statements.  1st one is RETURNS second one is RETURN
-2. Scalar Function - Second RETURN is at bottom RETRUN datatype.
+2. Scalar Function - Second RETURN is at bottom RETURN datatype.
 3. Inline Table - RETURNS TABLE AS RETURN - Both RETURN(S) on same line
 4. Mulistatement - RETURNS @TABLE  - Second RETURN at the end.  Nothing followed by RETURN.
 
@@ -72,6 +72,7 @@ CREATE FUNCTION fnTemp
 RETURNS @TempTable (Paramters Type)
 INSERT INTO @TempTable
 SELECT .. FROM ..
+RETURN
 
 
 
@@ -138,6 +139,9 @@ INLINE TABLE FUNCTIONS returns a TABLE
     in joins with other tables. 
 3. You can call a VIEW as the underlying table. 
 4. You can update the underlying Table using INLINE Table Function 
+
+See also APPLY Operator in Implement-Subqueries.sql used to join INLINE TABLES.
+CROSS APPLY same as INNER JOIN.  OUTER APPLY same as LEFT OUTER JOIN.
 
 https://www.youtube.com/watch?v=hs4mReAzESc&list=PL08903FB7ACA1C2FB&index=31
 

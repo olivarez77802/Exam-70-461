@@ -35,18 +35,33 @@ Query data by using SELECT statements
     See MODIFYINGDATA - COALESCE-ISNULL-CASE.Sql 
 
    1. SELECT Statement
-   2. EXCEPT Operator
-   3. INTERSECT Operator
-   4. JOIN Operator
-   5. DERIVED Tables
-   6. RANK 
-   7. SYNONYMS
+   2. LIKE Operator
+   3. EXCEPT Operator
+   4. INTERSECT Operator
+   5. JOIN Operator
+   6. DERIVED Tables
+   7. RANK 
+   8. SYNONYMS
    
- 
+
+Set operators have precedence: INTERSECT precedes UNION and EXCEPT, and UNION and EXCEPT are evaluated from left to right 
+based on their position in the expression. Consider the following set operators.
+
+<query 1> UNION <query 2> INTERSECT <query 3>;
+
+First, the intersection between query 2 and query 3 takes place, and then a union between the result of the intersection and
+query 1. You can always force precedence by using parentheses. So, if you want the union to take place first, you use the 
+following form.
+
+(<query 1> UNION <query 2>) INTERSECT <query 3>; 
+
+So Order of Precedence is:
+1. INTERSECT
+2. UNION and EXCEPT (Evaluated Left to Right)
   
 
 ***************
-SELECT
+1. SELECT
 ***************
 
 SELECT Statement
@@ -101,6 +116,17 @@ only rows for which the predicate evaluates to true and discard rows for which t
 logical query processing, the WHERE is evaluated right after the FROM, so conceptually it is equivalent to concatenating the predicates
 with an AND operator. SQL Server knows this, and therefore can internally rearrange the order in which it evaluates the predicates in 
 practice, and it does so based on cost estimates.
+
+SELECT shipperid, YEAR(shippeddate) AS shippedyear,
+   COUNT(*) AS numorders
+FROM Sales.Orders
+WHERE shippeddate IS NOT NULL
+GROUP BY shipperid, YEAR(shippeddate)
+HAVING COUNT(*) < 100;
+Notice that the query filters only shipped orders in the WHERE clause. This filter is applied at the row level conceptually
+before the data is grouped. Next the query groups the data by shipper ID and shipped year. Then the HAVING clause filters 
+only groups that have a count of rows (orders) that is less than 100. Finally, the SELECT clause returns the shipper ID, 
+shipped year, and count of orders per each remaining group.
 
 SELECT DISTINCT - 
 https://www.w3schools.com/sql/sql_distinct.asp
@@ -158,7 +184,7 @@ return @Age
 END
 
 ***************
-LIKE Operator
+2. LIKE Operator
 ***************
 PERFORMANCE OF THE LIKE PREDICATE
 
@@ -171,7 +197,7 @@ filtered column prevents the predicate from being a search argument. For example
 isn’t a search argument and will prevent SQL Server from being able to use an index efficiently.
 
 ***************
-EXCEPT Operator
+3. EXCEPT Operator
 ***************
 
 EXCEPT Operator
@@ -208,7 +234,7 @@ Select Id, Name, Gender FROM TABLE A
 WHERE Id NOT IN (SELECT Id FROM TABLE B)
  
 *****************
-INTERSECT 
+4. INTERSECT 
 *****************
 
 INTERSECT Operator 
@@ -236,16 +262,16 @@ ON TableA.Id = TableB.Id
 
  
 **************
-JOINS
+5. JOINS
 **************
 
 Joins
 
 Types of Joins
 * INNER JOIN - Returns rows when there is a match in both tables.
-* LEFT JOIN - Returns all rows from the left table, even if there are no matches in the right table.
-* RIGHT JOIN - Returns all rows from the right table, even if there are no matches on the left table.
-* FULL JOIN - Returns rows when there is a match in one of the tables.
+* LEFT (OUTER) JOIN - Returns all rows from the left table, returns matching rows on Right table.
+* RIGHT (OUTER) JOIN - Returns all rows from the right table, and matched records from Left Table. 
+* FULL (OUTER) JOIN - Returns rows when there is a match in one of the tables.
 * SELF JOIN - Used to join a table to itself as if the table where two tables.
 * CARTESIAN (CROSS) JOIN - Returns the Cartesian product of the sets of records from two or more joined tables.
                            For example. if we have 10 rows in the Employee table and the Department table we
@@ -254,7 +280,12 @@ Types of Joins
 						   Select Name, Gender, Salary, DepartmentName
 						   FROM tblEmployee
 						   CROSS JOIN tblDepartment.
- * OUTER JOINS - Match rows based on a predicate and return both matches and non-matches.
+ 
+ See Also Apply Operator in Implement-Subqueries.sql
+ CROSS APPLY - Same as INNER JOIN
+ OUTER APPLY - Same as LEFT OUTER JOIN
+
+ https://www.w3schools.com/sql/sql_join.asp
 
 https://www.tutorialspoint.com/sql/sql-using-joins.htm
 
@@ -312,7 +343,7 @@ SELECT TOP 1000 PERS.BusinessEntityID
   ON PERS.BusinessEntityID = PHON.BusinessEntityID
 
 *******************
-DERIVED TABLES
+6. DERIVED TABLES
 *******************
 
 Derived Tables
@@ -350,7 +381,7 @@ JOIN PERSON.ADDRESS AS A
 ON E.AddressID = A.AddressID
 
 *************
-RANK
+7. RANK
 *************
 
 RANK AND DENSE_RANK returns a rank starting at 1 based on the ordering of rows imposed by the ORDER BY Clause
@@ -450,7 +481,7 @@ FROM Sales.SalesPerson AS s
 WHERE TerritoryID IS NOT NULL AND SalesYTD <> 0;
 
 ******************
-SYNONYMS
+8. SYNONYMS
 ******************
    
    Synonyms using SSMS

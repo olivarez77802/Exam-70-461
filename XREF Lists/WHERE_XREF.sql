@@ -6,7 +6,7 @@ WHERE XREF - Different ways of using WHERE Clause
 3. Finding Rows that have a value between values
 4. INSERT using WHERE
 5. DELETE using WHERE
-6. JOIN using WHERE
+6. JOIN using WHERE. Differences between WHERE and ON
 7. VIEWS using WHERE
 8. HAVING used with WHERE
 9. WHERE used in DERIVED Query
@@ -66,14 +66,62 @@ DELETE using WHERE
 DELETE FROM CUSTOMERS
 WHERE ID = 6;
 
-****************
-JOIN using WHERE
-****************
+******************************************************
+6. JOIN using WHERE. Differences between WHERE and ON
+******************************************************
+
 SELECT E.UIN, E.SSN, NAME, A.ADDRESS, A.STATE
 FROM EMP  AS E
 JOIN ADDRESS AS A
 ON (E.UIN = A.UIN)
 WHERE A.STATE = 'TX'
+
+“What’s the difference between the ON and the WHERE clauses, and does it matter if you specify your predicate
+in one or the other?” The answer is that for inner joins it doesn’t matter. Both clauses perform the same filtering
+purpose. Both filter only rows for which the predicate evaluates to true and discard rows for which the predicate
+evaluates to false or unknown. In terms of logical query processing, the WHERE is evaluated right after the FROM, 
+so conceptually it is equivalent to concatenating the predicates with an AND operator. SQL Server knows this, 
+and therefore can internally rearrange the order in which it evaluates the predicates in practice, and it does 
+so based on cost estimates.
+
+SELECT
+  S.companyname AS supplier, S.country,
+  P.productid, P.productname, P.unitprice
+FROM Production.Suppliers AS S
+  INNER JOIN Production.Products AS P
+    ON S.supplierid = P.supplierid
+WHERE S.country = N'Japan';
+
+-- Is the same as 
+
+SELECT
+  S.companyname AS supplier, S.country,
+  P.productid, P.productname, P.unitprice
+FROM Production.Suppliers AS S
+  INNER JOIN Production.Products AS P
+    ON S.supplierid = P.supplierid
+    AND S.country = N'Japan';
+
+For many people, though, it’s intuitive to specify the predicate that matches columns from both sides in the ON clause,
+and predicates that filter columns from only one side in the WHERE clause. But again, with inner joins it doesn’t matter. 
+In the discussion of outer joins in the next section, you will see that, with those, ON and WHERE play different roles; 
+you need to figure out, according to your needs, which is the appropriate clause for each of your predicates.
+
+-- Example of OUTER JOIN using WHERE Clause
+SELECT
+  S.companyname AS supplier, S.country,
+  P.productid, P.productname, P.unitprice
+FROM Production.Suppliers AS S
+  LEFT OUTER JOIN Production.Products AS P    <-- Will return all of Table S
+    ON S.supplierid = P.supplierid            <-- Will return matches and Table S that do not have Products.
+WHERE S.country = N'Japan';
+
+It is very important to understand that, with outer joins, the ON and WHERE clauses play very different roles,
+and therefore, they aren’t interchangeable.   The WHERE clause still plays a simple filtering role.
+However, the ON clause doesn’t play a simple filtering role; rather, it’s more a matching role.
+In other words, a row in the preserved side will be returned whether the ON predicate finds a match for it or not. 
+Because it’s a matching predicate (as opposed to a filter), the join won’t discard suppliers; instead, 
+it only determines which products get matched to each supplier. 
 
 *****************
 WHERE using VIEWS
@@ -85,8 +133,13 @@ WHERE condition
 https://www.w3schools.com/sql/sql_quickref.asp
 
 ************************
-HAVING used with WHERE
+8. HAVING used with WHERE
 ************************
+--
+-- HAVING will always be used with an Aggregate Function and with the GROUP BY clause
+-- If a column name does not appear in the GROUP BY list nor is it contained in an
+-- aggregate function, it's not allowed in the HAVING, SELECT, and ORDER BY clauses.
+--
 SELECT Column_name, aggregrate_function(columnname)
 FROM table_name
 WHERE column_name operator value
