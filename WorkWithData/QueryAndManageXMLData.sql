@@ -41,10 +41,12 @@ Element - Both the tag and the value 'Samual Clinton'
 - or
 <element /> 
 
+Gender="M" and Age="40" are attributes of Element.
+
 <book xyz="a">
 xyz- attribute name  "a" - attribute value
 Attribute - specifies a single property for an element.  It consists of a 
-name and a value separated by an equal sign.
+name and a value separated by an equal sign.  
 
 XML type limitations
 - XML type is not treated like character types
@@ -405,10 +407,30 @@ The query returns the following output.
 
 */
 USE AdventureWorks2014
+
+-- RAW - Every row is under a signal element named 'row'.
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Raw
+
+-- Auto - Automatically; Defaults to type nvarchar.  AUTO exchanges 'row' with Table Name. 
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Auto
+
+-- ELEMENTS - Can be used with AUTO and RAW to give you elements. Starts to look more like traditional XML.
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Raw, ELEMENTS 
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML AUTO, ELEMENTS 
+
 -- Auto - Automatically; Defaults to type nvarchar
 SELECT TOP 5 *
 FROM HumanResources.Employee
 FOR XML Auto
+
 -- Type set it to XML DataType
 SELECT TOP 5 *
 FROM HumanResources.Employee

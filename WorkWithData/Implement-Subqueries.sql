@@ -1,4 +1,7 @@
 /*
+See also ModifyData/CombineDatasets.sql
+See also QueryDataByUsingSelect.sql
+
 Implement sub-queries
  - Identify problematic elements in query plans; pivot and unpivot; apply operator; cte statement; with statement
 
@@ -114,6 +117,14 @@ Apply Operator
 * Outer Apply returns matching + non-matching rows (semantically equivalent to Left Outer Join).
   The unmatched columns of the table valued function will be set to NULL.
 
+The APPLY operator is a powerful operator that you can use to apply a table expression given to
+it as the right input to each row from a table expression given to it as the left input. What’s 
+interesting about the APPLY operator as compared to a join is that the right table expression can
+be correlated to the left table; in other words, the inner query in the right table expression 
+can have a reference to an element from the left table. So conceptually, the right table expression
+is evaluated separately for each left row. This means that you can replace the use of cursors in
+some cases with the APPLY operator.
+
 Cross Apply & Outer Apply Operator
 https://www.youtube.com/watch?v=kVogo0AbatM
 
@@ -124,7 +135,7 @@ Error - Will give you an error.  Does not allow an Inner Join on a Phyiscal Tabl
 a Table Valued Function.  !!! Must use APPLY Operator
 --------------------------------------------------------------------------------------
 
-Select D.DepartmentName E.Name, E.Gender, E.Salary
+Select D.DepartmentName E.Name, E.Gender, E.Salary      
 from Department D
 Inner Join fn_GetEmployeesByDepartmentId (D.Id) E
 on D.Id = E.DepartmentId
@@ -133,9 +144,9 @@ on D.Id = E.DepartmentId
 APPLY Operator - Works!
 ------------------------
 
-Select D.DepartmentName, E.Name, E.Gender, E.Salary
+Select D.DepartmentName, E.Name, E.Gender, E.Salary        <-- Left Table with Elements from Right Table
 from Department D
-Cross Apply fn_GetEmployeeByDeparmtmentId (D.Id) E
+Cross Apply fn_GetEmployeeByDeparmtmentId (D.Id) E         <-- Right Table using Elements from Left Table
 
 -- on D.Id = E.DepartmentId   <-- Unlike Join - Not required
 
@@ -144,6 +155,18 @@ or if you also want non-matching rows use 'Outer Apply'
 Select D.DepartmentName, E.Name, E.Gender, E.Salary
 from Department D
 Outer Apply fn_GetEmployeeByDeparmtmentId (D.Id) E
+
+----------------------------------------------------------
+APPLY OPERATOR Using CROSS APPLY - Note 2 'WHERE' Clauses
+----------------------------------------------------------
+SELECT S.supplierid, S.companyname AS supplier, A.*
+FROM Production.Suppliers AS S
+  CROSS APPLY (SELECT productid, productname, unitprice
+               FROM Production.Products AS P
+               WHERE P.supplierid = S.supplierid
+               ORDER BY unitprice, productid
+               OFFSET 0 ROWS FETCH FIRST 2 ROWS ONLY) AS A
+WHERE S.country = N'Japan';
 
 ***************************
 CTE

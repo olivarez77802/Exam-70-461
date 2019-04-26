@@ -217,23 +217,41 @@ RTRIM(Character expression) - Removes blanks on the right hand side of the given
 LOWER(Character expression) - Converts all characters in the given Character expression to lowercase letters.
 UPPPER(Character expression) - Converts all the characters in the given Character_Expression to uppercase letters
 REVERSE('Any_String_Expression) - Reverses all the characters in the given string expression
-LEN(String_Expression) - Returns the count of total characters, in the given string expression, excluding the blanks at the end of the expression.
+
+LEN(String_Expression) - Returns the count of total characters, in the given string expression, 
+excluding the blanks at the end of the expression.
+Example: LEN(N'xyz') returns 3.  Note that it returns the number of characters(not bytes), regardless
+if the input is a regular character or Unicode character string.
 
 For a complete list go to SSMS Object Exporer  Programmability folder / Functions / System Functions / String Functions
 https://www.youtube.com/watch?v=qJFr-R76r9A&list=PL08903FB7ACA1C2FB&index=22
 
 LEFT(Character_Expression,Integer_Expression) - Returns the specified number of characters from the left hand side of the given character expression.
 RIGHT(Character_Expression, Integer_Expression) - Returns the specified number of characters from the right hand side of the given character expression.
-CHARINDEX('Expression_To_Find', 'Expression_To_Search, 'Start_Location') - Returns the starting position of the specified expression in a character string
+
+CHARINDEX('Expression_To_Find', 'Expression_To_Search, 'Start_Location') - Returns the starting position of the specified
+expression in a character string.  Example CHARINDEX(' ','Itzik Ben-Gan') looks for the first occurence of a space 
+second occurence.
+
 SUBSTRING('Expression','Start','Length') - Returns substring(part of the string), from the given expression.
 https://www.youtube.com/watch?v=vN4sy5nHn6k&list=PL08903FB7ACA1C2FB&index=23
+Example: SUBSTRING('abcde',1,3) returns 'abc'.
 
 REPLICATE(String to Replicate, Number of Times to Replicate)
 SPACE(Number of spaces)
 PATINDEX("%Patern%", Expression) - Returns the starting position of the first occurence.  PATINDEX allows the use of wildcards (CHARINDEX does not allow wildcards).
-REPLACE(String Expression, Pattern, Replacement Value)
+
+REPLACE(String Expression, Pattern, Replacement Value).  Example REPLACE('.1.2.3',',','/') substitutes all occurences of
+a dot(.) with a slash(/), returning the string '/1/2/3/'.
+
 STUFF(Orignal Expression, Start, Length, Replacement expression)
 https://www.youtube.com/watch?v=ALnM6d7OQUs&list=PL08903FB7ACA1C2FB&index=24
+Has four arguments.  
+1. Input string 
+2. Specifies from position 
+3. Specifies number of characters to delete.
+4. String to insert
+Example STUFF(',x,y,z',1,1,'') returns 'x,y,z'.
 
 */
 

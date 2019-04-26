@@ -29,6 +29,13 @@ checking existence (the exist() method), modifying sections within the XML data 
 as opposed to overwriting the whole thing, and shredding XML data into multiple rows in a result 
 set (the nodes() method).
 
+-------------------------------------------
+Using the XML Data Type for Dynamic Schema
+-------------------------------------------
+You create the schema collection by using the 'CREATE XML SCHEMA COLLECTION' T-SQL Statement.
+Creating the schema is a task that should not be taken lightly.  If you make an error in the
+schema, some invalid data might be accepted and some valid data might be rejected.
+ 
 
 XML Data Type Methods  
 An XML data type includes five methods that accept XQuery as a parameter
@@ -83,3 +90,4 @@ AS [4. Customer 2 orders]
 -- Return all orders with order number 10952
 SELECT @X.query('//Order[@orderid=10952]')
 AS [5. Orders with orderid=10952]
+
