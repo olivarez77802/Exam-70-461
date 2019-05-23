@@ -3,7 +3,6 @@ NULL XREF - Listing Ways of Handling NULLS in SQL
 
 NULL is a mark for a missing value- Not a value in itself.  The correct usage of the term is either "NULL mark" or just "NULL".
 
-<<<<<<< HEAD
 1. Overview
 2. 3 Valued Logic
 3. IS NULL
@@ -16,7 +15,6 @@ NULL is a mark for a missing value- Not a value in itself.  The correct usage of
 10. COUNT
 
 --------------------------------------------------
-=======
 4 Different ways of replacing a Null Value:
   A. COALESCE
   B. CASE
@@ -24,8 +22,6 @@ NULL is a mark for a missing value- Not a value in itself.  The correct usage of
   D. CONCAT - Substitutes a NULL input with an empty string (or skips the string)
 See ModifyData/CombineDatasets.sql for more info. 
 
->>>>>>> dd44488732b0891f2cfd9b94c13ccec3db9a53aa
-NULL   
 https://www.w3schools.com/sql/sql_null_values.asp
 ---------------------------------------------------
 
@@ -36,11 +32,9 @@ with every piece of code you write with T-SQL, you want to ask yourself whether 
 interacting with.  If the answere is yes, you want to make sure you understand the treatment of NULLs in your query, and
 ensure that your tests address treatment of NULLs specifically.
 
-<<<<<<< HEAD
-----------------------
+---------------------
 NULL - 3 Valued Logic
 ----------------------
-=======
 
 -- CONCATENATION
 T-SQL supports two ways to concatenate strings- one with the plus(+) operator, and another with the CONCAT function.
@@ -165,7 +159,6 @@ SQL says that NULLs should sort together, but leaves it to the implementation to
 sort them before or after non-NULL values. In SQL Server the decision was to sort them before non-NULLs 
 (when using an ascending direction).
 
-<<<<<<< HEAD
 -----------------------
 7. JOINS
 -----------------------
@@ -209,13 +202,10 @@ GROUP BY shipperid;
 -- COUNT(*) - Counts NULLS
 -- COUNT(shippeddate) - Skips NULLS
 
-
-=======
 ----------------------
 SET OPERATORS
 ----------------------
 T-SQL supports three set operators: UNION, INTERSECT, and EXCEPT; it also suuports one multiset operator: UNION ALL.
 Set operators consider two NULLs as equal for the purpose of comparison.  This is quite unusual when compared to
 filtering clause like WHERE and ON.
->>>>>>> dd44488732b0891f2cfd9b94c13ccec3db9a53aa
 */

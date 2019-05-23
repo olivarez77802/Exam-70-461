@@ -5,6 +5,10 @@ OBJECT_ID Xref
 -- Testing for the existence of a Stored Procedure (N'P').  You can check for the existence of a data object
    in many ways. Example you can check the metadata in sys.objects.  However, using the OBJECT_ID() is the
    least verbose.
+
+https://docs.microsoft.com/en-us/sql/t-sql/functions/object-id-transact-sql?view=sql-server-2017
+
+
 IF OBJECT_ID (N'Sales.GetCustomerOrders', N'P') IS NOT NULL
    DROP PROC Sales.GetCustomerOrders;
 GO
@@ -17,6 +21,9 @@ GO;
 -- FN - Scalar Function
 -- IF - Inline Table Valued Function
 -- TF - Table Valued Function
+-- U  - Table  N'U'
+-- P  - Stored Procedure. N'P'
+-- V  - View. N'V'
 --
 IF OBJECT_ID(N'Sales.fn_extension',N'FN') IS NOT NULL
    DROP FUNCTION Sales.fn_extension  
@@ -24,6 +31,8 @@ IF OBJECT_ID(N'Sales.fn_FilteredExtension', N'IF') IS NOT NULL
    DROP FUNCTION Sales.fn_FilteredExtension 
 IF OBJECT_ID(N'Sales.fn_FilteredExtension2', N'TF') IS NOT NULL
    DROP FUNCTION Sales.fn_FilteredExtension2;
+IF OBJECT_ID(N'Sales.OrderTotalsByYear', N'V') IS NOT NULL
+   DROP VIEW Sales.OrderTotalsByYear;
 
 */
 
@@ -42,3 +51,4 @@ BEGIN
     ('master','model','msdb','tempdb') AND name > @databasename);
 END
 GO
+

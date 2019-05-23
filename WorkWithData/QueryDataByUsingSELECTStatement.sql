@@ -7,9 +7,7 @@ Query data by using SELECT statements
    based on the tables provided; given a table with constraints, determine which statement set would load
    a table; use and understand different data access technologies; case versus isnull versus coalesce.
    
- - Use the ranking function to select top(X) rows for multiple categories in a single query.
-   RANK
-
+ 
  - Write and perform queries effeciently using the new (SQL 2005/8) code items such as synonyms
    https://docs.microsoft.com/en-us/sql/t-sql/statements/create-synonym-transact-sql?view=sql-server-2017
 
@@ -384,6 +382,10 @@ ON E.AddressID = A.AddressID
 7. RANK
 *************
 
+Use the ranking function to select top(X) rows for multiple categories in a single query.
+   RANK
+
+
 RANK AND DENSE_RANK returns a rank starting at 1 based on the ordering of rows imposed by the ORDER BY Clause
 
 ORDER BY Clause is required 
@@ -490,5 +492,39 @@ WHERE TerritoryID IS NOT NULL AND SalesYTD <> 0;
    Practical uses for Synonyms
    http://www.sqlservercentral.com/articles/Synonyms/115072/
   
-  
+ - Syntax.  Will store in folder Synonyms once created.
+  CREATE SYNONYM dbo.Categories FOR Production.Categories;
+
+  Then the end user can select from Categories without needing to specify a schema.
+
+  SELECT categoryid, categoryname, description
+  FROM Categories;
+
+  -Synonyms cannot refer to other synonyms.  They can refer to database objects
+   such as tables, views, stored procedures, and functions.  Synonym chaining is 
+   not allowed.
+  - You cannot reference a synonym in a DDL, statement such as ALTER.  Such
+    statements require you reference the base object instead. 
+	e.g. ALTER sp.StoredProcedure.   sp.StoredProcedure could not be a synonym.
+  - You can drop a synonym by using the DROP SYNONYM statement
+    DROP SYNONYM dbo.Categories
+
+	Advantages or Disadvatage of Synonyms over Views
+	 - Unlike views, synonyms can stand in for many other kinds of objects, not
+	   just tables.
+	 - Just as with views, synonyms can provide an abstraction layer, allowing
+	   you to present a logical view of the system without having to expose the 
+	   phyical names of the database objects to the end user. If the underlying
+	   object is altered, the synonym will not break (NO SCHEMA BINDING).
+	- Unlike views, synonyms cannot simplify complex logic like a view can
+	  simplify complex joins.  Synonyms are really just names.
+	- A view can refer to many tables, but a synonym can only refer to just
+	  one object.
+	- A view can reference another view, but a synonym cannot reference another
+	  synonym; synonym chaining not allowed.
+	- If you do not want to expose metadata to the user, the user will not see
+	  the any columns or datatypes if the synonyms refers to a table or view,
+	  nor will the user see any parameters if the synonym refers to a procedure
+	  or function.
+   
 */

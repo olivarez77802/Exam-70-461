@@ -8,6 +8,7 @@ Implement sub-queries
 1. SUBQUERY					 
 2. APPLY Operator
 3. CTE Statment
+4. PIVOT
 
 ********************
 SUBQUERY
@@ -237,4 +238,45 @@ SELECT ...
 FROM C2
 WHERE ...;
 
+
+*************
+PIVOT
+*************
+Pivoting is a specialized case of grouping and aggregating of data. Unpivoting is,
+in a sense, the inverse of pivoting. The specification for the PIVOT operator 
+starts by indicating an aggregate function.
+
+Pivot Syntax
+-------------
+SELECT <NonPivot>,             -- Grouping Column    -- Vertical Column   -- Y Column
+       <FirstPivotedColumn>,   -- Spreading Column   -- Horizontal Column -- X Column 
+	   ...                     -- Aggregation Column 
+FROM <Table containing data>
+   PIVOT (FUNCTION(<data column>)      -- Aggregate Function
+      FOR <List of pivoted columns> )  -- Spreading Column 
+	     AS <alias>
+
+-- OR
+WITH CTE
+AS (
+SELECT Y, X, Aggregate(Z) AS A
+FROM Table
+GROUP BY X, Y
+)
+SELECT Y, X-value, x-value, x-value, .. FROM CTE AS P
+PIVOT (Aggregate(A) FOR X IN (X-value, X-value, X-value, ...)) AS PVT;
+       
 */
+
+-- so-edw-sql2
+WITH PWORKER 
+AS (
+SELECT GenderCode AS Gender,  
+	   WorkStation AS WS,
+       SUM(FTEAnnualizedAnnualSalary) AS TS
+  FROM [SEACommonTransform].[dbo].[EDWWorkerFact]
+  WHERE FTEAnnualizedAnnualSalary IS NOT NULL 
+  GROUP BY WorkStation, GenderCode
+  )
+  SELECT Gender, A, C, D, E, F, G, H, I, J, K, L, M, N, O, P, R, S, T, V, W, X FROM PWORKER AS P 
+    PIVOT (SUM(TS) FOR WS IN (A, C, D, E, F, G, H, I, J, K, L, M, N, O, P, R, S, T, V, W, X)) AS pvt;

@@ -9,6 +9,13 @@ from the view, the data is actually retrieved from the underlying base tables.  
 a virtual table it does not store any data.
 - An Index View gets materialized.  This means the view is now capable of storing data.
 
+View Options
+1. WITH ENCRYPTION - Makes it difficult for users to discover the SELECT text of the View.
+2. WITH SchemaBinding - Guarentees that the underlying table structures cannot be altered without
+dropping the view.
+3. WITH VIEW_METADATA - Returns the metadata of the view instead of the base table.
+4. WITH CHECK OPTION - Important when making updates via a VIEW and using WHERE Clause.
+
 
 1. Views
 2. Indexed Views
@@ -17,22 +24,49 @@ a virtual table it does not store any data.
 Views
 ***************
 
+Views get saved in the database, and can be available to other queries and stored procedures.
+However, if the view is only used in one place, it can be replaced using CTE, Derived Tables,
+Temp Tables, Table Variable etc.
+
  Advantages
   - A View is a virtual table.  View is a saved SELECT query.
   - Views can be used to implement row and column level security.
   - Views can be used to present aggregated data and hide details
+  - You can use the WHERE Clause
+    
 
   Disadvantages
+  - You cannot add an ORDER BY to the SELECT statement in a view.  A view must appear just like a table
+    and tables in a relational database contain sets of rows.  Sets by themselves are not ordered, 
+	although you can apply an order to a result set using ORDER BY.  Similarily, tables and views in SQL
+	do not have an order to their rows, though you can apply one by adding an ORDER BY to the outermost SELECT
+	when you access the view.
+  - A view cannot create a table, whether permanent or temporary.  e.g. You cannot use the SELECT INTO Syntax.
+  - A view can reference only permanent tables; a view cannot reference a temporary table.
   - If you update a view based on multiple tables it may not update correctly.
     Cannot issue a DML Command (INSERT, UPDATE, DELETE) on multiple base tables
     Will have to create 'Instead of insert' trigger.
 	https://www.youtube.com/watch?v=MseKoztMpoo&list=PL08903FB7ACA1C2FB&index=45
+  - The only way to filter a view is to add the filter in a WHERE clause when you select from the view.
+    There is no way to pass a parameter to a view in order to filter the rows.  However you can use an
+	inline table valued function.
+  - Views cannot have parameters.   Need to use INLINE TABLE Functions as a replacement for 
+    parameterized views.
+	
+
+Inline Table Valued functions can be used to achieve the functionality of a parameterized views.
+The table returned by the table value function, can also be used in joins with other tables.
+Inline Tables have better performance that Multi Statement Table Valued Functions because internally,
+SQL Server treats an inline table valued function much like it would a view and treats a multi-statement
+table valued function similar to how it would a stored procedure.
+
 
   
   Updating a View
    A view can be updated under certain conditions which are given below −
       The SELECT clause may not contain the keyword DISTINCT.
-	  The SELECT clause may not contain summary functions.
+	  The SELECT clause may not contain summary functions.  (Kind of confusing, we are talking modifying with 
+	  a view, a view may contain summary (or aggregate) fields)
 	  The SELECT clause may not contain set functions.
 	  The SELECT clause may not contain set operators.
 	  The SELECT clause may not contain an ORDER BY clause.
@@ -49,6 +83,25 @@ SQL > UPDATE CUSTOMERS_VIEW
    SET AGE = 35
    WHERE name = 'Ramesh';
 This would ultimately update the base table CUSTOMERS and the same would reflect in the view itself.
+
+Examples
+-- Using WHERE Clauses
+Select * FROM vEmployee WHERE EID = 3
+*/
+
+SP_HELPTEXT vEmp
+
+--CREATE VIEW vEmp
+--AS
+--SELECT 
+--      JobTitle
+--      ,[BirthDate]
+--      ,[MaritalStatus]
+--      ,Gender
+--      ,[HireDate] 
+--	  ,ROW_NUMBER() OVER (ORDER BY Gender) AS GEN 
+--FROM [AdventureWorks2014].[HumanResources].[Employee] 
+
 
 *******************
 INDEXED VIEWS

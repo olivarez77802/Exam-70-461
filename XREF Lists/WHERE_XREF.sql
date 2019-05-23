@@ -124,7 +124,7 @@ Because it’s a matching predicate (as opposed to a filter), the join won’t disca
 it only determines which products get matched to each supplier. 
 
 *****************
-WHERE using VIEWS
+7. WHERE using VIEWS
 *****************
 CREATE VIEW view_name AS
 SELECT column_names(s)
