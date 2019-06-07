@@ -16,6 +16,13 @@ dropping the view.
 3. WITH VIEW_METADATA - Returns the metadata of the view instead of the base table.
 4. WITH CHECK OPTION - Important when making updates via a VIEW and using WHERE Clause.
 
+WITH CHECK OPTION
+Finally, you can add a WITH CHECK OPTION to the view. This is an important option. If you define a view with a filter restriction 
+in the WHERE clause of the SELECT statement, and then you modify rows of a table through the view, you could change a value so that 
+the affected row no longer matches the WHERE clause filter. It is even possible to update rows that fall outside the filter. 
+WITH CHECK OPTION prevents such disappearing rows from occurring when you update through the view, and it restricts modifications
+to only rows that match the filter condition. 
+
 
 1. Views
 2. Indexed Views

@@ -1,5 +1,5 @@
 /*
-Implicit XREF
+Implicit or Default XREF
 
 1. GROUP BY
 2. JOIN
@@ -7,6 +7,7 @@ Implicit XREF
 4. UNION and UNION ALL
 5. PIVOT (Determining Grouping Element)
 6. Views
+7. Manage Transactions Default
 
 --------------
 1. GROUP BY
@@ -133,5 +134,14 @@ a result, when you look at the query plans based on queries that select from vie
 see the referenced underlying tables of the view in the query plan; the view itself will not be
 an object in the query plan.
 
+-----------------------
+7. Manage Transactions
+-----------------------
+1. SQL's default Isolation Level is 'READ COMMITED'.  This means read only committed data.
+2. AUTOCOMMIT is the default transaction management mode.
+3. SET XACT_ABORT OFF  is the default.    Means the entire batch will not fail.  SET XACT_ABORT ON will rollback the entire batch.
+ 
+
+See also ManageTransactions.sql and SET_XREF.sql for more info.
 
 */

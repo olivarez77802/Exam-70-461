@@ -7,31 +7,6 @@ Query data by using SELECT statements
    based on the tables provided; given a table with constraints, determine which statement set would load
    a table; use and understand different data access technologies; case versus isnull versus coalesce.
    
- 
- - Write and perform queries effeciently using the new (SQL 2005/8) code items such as synonyms
-   https://docs.microsoft.com/en-us/sql/t-sql/statements/create-synonym-transact-sql?view=sql-server-2017
-
-- write efficient; technically complex SQL Queries, including all types of joins versus the use of derived
-   tables.
-   SELECT 
-   DERIVED_TABLES 
-
-     
- - Implement logic which uses dynamic SQL and system metadata
-   ??? Create module
-
-  - Determine what code may or may not execute based on tables provided
-   ??? Create module
-
- - Given a table with constraints, determine which statement set would load a table.
-   CREATE_DATABASE_OBJECTS Constraints.sql 
-
- - Use and understand different data access technologies
-    ??? Create module
-
-  - CASE versus ISNULL versus COALESCE
-    See MODIFYINGDATA - COALESCE-ISNULL-CASE.Sql 
-
    1. SELECT Statement
    2. LIKE Operator
    3. EXCEPT Operator
@@ -491,6 +466,9 @@ WHERE TerritoryID IS NOT NULL AND SalesYTD <> 0;
 
    Practical uses for Synonyms
    http://www.sqlservercentral.com/articles/Synonyms/115072/
+
+   Write and perform queries effeciently using the new (SQL 2005/8) code items such as synonyms
+   https://docs.microsoft.com/en-us/sql/t-sql/statements/create-synonym-transact-sql?view=sql-server-2017
   
  - Syntax.  Will store in folder Synonyms once created.
   CREATE SYNONYM dbo.Categories FOR Production.Categories;

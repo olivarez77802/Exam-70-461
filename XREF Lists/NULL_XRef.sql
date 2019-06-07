@@ -13,17 +13,12 @@ NULL is a mark for a missing value- Not a value in itself.  The correct usage of
 8. Subqueries
 9. SET OPERATORS - UNION, INTERSECT, EXCEPT
 10. COUNT
+11. TRY_CONVERT and TRY_PARSE
 
---------------------------------------------------
-4 Different ways of replacing a Null Value:
-  A. COALESCE
-  B. CASE
-  C. ISNULL
-  D. CONCAT - Substitutes a NULL input with an empty string (or skips the string)
-See ModifyData/CombineDatasets.sql for more info. 
+*****************
+1. Overview
+*****************
 
-https://www.w3schools.com/sql/sql_null_values.asp
----------------------------------------------------
 
 What's important from a perspective of coding with T-SQL is to realize that if the database your querying supports NULLs,
 their treatment if far from being trivial.   You need to carefully understand what happens when NULLs are involved in the
@@ -33,7 +28,7 @@ interacting with.  If the answere is yes, you want to make sure you understand t
 ensure that your tests address treatment of NULLs specifically.
 
 ---------------------
-NULL - 3 Valued Logic
+2. 3 Valued Logic
 ----------------------
 
 -- CONCATENATION
@@ -91,7 +86,6 @@ SELECT orderid, orderdate, empid
 FROM Sales.Orders
 WHERE shippeddate = @dt
    OR (shippeddate IS NULL AND @dt IS NULL);
->>>>>>> dd44488732b0891f2cfd9b94c13ccec3db9a53aa
 
 NULL's use three valued logic
 1. TRUE
@@ -101,7 +95,7 @@ Note! - Two NULLS are not considered equal to each other.   You should not use r
 T-SQL provides the predicate 'IS NULL' to return true when the tested operand is NULL.
 
 ------------------------
-IS NULL
+3. IS NULL
 ------------------------
 -- Below query will return an empty set.  Since the only regions that are <> 'N'WA' are NULL.
 SELECT empid, firstname, lastname, country, region, city
@@ -116,7 +110,7 @@ WHERE region <> N'WA'
    OR region IS NULL;
 
 -----------------------
-REPLACING A NULL VALUE
+4. REPLACING A NULL VALUE
 -----------------------
 
 4 Different ways of replacing a Null Value:
@@ -126,8 +120,10 @@ REPLACING A NULL VALUE
   D. CONCAT - Substitutes a NULL input with an empty string (or skips the string)
 See CombineDatasets.sql for more details.
 
+https://www.w3schools.com/sql/sql_null_values.asp
+
 ---------------------------------------------------------------
-Indexes - Misuse of COALESCE will prevent them from being used.  
+5. Indexes - Misuse of COALESCE will prevent them from being used.  
 ---------------------------------------------------------------
 
 Remember that when comparing two NULLs, you get unknown and the row is filtered out. So the current form of the predicate 
@@ -149,7 +145,7 @@ WHERE shippeddate = @dt
    OR (shippeddate IS NULL AND @dt IS NULL);
 
 ------------------
-SORTING
+6. SORTING
 ------------------
 Another tricky aspect of ordering is treatment of NULLs. Recall that a NULL represents a missing value,
 so when comparing a NULL to anything, you get the logical result unknown. That’s the case even when 
@@ -173,7 +169,7 @@ ON A.KEY = B.KEY
 The above will return all of Table A including those not matching Table B. B.Key will be reflected as NULL.
 
 ----------------------
-SUBQUERIES
+8. SUBQUERIES
 ----------------------
 
 Note that if what’s supposed to be a scalar subquery returns in practice more than one value, the code fails at
@@ -182,6 +178,11 @@ run time. If the scalar subquery returns an empty set, it is converted to a NULL
 -------------------------------------------
 9. SET OPERATORS - UNION, INTERSECT, EXCEPT
 -------------------------------------------
+
+T-SQL supports three set operators: UNION, INTERSECT, and EXCEPT; it also suuports one multiset operator: UNION ALL.
+Set operators consider two NULLs as equal for the purpose of comparison.  This is quite unusual when compared to
+filtering clause like WHERE and ON.
+
 Set Operators have a number of benefits.  They allow simpler code because you don't explicitly compare
 the columns from two inputs like you do with joins.  Also, when set operators compare two NULLs. they
 consider them the same, which is not the case with JOINS.  When this is the desired behavior, it is 
@@ -202,10 +203,28 @@ GROUP BY shipperid;
 -- COUNT(*) - Counts NULLS
 -- COUNT(shippeddate) - Skips NULLS
 
-----------------------
-SET OPERATORS
-----------------------
-T-SQL supports three set operators: UNION, INTERSECT, and EXCEPT; it also suuports one multiset operator: UNION ALL.
-Set operators consider two NULLs as equal for the purpose of comparison.  This is quite unusual when compared to
-filtering clause like WHERE and ON.
+------------------------------
+11. TRY_CONVERT and TRY_PARSE  
+------------------------------
+You can use two functions to preempt or detect potential errors so that your code can avoid unexpected errors. 
+TRY_CONVERT attempts to cast a value as a target data type, and if it succeeds, returns the value, returning NULL
+if the test fails. The following example tests two values of the datetime data type, which does not accept dates
+earlier than 1753-01-01 as valid dates.
+
+SELECT TRY_CONVERT(DATETIME, '1752-12-31');
+SELECT TRY_CONVERT(DATETIME, '1753-01-01');
+
+The first statement returns a NULL, signaling that the conversion will not work. The second statement returns the 
+converted datetime value as a datetime data type. TRY_CONVERT has a format similar to the existing CONVERT function,
+so you can also pass a style in the case of string conversions.
+
+With TRY_PARSE, you can take an input string containing data of an indeterminate data type and convert it to a 
+specific data type if possible, and return NULL if it is not. The following example attempts to parse two strings.
+
+SELECT TRY_PARSE('1' AS INTEGER);
+SELECT TRY_PARSE('B' AS INTEGER);
+
+The first string converts to an integer, so the TRY_PARSE function returns the value as an integer. The second string,
+‘B’, will not convert to an integer, so the function returns NULL. The TRY_PARSE function follows the syntax of the 
+PARSE and CAST functions.
 */

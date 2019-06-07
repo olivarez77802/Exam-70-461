@@ -258,16 +258,30 @@ procedure prevents the procedure from returning that message to the client.  In 
 the performance of frequently executed stored procedures because there is less network communications required when
 the 'rows affected' message is not returned to the client.
 */
---
+/*
+****************************************************************************************************************
 --  XACT_ABORT
---
+****************************************************************************************************************
+XACT_ABORT - Controls Atomicity so it the A in A.C.I.D
+IF XACT_ABORT is OFF, which IS the DEFAULT, you can add code to decide whether to roll back the transaction or 
+commit it.
+
+XACT_ABORT works with all types of code and affects the entire batch. You can make an entire batch fail if any
+error occurs by beginning it with SET XACT_ABORT ON. You set XACT_ABORT per session. After it is set to ON, all
+remaining transactions in that setting are subject to it until it is set to OFF.
+
+
+
 The THROW statement honors SET XACT_ABORT.
 RAISERROR does not. New applications should use THROW instead of RAISERROR.
 
-Specifies whether SQL Server automatically rolls back the current transaction when a Transact-SQL statement
-raises a run-time error.
+XACT_ABORT behaves differently when used in a TRY block. Instead of terminating the transaction as it does in unstructured error handling, 
+XACT_ABORT transfers control to the CATCH block, and as expected, any error is fatal. The transaction is left in an uncommittable state 
+(and XACT_STATE() returns a –1). Therefore, you cannot commit a transaction inside a CATCH block if XACT_ABORT is turned on; you must
+roll it back.
 
 https://docs.microsoft.com/en-us/sql/t-sql/statements/set-xact-abort-transact-sql?view=sql-server-2017 
+*/
 
 SET XACT_ABORT OFF;  
 GO  
@@ -295,5 +309,13 @@ SELECT *
     FROM t2;  
 GO  
 --------------------------------- END XACT_ABORT ------------------------------------------
+/*
+-- IMPLICIT TRANSACTION MODE
+In the implicit transaction mode, when you issue one or more DML or DDL statements, or a 
+SELECT statement, SQL starts a transaction, increments @@TRANCOUNT, but does not automatically
+commit or roll back the statement.  You must issue a COMMIT or ROLLBACK interactively to finish
+the transaction, even if all you issued was a SELECT statement.
 
+Implicit transaction mode is not the SQL default.  You enter that mode by entering command
+SET IMPLICIT_TRANSACTION ON
 */
