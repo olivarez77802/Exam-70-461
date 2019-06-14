@@ -89,6 +89,17 @@ the column stores values that have trailing blanks in char, varchar, binary, and
 
 https://docs.microsoft.com/en-us/sql/t-sql/statements/set-ansi-padding-transact-sql?view=sql-server-2017
 
+ANSI Padding is used when Storing values to a TABLE.
+https://sqlstudies.com/2017/06/15/turning-ansi_padding-off-and-why-you-shouldnt/https://sqlstudies.com/2017/06/15/turning-ansi_padding-off-and-why-you-shouldnt/
+
+SET ANSI_PADDING ON
+DECLARE @T1 VARCHAR(10)
+SET @T1 = 'AAA  '
+SELECT DATALENGTH(@T1)
+-- SET ANSI_PADDING ON is the default but even if you set it to off the length would be the same.
+-- ANSI Padding is used more for when you STORE values to a table.  Not seeig differences when you
+-- Declare variableSETs.
+
 ------------------------- END ANSI_PADDING -----------------------------------------------------
 --
 -- SET ANSI_NULLS ON
@@ -164,6 +175,14 @@ The following example shows that the SET QUOTED_IDENTIFIER setting must be ON, a
 must be in double quotation marks to create and use objects that have reserved keyword names.
 
 https://docs.microsoft.com/en-us/sql/t-sql/statements/set-quoted-identifier-transact-sql?view=sql-server-2017
+
+You should leave QUOTED_IDENTIFIER set to ON because that is the ANSI standard and the SQL Server default.
+When SET QUOTED_IDENTIFIER is ON, which is the default, you delimit string literals by using single quotation marks,
+and use double quotation marks only to delimit T-SQL identifiers (in addition to square brackets).
+
+If you set QUOTED_IDENTIFIER to OFF, then along with single quotation marks, you can also use double quotation
+marks to delimit strings. But then you must use square brackets to delimit T-SQL identifiers.
+
 SET QUOTED_IDENTIFIER OFF  
 GO  
 -- An attempt to create a table with a reserved keyword as a name  

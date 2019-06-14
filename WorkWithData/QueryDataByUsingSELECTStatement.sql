@@ -15,6 +15,7 @@ Query data by using SELECT statements
    6. DERIVED Tables
    7. RANK 
    8. SYNONYMS
+   9. Dynamic Sql
    
 
 Set operators have precedence: INTERSECT precedes UNION and EXCEPT, and UNION and EXCEPT are evaluated from left to right 
@@ -504,5 +505,25 @@ WHERE TerritoryID IS NOT NULL AND SalesYTD <> 0;
 	  the any columns or datatypes if the synonyms refers to a table or view,
 	  nor will the user see any parameters if the synonym refers to a procedure
 	  or function.
-   
+
+****************
+9.  Dynamic SQL
+****************
+See example of Dynamic SQL in:
+1. Set xref - SET ANSI_NULLS
+  
+Can you generate and execute dynamic SQL in a different database than the one your code is in?
+Yes, because the USE <database> command can be inserted into a dynamic SQL batch.
+
+What are some objects that cannot be referenced in T-SQL by using variables?
+Objects that you cannot use variables for in T-SQL commands include the database name in a USE statement,
+the table name in a FROM clause, column names in the SELECT and WHERE clauses, and lists of literal values
+in the IN() and PIVOT() functions.
+
+The sp_executesql system stored procedure was introduced as an alternative to using the EXEC command
+for executing dynamic SQL. It both generates and executes a dynamic SQL string.
+
+The ability to parameterize means that sp_excutesql avoids simple concatenations like those used in the EXEC
+statement. As a result, it can be used to help prevent SQL injection.
+
 */

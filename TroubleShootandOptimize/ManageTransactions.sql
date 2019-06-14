@@ -47,14 +47,27 @@ https://www.youtube.com/watch?v=VLc4ewu6lUI&list=PL08903FB7ACA1C2FB&index=58
 **********************************
 2. TRANSACTION MODES
 **********************************
+@@TRANCOUNT -  Is really a variable to define Levels.
 
 TRANSACTIONS
 SQL Server operates in the following transaction modes:
 1. Autocommit transactions - Each individual statement is a transaction. (A Behind the scenes BEGIN and COMMIT is done)
-2. Explicit transactions - Each transaction is explicitly started with the 'BEGIN TRANSACTION' statement
-   and explicitly ended with a 'COMMIT' or 'ROLLBACK' statement.
-3. Implicit transactions - A new transaction is implicitly started when the prior transaction completes, but
+   You do not issue any surrounding transactional commands such as 'BEGIN TRAN, ROLLBACK TRAN, or COMMIT TRAN'.
+   The @@TRANCOUNT value is not normally detectable for that command.
+
+2. Implicit transactions - A new transaction is implicitly started when the prior transaction completes, but
    each transaction is explicitly completed with a COMMIT or ROLLBACK statement.  Do not need a 'BEGIN TRANSACTION' this is implicit.
+   In the implicit transaction mode, when you issue one or more DML or DDL statements, or a SELECT statement, SQL starts
+   a transaction and increments @@TRANCOUNT to 1.
+
+3. Explicit transactions - Each transaction is explicitly started with the 'BEGIN TRANSACTION' statement
+   and explicitly ended with a 'COMMIT' or 'ROLLBACK' statement.  In an explicit transaction, as soon as you issue
+   the 'BEGIN TRAN' command, the value of @@TRANCOUNT is incremented by 1.
+
+4. Explicit transactions can be used in implicit transaction mode, but if you start an explicit transaction the 
+   value of @@TRANCOUNT will increment from 0 to 2 immedidately after the 'BEGIN TRAN' command.  This is the 
+   same as a nested transaction.  Not a good practice to do this.
+
 https://docs.microsoft.com/en-us/sql/t-sql/language-elements/transactions-transact-sql?view=sql-server-2017
 
 Autocommit Mode
@@ -88,15 +101,18 @@ Some advantages to using implicit transactions are:
 •	You can roll back an implicit transaction after the command has been completed.
 •	Because you must explicitly issue the COMMIT statement, you may be able to catch mistakes after the command is finished.
 Some disadvantages to using implicit transactions are:
-•	Any locks taken out by your command are held until you complete the transaction. Therefore, you could end up blocking other users from doing their work.
+•	Any locks taken out by your command are held until you complete the transaction. Therefore, you could end up blocking
+    other users from doing their work.
 •	Because this is not the standard method of using SQL Server, you must constantly remember to set it for your session.
-•	The implicit transaction mode does not work well with explicit transactions because it causes the @@TRANCOUNT value to increment to 2 unexpectedly.
+•	The implicit transaction mode does not work well with explicit transactions because it causes the @@TRANCOUNT value
+    to increment to 2 unexpectedly.
 •	If you forget to commit an implicit transaction, you may leave locks open.
 
 Note that implicit transactions can span batches.
 
 MORE INFO IMPLICIT TRANSACTIONS
-For more details about implicit transactions, see the Books Online for SQL Server 2012 article “SET IMPLICIT_TRANSACTIONS (Transact-SQL)” at http://msdn.microsoft.com/en-us/library/ms187807.aspx.
+For more details about implicit transactions, see the Books Online for SQL Server 2012 article
+“SET IMPLICIT_TRANSACTIONS (Transact-SQL)” at http://msdn.microsoft.com/en-us/library/ms187807.aspx.
 
 Explicit Transaction Mode
 An explicit transaction occurs when you explicitly issue the BEGIN TRANSACTION or BEGIN TRAN command to start a transaction.  

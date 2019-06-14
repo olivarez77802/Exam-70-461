@@ -22,7 +22,7 @@ PRINT 'Number of films = ' + CAST(@NumFilms AS VARCHAR(MAX))
 https://www.youtube.com/watch?v=NmYaOlcbfZM&index=3&list=PLNIs-AWhQzcleQWADpUgriRxebMkMmi4H
 
 ******************
-Helpful Web Links
+1. Helpful Web Links
 ******************
 
 W3Schools Data Types
@@ -51,7 +51,7 @@ Unicode types (NCHAR, NVARCHAR).   Using Unicode types makes your code more univ
 
 
 *******************************************************
-Regular Character Types versus Unicode Character Types 
+2. Regular Character Types versus Unicode Character Types 
 ******************************************************
 Regular Character Types  - Uses one byte of storage per character and supports only one language besides English.
 Delimited with single quotation marks, as in 'abc'.
@@ -70,7 +70,7 @@ one attribute to another, SQL Server has to apply implicit conversion of one att
 and this could have negative performance implications, like preventing the effecient use of indexes.
 
 ***********************************
-CAST, CONVERT, and PARSE 
+3. CAST, CONVERT, and PARSE 
 ***********************************
 To force a literal to be of a certain type, you may need to apply explicit conversions with functions like
 CAST, CONVERT, PARSE, or TRY_CAST, TRY_CONVERT, and TRY_PARSE.
@@ -107,7 +107,7 @@ The below code reurns a NULL
    SELECT TRY_CAST('abc' AS INT);
 
 ********************************
-TRY_CAST, TRY_CONVERT, TRY_PARSE
+4. TRY_CAST, TRY_CONVERT, TRY_PARSE
 ********************************
 TRY_CAST, TRY_CONVERT, TRY_PARSE will return NULL if the value is not convertible.
 
@@ -151,7 +151,7 @@ https://www.experts-exchange.com/articles/12315/SQL-Server-Date-Styles-formats-u
 
 
 ********************
-Date and Time Styles
+5. Date and Time Styles
 ********************
 
 Cast and Convert
@@ -166,7 +166,7 @@ SELECT CAST(GETDATE() as DATE)   -- 2012-09-02
 SELECT CONVERT(DATE, GETDATE())  -- 2012-09-02
 
 *********
-Variables
+6. Variables
 *********
 
 Variables
@@ -190,7 +190,7 @@ GO
 
 
 ***************************
-Fixed versus Dynamic Types
+7. Fixed versus Dynamic Types
 ***************************
 Fixed Types
 - CHAR, NCHAR, BINARY
@@ -206,8 +206,9 @@ types are usually preferable when read performance is a priority.
 
 Attained form Safari BOoks
 
+ 
 *****************************
-Data Type Precedence
+8. Data Type Precedence
 ****************************
 The data type with the lower precedence is converted to the data type with the higher precedence.
 Int has higher precededence than VARCHAR.  
@@ -215,8 +216,19 @@ SELECT '1' + 1    - gives 2 instead of '11'
 
 https://docs.microsoft.com/en-us/sql/t-sql/data-types/data-type-precedence-transact-sql?view=sql-server-2017
 
+Data Type Precedence
+http://msdn.microsoft.com/en-us/library/ms190309.aspx 
+When using expressions that involve operands of different types, SQL Server usually
+converts the one that has lower data type precedence to the one with the higher.  One 
+operand is INT and the other is VARCHAR, you will find that INT precedes VARCHAR; hence
+SQL converts the VARCHAR value of '1' to the INT Value of 1, and the result of the expression
+is therefore 2 and not the string '11'. 
+SELECT 1 + '1'
+*/
+SELECT 1 + '1'
+
 ****************************************
-GUID - Globally Unique Identifier
+9. GUID - Globally Unique Identifier
 ****************************************
 Advantages:
 - A GUID is unique across tables, databases and servers
@@ -261,13 +273,3 @@ INSERT INTO USACustomer Values (default,'Mike')
 https://www.youtube.com/watch?v=SJJ8EmfO2Fg&index=136&list=PL08903FB7ACA1C2FB
 */
 /*
-Data Type Precedence
-http://msdn.microsoft.com/en-us/library/ms190309.aspx 
-When using expressions that involve operands of different types, SQL Server usually
-converts the one that has lower data type precedence to the one with the higher.  One 
-operand is INT and the other is VARCHAR, you will find that INT precedes VARCHAR; hence
-SQL converts the VARCHAR value of '1' to the INT Value of 1, and the result of the expression
-is therefore 2 and not the string '11'. 
-SELECT 1 + '1'
-*/
-SELECT 1 + '1'
