@@ -52,14 +52,27 @@ BEGIN
  RETURN datatype
 END
 
--- Inline Table
+-- Inline Table --------------------------------------------------
 CREATE FUNCTION FnTemp(Parameters Type)
 RETURNS TABLE AS RETURN
 (
 ..
 )
 
--- Table Variable
+CREATE FUNCTION [dbo].[udfGetProductList]
+(@SafetyStockLevel SMALLINT
+)
+RETURNS TABLE
+AS
+RETURN
+(SELECT Product.ProductID, 
+        Product.Name, 
+        Product.ProductNumber
+ FROM Production.Product
+ WHERE SafetyStockLevel >= @SafetyStockLevel)
+
+
+-- Table Variable --------------------------------------------------
 DECLARE @TempTable TABLE
 (
   Variables Types

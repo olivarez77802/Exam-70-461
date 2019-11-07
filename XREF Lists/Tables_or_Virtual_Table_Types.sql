@@ -1,11 +1,13 @@
 /*
-See Also WorkWithFunctions.sql
+See Also:
+WorkwithData/QueryDatabyUsingSelect.sql
 
 Different ways Tables can be created or ways to simulate a table:
 1. CTE 
-2  #TempTable    - Last only for session
+2  #TempTable - Define Columns   - Last only for session
+2. #TempTables - No Column Definition - Last only for session
 3. Table Variables - Always there - Several other advantages over #Temp Tables
-4. Derived Query
+4. Derived Table 
 5. In-Line Table Value Function
 6. Multi statement table valued function
 7. Subqueries
@@ -47,13 +49,22 @@ WHERE VAC_HOURS > 0
 
 
 ************************************
-2. Temp Table
+2. Temp Table - Define Columns
  - Only Lasts as long as the session
 ************************************
 - Lasts for a session
 - If you create a temporary table in one stored procedure (Proc1), that temporary table is visible to all
   other stored procedures called from Proc1.   However, that temporary table is not visible to any other
   procedures that call Proc1.
+
+-- See 'SELECT INTO' below if you don't want to define columns.
+
+-- When you define the columns they can be used with a Stored procedure
+-- CREATE TABLE #Employment (
+   ****
+   ) 
+-- INSERT INTO #Employment
+--	EXEC spGetEmploymentAsOf
 
 CREATE TABLE #Person_Details
 (
@@ -73,7 +84,13 @@ Local Temp Tables are noted with a prefixed # symbol.
 
 Temporary Tables are only available for the connection that created the table,
 if you were to open another connection and try to query the temporary table the query
-would fail.
+would fail.   
+
+What is a connection, when stored procedure that creates temp tables is called from SSIS ?  You 
+have to look at the properties of your connection manager.  It should have a Misc Parameter named
+'RetainSameConnection'.   If it set to false the Temp Tables will automatically be deleted.  If it is 
+set to 'True' the Temp Tables won't be deleted see below link.
+https://www.mssqltips.com/sqlservertip/2826/how-to-create-and-use-temp-tables-in-ssis/
 
 Temporary tables, are very similar to permanent tables.  Permanent tables get created in 
 the database you specify, and remain in the database permanently, until you delete(drop)
@@ -113,10 +130,16 @@ SELECT * FROM #Person_Details
 
 SELECT name FROM tempdb..sysobjects 
 
-/*
+*********************************************************************************************
+2. Temp Tables - No Column Definition
 Using 'SELECT INTO' Syntax you do not need to define the columns.  The columns are defined 
 behind the scenes. 
-*/
+*********************************************************************************************
+-- Cannot be used with Stored Procedures.  Example you can't say 
+-- SELECT *
+-- INTO
+-- FROM EXEC dbo.Stored-Procedure
+-- 
 USE AdventureWorks2014
 SELECT P.FirstName,
        P.LastName
@@ -147,7 +170,7 @@ FROM @TempPerson
 ******************
 - Table is created and dropped automatically with each run so it does not last the whole session like the temp table
   You won't have to drop the Table Variable if you decide to re-run.
-- Using a Table Variable results in few recomilations of a stored procedure compared to a tempory table.
+- Using a Table Variable results in few recompilations of a stored procedure compared to a tempory table.
 - Table Variable requires less locking and logging resources, because table variables have limited scope
   and are not part of the persistent database, transaction rollbacks do not affect them.
 - A Table Variable is NOT a memory only structure.  A table variable might hold more data than can fit
@@ -175,7 +198,7 @@ SELECT * FROM @TempPeople
 https://www.youtube.com/watch?v=MdVd0fI1s-A&index=9&list=PLNIs-AWhQzcleQWADpUgriRxebMkMmi4H
 
 *********************
-Derived Query
+4. Derived Table
 *********************
 - Only lasts for duration of query
 - Basically a subquery, except it is always in the FROM Clause.  The reason it is called
@@ -201,7 +224,7 @@ as EmployeeCount
 Where TotalEmployees >= 2
 
 ****************************
-Inline Table Valued Function
+5. Inline Table Valued Function
 *****************************
 - Structure of the table that gets returned, is determined by the SELECT statement with in the function.
 - The table returned by the table valued function, can also be used in joins with other tables.
@@ -228,12 +251,12 @@ RETURN
 GO
 
 *************************************
-Multi Statement Table Valued Function
+6. Multi Statement Table Valued Function
 *************************************
 - Can be used with APPLY operator to simulate an INNER JOIN or OUTER JOIN
 
 ***********
-Subqueries
+7. Subqueries
 ***********
 - Subqueries are used in JOIN and WHERE Clause.  Predicates are used
   when used with WHERE Clause.

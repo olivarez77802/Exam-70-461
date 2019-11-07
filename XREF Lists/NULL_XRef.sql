@@ -168,6 +168,8 @@ ON A.KEY = B.KEY
 
 The above will return all of Table A including those not matching Table B. B.Key will be reflected as NULL.
 
+https://teamsql.io/blog/?p=923
+
 ----------------------
 8. SUBQUERIES
 ----------------------

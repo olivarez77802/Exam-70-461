@@ -7,6 +7,7 @@ See also QueryDataByUsingSelectStatement.sql
 3. INTERSECT - Distinct rows
 4. EXCEPT - Distict rows
 5. DISTINCT
+6. GROUP BY
 
 -------------------
 5. DISTINCT
@@ -23,5 +24,15 @@ FROM Sales.Orders
 GROUP BY shipperid;
 Note that the DISTINCT option is available not only to the COUNT function, but also to other general set functions. However, 
 it’s more common to use it with COUNT.
+
+----------------
+6. GROUP BY
+----------------
+SELECT shipperid, COUNT(*) AS numorders
+FROM Sales.Orders
+GROUP BY shipperid;
+- Using an explicit GROUP BY clause, you can group the rows based on a specified grouping set
+of expressions.  For Example, the following query groups the rows by shipper ID and counts
+the number of rows (orders, in this case) per each distinct group.
 
 */

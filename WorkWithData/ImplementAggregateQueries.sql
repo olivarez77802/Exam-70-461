@@ -1,4 +1,10 @@
 /*
+See also:
+WorkwithData/QueryDatabyUsingSelect.sql
+WorkwithData/ImplementSubQueries.sql
+Tables_or_Virtual_Tables.sql
+
+
 Implement Aggregate queries
  - New analytic functions; grouping sets; spatial aggregates; apply ranking functions
 
@@ -7,7 +13,7 @@ Implement Aggregate queries
    Group Functions - Use Aggregate Functions.  A query becomes a grouped query when you use a group function, a 
    GROUP BY Clause, or both.  Grouped queries will hide the details.
    
-   Window Functions -Use Aggregate Functions.  Aggregate Functions are applied to a window of rows devined by the 
+   Window Functions -Use Aggregate Functions.  Aggregate Functions are applied to a window of rows defined by the 
    OVER clause. Window queries do not hide the detail, the return a row for every underlying query's row.  This means
    you can mix detail and aggregated elements in the same query.
    
@@ -192,6 +198,24 @@ SELECT E.Gender
   JOIN HumanResources.Employee AS E
   ON P.BusinessEntityID = E.BusinessEntityID
 
+-- Example of Sorting with two Union Statements.  Notice the 'Order by' at the end.
+SELECT id,name,age
+From Student
+Where age < 15
+Union
+Select id,name,age
+From Student
+Where Name like "%a%"
+Order by name
+
+-- Example of getting Top 4
+SELECT TOP 4 a.* FROM
+(
+    SELECT *, 1 AS Priority from Usernames WHERE Name = 'Bob'
+    UNION
+    SELECT *, 2 from Usernames WHERE Name LIKE '%Bob%'
+) AS a
+ORDER BY Priority ASC
 -----------------------------------------------------------------------------
 ROLLUP  - Most Optimal when compared to UNION ALL and GROUP BY GROUPING SETS
 -----------------------------------------------------------------------------
@@ -426,8 +450,10 @@ https://www.tutorialspoint.com/sql/sql-having-clause.htm
 
   
 --------------
-ROW_NUMBER()
---------------
+12. ROW_NUMBER()
+---------------
+
+09/23/2019 - I had A hard TIME mixing A Derived TABLE WITH a CTE.  I had TO CREATE A #TempTable USING 'SELECT INTO' TO make it WORK.
 
 ROW_NUMBER() Clause  ....  
 

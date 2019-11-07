@@ -6,6 +6,7 @@ Implement Error Handling.
   2. Use set based rather than row based logic
   3. Transaction Management
   4. Unstructured and Structured Error Handling
+  5. XACT_ABORT
 
 *******************************
 1. Implement try/catch/throw
@@ -164,4 +165,109 @@ https://www.youtube.com/watch?v=xgpyqxKuta0&index=55&list=PL08903FB7ACA1C2FB
 
 Microsoft TRY/ CATCH
 https://docs.microsoft.com/en-us/sql/t-sql/language-elements/try-catch-transact-sql?view=sql-server-2017
+
+***************
+5. XACT_ABORT
+***************
+SET XACT_ABORT has some advantages. It causes a transaction to roll back based on any error with severity > 10. 
+However, XACT_ABORT has many limitations, such as the following:
+
+You cannot trap for the error or capture the error number.
+
+Any error with severity level > 10 causes the transaction to roll back.
+
+None of the remaining code in the transaction is executed. Even the final PRINT statements of the transaction are not executed.
+
+After the transaction is aborted, you can only infer what statements failed by inspecting the error message returned to the 
+client by SQL Server.
+
+As a result, XACT_ABORT does not provide you with error handling capability. You need TRY/CATCH.
+
+XACT_ABORT behaves differently when used in a TRY block. Instead of terminating the transaction as it does in unstructured
+error handling, XACT_ABORT transfers control to the CATCH block, and as expected, any error is fatal. The transaction is 
+left in an uncommittable state (and XACT_STATE() returns a –1). Therefore, you cannot commit a transaction inside a CATCH 
+block if XACT_ABORT is turned on; you must roll it back.
+
+
 */
+--
+--
+--
+
+--
+-- Notice the 'After error' is not printed.  This is because of the XACT_ABORT ON
+--
+USE JesseTest
+GO
+SET XACT_ABORT ON;
+PRINT 'Before error';
+SET IDENTITY_INSERT Production.Products ON;
+INSERT INTO Production.Products(productid, productname, supplierid, categoryid,
+ unitprice, discontinued)
+    VALUES(1, N'Test1: Duplicate productid', 1, 1, 18.00, 0);
+SET IDENTITY_INSERT Production.Products OFF;
+PRINT 'After error';
+GO
+PRINT 'New batch';
+SET XACT_ABORT OFF;
+--
+-- The first transaction will get duplicate key error, so it will jump to CATCH block even though
+-- second transaction is good.  The transaction will get rolled back
+-- Regardless if XACT_ABORT is turned ON or OFF.  XACT_ABORT behaves different when used in a TRY
+-- Block.  If an error occurs control transfer to the CATCH block, you then must ROLLBACK the transaction. 
+--
+USE JesseTest;
+GO
+BEGIN TRY
+BEGIN TRAN;
+    SET IDENTITY_INSERT dbo.Production3 ON;
+    INSERT INTO dbo.Production3(IdNum, ProductName, SupplierId,
+     CategoryId, UnitPrice, Discontinued)
+        VALUES(1, 'BMW', 2, 1, 18.00, 0);
+    INSERT INTO dbo.Production3(IdNum, ProductName, SupplierId,
+     CategoryId, UnitPrice, Discontinued)
+        VALUES(3, 'Ford', 3, 1, 16.00, 0);
+    SET IDENTITY_INSERT dbo.Production3 OFF;
+COMMIT TRAN;
+END TRY
+BEGIN CATCH
+    IF ERROR_NUMBER() = 2627 -- Duplicate key violation
+        BEGIN
+            PRINT 'Primary Key violation';
+        END
+    ELSE IF ERROR_NUMBER() = 547 -- Constraint violations
+        BEGIN
+            PRINT 'Constraint violation';
+        END
+    ELSE
+        BEGIN
+            PRINT 'Unhandled error';
+			PRINT ERROR_NUMBER();
+			
+        END;
+    IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+END CATCH
+--
+-- Use THROW statement without parameters to re-raise (re-throw) the original error message
+-- and send it back to client.  This is the best method for reporting the error back to the caller
+--
+GO
+BEGIN TRY
+BEGIN TRAN;
+    SET IDENTITY_INSERT dbo.Production3 ON;
+	INSERT INTO dbo.Production3(IdNum, ProductName, SupplierId,
+     CategoryId, UnitPrice, Discontinued)
+        VALUES(1, 'BMW', 2, 1, 18.00, 0);
+    INSERT INTO dbo.Production3(IdNum, ProductName, SupplierId,
+     CategoryId, UnitPrice, Discontinued)
+        VALUES(3, 'Ford', 3, 1, 16.00, 0);
+     SET IDENTITY_INSERT dbo.Production3 OFF;
+COMMIT TRAN;
+END TRY
+BEGIN CATCH
+    SELECT XACT_STATE() as 'XACT_STATE', @@TRANCOUNT as '@@TRANCOUNT';
+    IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;
+GO
+SELECT XACT_STATE() as 'XACT_STATE', @@TRANCOUNT as '@@TRANCOUNT';

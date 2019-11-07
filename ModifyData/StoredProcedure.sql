@@ -1,5 +1,8 @@
 /*
 Stored Procedure
+
+See also XREF/Table_or_Virtual_Tables (#TempTables)
+
 Wise Owl Tutorial
 https://www.youtube.com/watch?v=fjNsRV4zLdc&index=1&list=PLNIs-AWhQzcleQWADpUgriRxebMkMmi4H
 

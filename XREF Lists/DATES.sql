@@ -2,7 +2,7 @@
 DATES
 
 Data that is supposed to represent dates, people have a tendancy to use DATETIME.
-DATATIME - Uses 8 bytes of storage.
+DATETIME - Uses 8 bytes of storage.
 DATE - Uses 3 bytes of storage.  Does not include Time
 DATETIM2 - Usees 6 to 8 bytes of storage.  Provides a wider range of dates and improved
            controllable precision.
@@ -18,7 +18,8 @@ the literal to the filtered column’s type, it assumes midnight when a time part 
 If you want such a filter to return all rows from the specified date, you need to ensure that you
 store all values with midnight as the time.
 
-Another important aspect of filtering date and time data is trying whenever possible to use search arguments. For example, suppose that you need to filter only orders placed in February 2007. You can use the YEAR and MONTH functions, as in the following.
+Another important aspect of filtering date and time data is trying whenever possible to use search arguments. For example,
+suppose that you need to filter only orders placed in February 2007. You can use the YEAR and MONTH functions, as in the following.
 
 SELECT orderid, orderdate, empid, custid
 FROM Sales.Orders
@@ -69,6 +70,11 @@ end of the current month.
 T-SQL supports addition and difference date and time functions called DATEADD and DATEDIFF.
 
 DATEADD(year,1,'20120212') adds one year to the specified date.
+-- to add 5 days to September 1, 2011 the function would be
+DATEADD(DAY, 5, '9/1/2011')
+
+-- to subtract 5 months from September 1, 2011 the function would be
+DATEADD(MONTH, -5, '9/1/2011')
 DATEDIFF(day,'20110212','20120212') computes the difference in days, returning 365 days in this case.
 
 

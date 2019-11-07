@@ -8,6 +8,10 @@ OBJECT_ID Xref
 
 https://docs.microsoft.com/en-us/sql/t-sql/functions/object-id-transact-sql?view=sql-server-2017
 
+Check Object_id for temp table 
+https://stackoverflow.com/questions/581427/how-to-check-if-a-temporary-table-is-existing-in-database
+IF OBJECT_ID('tempdb..#t1') IS NOT NULL
+   DROP TABLE #t1
 
 IF OBJECT_ID (N'Sales.GetCustomerOrders', N'P') IS NOT NULL
    DROP PROC Sales.GetCustomerOrders;

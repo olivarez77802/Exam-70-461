@@ -27,7 +27,7 @@ of expressions.  For Example, the following query groups the rows by shipper ID 
 the number of rows (orders, in this case) per each distinct group.
 
 -- If a column name does not appear in the GROUP BY list nor is it contained in an
--- aggregate function, it's not allowed in the HAVING, SELECT, and ORDER BY clauses.
+-- aggregate function, it's not allowed in the SELECT, HAVING, and ORDER BY clauses.
 
 The below SELECT will error out, since it does not have S.companyname in the GROUP BY 
 or use it in an aggregate function.

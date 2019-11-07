@@ -4,14 +4,41 @@ Manage Transactions
     transactions; isolation levels; scope and type of locks; trancount.
 	https://www.microsoft.com/en-us/learning/exam-70-461.aspx
 
-1. ACID
-2. Transaction modes. (Covers understanding begin tran,commit, and rollback; implicit versus explicit transactions)
-3. Mark a transaction
-4. Isolation Levels
-5. Scope and Type of Locks
+1. Transaction 
+2. ACID 
+3. Transaction modes. (Covers understanding begin tran,commit, and rollback; implicit versus explicit transactions)
+4. Mark a transaction
+5. Nested Transactions
+6. Isolation Levels
+7. Scope and Type of Locks
+
+**********************************
+1. Transaction
+**********************************
+
+All Operations that in any way write to the database are treated by SQL Server as transactions.  This includes
+1. DML - Data Manipulation Language statements such as INSERT, UPDATE, and DELETE
+2. DDL - Data Definition Languaage statements such as CREATE TABLE and CREATE INDEX.
+Technically, even signle SELECT statements are a type of transaction in SQL, these are called read-only transactions.
+
+A transaction is a group of database commands that change the data stored in a database.  A transaction, is treated as a single unit.
+A transaction ensures that, either all of the commands succeed, or none of them.  If one of the commands in the transaction
+fails, all of the commands fail, and any data that was modified in the database is rolled back.  In this way, transactions 
+maintain the integrity of data in the database.
+
+Transaction processing follows these steps:
+1. Begin a transaction
+2. Process database commands
+3. Check for errors.
+   If errors occurred
+       rollback the transaction
+   else
+       commit the transaction
+
+The ACID acronym is used to describe the properties of transactions.
 
 *********************************
-1. ACID 
+2. ACID 
 *********************************
 
 A transaction is a group of database commands that are treated as a single unit. A
@@ -44,8 +71,9 @@ data.
 https://www.youtube.com/watch?v=VLc4ewu6lUI&list=PL08903FB7ACA1C2FB&index=58
 
 
+
 **********************************
-2. TRANSACTION MODES
+3. TRANSACTION MODES
 **********************************
 @@TRANCOUNT -  Is really a variable to define Levels.
 
@@ -132,18 +160,6 @@ EXAM TIP
 Note that transactions can span batches. This includes both implicit transactions and explicit transactions葉hat is, GO statements.
 However, it is often a best practice to make sure that each transaction takes place in one batch.
 
-NESTED TRANSACTIONS
-When explicit transactions are nested葉hat is, placed within each other葉hey are called nested transactions. The behavior of 
-COMMIT and ROLLBACK changes when you nest transactions.
-
-EXAM TIP
-An inner COMMIT statement has no real effect on the transaction, only decrementing @@TRANCOUNT by 1. Just the outermost COMMIT statement,
-the one executed when @@TRANCOUNT = 1, actually commits the transaction.
-
-EXAM TIP
-Note that it doesn稚 matter at what level you issue the ROLLBACK command. A transaction can contain only one ROLLBACK command,
-and it will roll back the entire transaction and reset the @@TRANCOUNT counter to 0.
-
 Log File Information
 http://www.techbrothersit.com/2015/03/how-to-delete-huge-data-from-sql-server.html
 
@@ -152,26 +168,8 @@ BEGIN TRANSACTION - Marks the starting point of an explicit, local transaction. 
 the BEGIN TRANSACTION statement and end with the COMMIT and ROLLBACK statement.
 https://docs.microsoft.com/en-us/sql/t-sql/language-elements/begin-transaction-transact-sql?view=sql-server-2017
 
-
-
-Transactions
-
-A transaction is a group of database commands that change the data stored in a database.  A transaction, is treated as a single unit.
-A transaction ensures that, either all of the commands succeed, or none of them.  If one of the commands in the transaction
-fails, all of the commands fail, and any data that was modified in the database is rolled back.  In this way, transactions 
-maintain the integrity of data in the database.
-
-Transaction processing follows these steps:
-1. Begin a transaction
-2. Process database commands
-3. Check for errors.
-   If errors occurred
-       rollback the transaction
-   else
-       commit the transaction
-
 ****************************************************************************
-3. MARK a Transaction
+4. MARK a Transaction
 ****************************************************************************
 You can name an explicit transaction by putting the name after the BEGIN TRAN statement. Transaction names must follow the rules for SQL
 Server identifiers; however, SQL Server only recognizes the first 32 characters as a unique name and ignores any remaining characters, 
@@ -210,8 +208,43 @@ You can restore to just before the transaction with STOPBEFOREMARK.
 You can recover the dataset by restoring with either WITH STOPATMARK or STOPBEFOREMARK.
 
 You can add RECOVERY to the WITH list, but it has no effect.
+
+***************************
+5. Nested Transactions
+***************************
+
+NESTED TRANSACTIONS
+When explicit transactions are nested葉hat is, placed within each other葉hey are called nested transactions. The behavior of 
+COMMIT and ROLLBACK changes when you nest transactions.
+
+EXAM TIP
+An inner COMMIT statement has no real effect on the transaction, only decrementing @@TRANCOUNT by 1. Just the outermost COMMIT statement,
+the one executed when @@TRANCOUNT = 1, actually commits the transaction.
+
+EXAM TIP
+Note that it doesn稚 matter at what level you issue the ROLLBACK command. A transaction can contain only one ROLLBACK command,
+and it will roll back the entire transaction and reset the @@TRANCOUNT counter to 0.
+
+@@TRANCOUNT- can be queried to find the level of transactions.
+0 - Indicates the code is not within a transaction
+1 - Indicates there is active transaction
+>1 - Indicates nesting level of nested transactions
+Every COMMIT statement reduces the value of @@TRANCOUNT by 1, and only the outermost COMMIT statement commits the entire nested transaction.
+https://docs.microsoft.com/en-us/sql/t-sql/functions/trancount-transact-sql?view=sql-server-2017
+
+Nested Transactions in SQL
+https://www.youtube.com/watch?v=MGFfQyJMO9E
+
+COMMIT TRANSACTION
+- When used in nested transactions, commits of the inner transactions do not free resources or make their modifications
+  permanent.  The data modifications are made permanent and resources freed only when the outer transaction is committed.
+  When @@TRANCOUNT is finally decrememented to 0, then entire transaction is committed.
+https://docs.microsoft.com/en-us/sql/t-sql/language-elements/commit-transaction-transact-sql?view=sql-server-2017
+
+
+
 ****************************************************************************
-4. ISOLATION LEVEL.  
+6. ISOLATION LEVEL.  
 ***************************************************************************
 -  The 'I' in A.C.I.D.  The degreee of isolation can vary
    for readers depending on settings that their session applies.
@@ -380,21 +413,6 @@ https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-database-transact-sq
 MICROSOFT DOC - Locking and Row Versioning Basics
 https://docs.microsoft.com/en-us/sql/2014-toc/sql-server-transaction-locking-and-row-versioning-guide?view=sql-server-2014#Lock_Basics
 
-@@TRANCOUNT- can be queried to find the level of transactions.
-0 - Indicates the code is not within a transaction
-1 - Indicates there is active transaction
->1 - Indicates nesting level of nested transactions
-Every COMMIT statement reduces the value of @@TRANCOUNT by 1, and only the outermost COMMIT statement commits the entire nested transaction.
-https://docs.microsoft.com/en-us/sql/t-sql/functions/trancount-transact-sql?view=sql-server-2017
-
-Nested Transactions in SQL
-https://www.youtube.com/watch?v=MGFfQyJMO9E
-
-COMMIT TRANSACTION
-- When used in nested transactions, commits of the inner transactions do not free resources or make their modifications
-  permanent.  The data modifications are made permanent and resources freed only when the outer transaction is committed.
-  When @@TRANCOUNT is finally decrememented to 0, then entire transaction is committed.
-https://docs.microsoft.com/en-us/sql/t-sql/language-elements/commit-transaction-transact-sql?view=sql-server-2017
 
 
 Differences between Serializable and Snapshot isolation Levels
@@ -408,7 +426,7 @@ same level of data consistency as serializable isolation does.
 https://www.youtube.com/watch?v=9NVu17LjPSA
 
 ******************************************
-5. Scope and Type of Locks
+7. Scope and Type of Locks
 ******************************************
 Basic Locking
 To preserve the isolation of transactions, SQL Server implements a set of locking protocols. At the basic level, there are two general modes of locking:

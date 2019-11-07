@@ -1,4 +1,8 @@
 /*
+See Also:
+ImplementAggregateQueries
+
+
 Query data by using SELECT statements
  - Use the ranking function to select top (X) rows for multiple categories in a single query; write and perform
    queries effeciently using the new (SQL 2005/8) oode items such as synonyms, and joins (except, intersect);
@@ -16,6 +20,7 @@ Query data by using SELECT statements
    7. RANK 
    8. SYNONYMS
    9. Dynamic Sql
+   10. CASE - See Modifying Data/Combine datasets; Setting_Variable
    
 
 Set operators have precedence: INTERSECT precedes UNION and EXCEPT, and UNION and EXCEPT are evaluated from left to right 

@@ -108,7 +108,8 @@ SELECT DATALENGTH(@T1)
 --
 
 -- Create table t1 and insert values.  
-DROP TABLE #t1
+IF OBJECT_ID('tempdb..#t1') IS NOT NULL
+   DROP TABLE #t1
 CREATE TABLE #t1 (a INT NULL);  
 INSERT INTO #t1 values (NULL),(0),(1);
 DECLARE @TYPE NVARCHAR (20)

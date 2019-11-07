@@ -1,12 +1,13 @@
 /*
 Different ways of setting a variable or declaring variable
 
-1.  Using SET in a CASE Statement
+1.  Using SET in a CASE Statement  ( See also QueryDatabyUsingSelect; ModifyingData/CombineDatasets)
 2.  Using SET with SELECT Statement
 3.  Using SET with SELECT Statement
 4.  Accumulating Variables in a Variable
 5.  Loading Variable from Stored Procedure
 6.  Variables in a Stored Procedure
+7.  Table Variable (see also Tables_or_Virtual_Tables)
 
 Variables and Data Types
 Data Types
@@ -17,8 +18,6 @@ https://docs.microsoft.com/en-us/sql/integration-services/data-flow/integration-
 
 Cast and Convert
 https://www.youtube.com/watch?v=8GHUfb5k-a8&index=28&list=PL08903FB7ACA1C2FB
-
-
 
 
 DECLARE @MyDate  DATETIME
@@ -185,13 +184,20 @@ SELECT @Count
 ******************************************
 6. Loading Variables to a Stored Procedure
 *******************************************
+
+USE TRS
+DECLARE @cnt INT;
+EXEC dbo.spGetHeaderRPForWorkstationAsOf 388, 'B', @recordCount = @cnt OUTPUT
+SELECT @cnt   
+http://www.sqlservertutorial.net/sql-server-stored-procedures/stored-procedure-output-parameters/
+
 - It is best practice to name the parameters when you call a stored procedures.   Although passing parameter values by position
   may be more compact, it is also more error prone.  If you pass parameters by name and the parameter order changes on the 
   stored procedure, your call of the stored procedure will still work.
 
 EXEC spFilmList 150, 180, 'star'  - Can be done after the Stored Procedure is executed
-EXEC spFileList @MinLength=150, @MaxLength=180, @Title='star'  - Alternate way of writing parameters
-EXEC spFileList @MaxLength=180, @Title='star'  - Uses Default Value for MinLength since it is optional
+EXEC spFilmList @MinLength=150, @MaxLength=180, @Title='star'  - Alternate way of writing parameters
+EXEC spFilmList @MaxLength=180, @Title='star'  - Uses Default Value for MinLength since it is optional
 
 OUTPUT Keyword - Allows both input and OUTPUT.  OUTPUT Parameters are always optional parameters.
 
@@ -216,5 +222,17 @@ WHERE FileRunMinutes >= @MinLength  AND
 ORDER BY FilmName ASC
 END
 
+***************************
+7. Loading a Table Variable  - See also Tables_or_Virtual Tables
+***************************
+Stored procedure spGetPayrollDaysHoursWorkedChangesAsOf  uses a Table Variable.
+
+DECLARE @EmployeeJobCategory AS EmployeeJobCategory
+INSERT INTO @EmployeeJobCategory
+SELECT
+    WorkerDimKey,
+	JobCategory,
+	Workstation
+FROM #Reported
 
 */
