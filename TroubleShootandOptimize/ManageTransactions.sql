@@ -12,6 +12,7 @@ Manage Transactions
 6. Isolation Levels
 7. Scope and Type of Locks
 
+
 **********************************
 1. Transaction
 **********************************
@@ -52,7 +53,7 @@ were rolled back.  The task that the set of operations represent is either accom
 or not, but in any case not left half-done.  Example an UPDATE command that would update
 500 rows in a table at the point in time that the transaction begins.  The command will
 not finish until exactly all 500 rows are updated.  If something happens the transaction
-will get rolled back.
+will get rolled back.   You cannot commit partial transactions. No Nested Commits.
 
 Consistent - All data touched by the transaction is left in a logically consistent
 state.  No orphan data. 
@@ -245,6 +246,16 @@ Every COMMIT statement reduces the value of @@TRANCOUNT by 1, and only the outer
 https://docs.microsoft.com/en-us/sql/t-sql/functions/trancount-transact-sql?view=sql-server-2017
 
 Nested Transactions in SQL
+ROLLBACK versus COMMIT
+ROLLBACK - Will roll back ALL open transactions.  It will ROLLBACK Everything!  Unlike a COMMIT that relates to last 'BEGIN TRAN'
+COMMIT - Will only psedo-commit any "nested" transactions, it simply decrements @@TRANCOUNT.
+         Committing "nested" transactions only applies to the last executed "BEGIN TRAN".
+-- Tran1     @@TRANCOUNT=1
+-- -- Tran2  @@TRANCOUNT=2
+-- -- Tran2 COMMIT @TRANCOUNT=1
+-- -- Tran3  @@TRANCOUNT=2
+-- -- Tran3 COMMIT @TRANCOUNT= 1
+-- Tran1    ROLLBACK @@TRANCOUNT=0
 https://www.youtube.com/watch?v=MGFfQyJMO9E
 
 COMMIT TRANSACTION

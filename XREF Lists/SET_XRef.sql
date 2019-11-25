@@ -62,7 +62,7 @@ IF ( (2048 & @options) = 2048 ) PRINT 'ANSI_NULL_DFLT_OFF'
 IF ( (4096 & @options) = 4096 ) PRINT 'CONCAT_NULL_YIELDS_NULL' 
 IF ( (8192 & @options) = 8192 ) PRINT 'NUMERIC_ROUNDABORT' 
 IF ( (16384 & @options) = 16384 ) PRINT 'XACT_ABORT'
-
+IF ( (2 & @options) = 0) PRINT 'Implicit transactions is off, explicit transaction is currently running'
 **********************************************************************************************
 DEFAULTS
 **********************************************************************************************
