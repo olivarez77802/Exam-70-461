@@ -120,7 +120,7 @@ A transaction in autocommit mode with no COMMIT required.
 In the autocommit mode, you do not issue any surrounding transactional commands such as BEGIN TRAN, ROLLBACK TRAN, or COMMIT TRAN. 
 Further, the @@TRANCOUNT value (for the user session) is not normally detectable for that command, though it would be in a data 
 modification statement trigger. Whatever changes you make to the database are automatically handled, statement by statement, 
-as transactions. Remember, autocommit is the default operation of SQL Server.
+as transactions. Remember, autocommit is the default operation of SQL Server.  SET IMPLICIT TRANSACTIONS OFF is also the default.
 
 Implicit Transaction Mode
 In the implicit transaction mode, when you issue one or more DML or DDL statements, or a SELECT statement, SQL Server starts a transaction, 
