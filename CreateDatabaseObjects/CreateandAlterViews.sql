@@ -43,11 +43,16 @@ Temp Tables, Table Variable etc.
     
 
   Disadvantages
-  - You cannot add an ORDER BY to the SELECT statement in a view.  A view must appear just like a table
+  - You cannot add an ORDER BY with the SELECT statement in a view.  A view must appear just like a table
     and tables in a relational database contain sets of rows.  Sets by themselves are not ordered, 
 	although you can apply an order to a result set using ORDER BY.  Similarily, tables and views in SQL
 	do not have an order to their rows, though you can apply one by adding an ORDER BY to the outermost SELECT
-	when you access the view.
+	when you access the view. You can also get around the restriction to not use an ORDER BY with a view by constructing
+	a subquery and using 'TOP 1'.
+  - Views are not meant to dictate presentation order, if you expect queries against a view from presenting
+    data in a predictable order, stop looking for workarounds and add those outer queries to your outer queries.
+	2019/10/25 - I had to create a #TempTable on a view and then used the SELECT *, ROW_NUMBER (Partition BY UIN ORDER BY TIMEDIMKEY DESC) as RowNumber
+	INTO #TempTable in order to make the view return the result I was expecting.  I then had the commmand DELETE * FROM #TempTable WHERE RowNumber > 1.
   - A view cannot create a table, whether permanent or temporary.  e.g. You cannot use the SELECT INTO Syntax.
   - A view can reference only permanent tables; a view cannot reference a temporary table.
   - If you update a view based on multiple tables it may not update correctly.

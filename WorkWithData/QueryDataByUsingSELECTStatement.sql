@@ -362,6 +362,7 @@ ON E.AddressID = A.AddressID
 *************
 7. RANK
 *************
+See also TroubleshootandOptimize\RowBasedOperations
 
 Use the ranking function to select top(X) rows for multiple categories in a single query.
    RANK
@@ -410,7 +411,7 @@ Ex.
 WITH Result AS
 (
   SELECT Salary, Gender,
-         DENSE_RANK() OVER (PARTION BY Gender ORDER BY Salary DESC) AS Salary_Rank
+         DENSE_RANK() OVER (PARTITION BY Gender ORDER BY Salary DESC) AS Salary_Rank
   FROM Employees
 )
 SELECT TOP 1 Salary FROM Result WHERE Salary_Rank = 3 AND Gender = 'Female'

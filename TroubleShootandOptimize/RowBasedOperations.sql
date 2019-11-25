@@ -3,6 +3,9 @@ Troubleshoot and Optimize
 - Evaluate the use of row-based operations vs. set-based operations 
   When to use cursors; impact of scalar UDFs; combine multiple DML operations 
 
+See also:
+WorkwithData\QueryDatabyUsingSelect\7.Rank
+
 @@ROWCOUNT
 https://docs.microsoft.com/en-us/sql/t-sql/functions/rowcount-transact-sql?view=sql-server-2017
 

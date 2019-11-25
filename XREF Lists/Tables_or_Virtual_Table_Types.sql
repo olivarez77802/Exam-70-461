@@ -1,6 +1,7 @@
 /*
 See Also:
 WorkwithData/QueryDatabyUsingSelect.sql
+CreateDatabaseObjects/CreateandAlterViews.sql
 
 Different ways Tables can be created or ways to simulate a table:
 1. CTE 

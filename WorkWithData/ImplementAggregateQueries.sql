@@ -2,7 +2,7 @@
 See also:
 WorkwithData/QueryDatabyUsingSelect.sql
 WorkwithData/ImplementSubQueries.sql
-Tables_or_Virtual_Tables.sql
+XREFLists/Tables_or_Virtual_Tables.sql
 
 
 Implement Aggregate queries
@@ -20,19 +20,19 @@ Implement Aggregate queries
  1. AGGREGATE Functions
  2. GROUP BY
  3. OVER 
- 4. Analytic Functions
- 5. UNION and UNION ALL
- 6. ROLLUP
- 7. GROUPING SETS
- 8. CUBE
- 9. GROUPING_ID()
- 10. GROUPING Function
- 11. HAVING()                              -- Must follow the GROUP BY clause in a query and must also precede the ORDER BY clause if used.
- 12. ROW_NUMBER()                          -- Needs the OVER (ORDER BY.. ) Clause
+ 4. ROW_NUMBER OVER
+ 5. Analytic Functions
+ 6. UNION and UNION ALL
+ 7. ROLLUP
+ 8. GROUPING SETS
+ 9. CUBE
+ 10. GROUPING_ID()
+ 11. GROUPING Function
+ 12. HAVING()                              -- Must follow the GROUP BY clause in a query and must also precede the ORDER BY clause if used.
  13. RANK (See QueryDataByUsingSelect.sql) -- ORDER BY is required.
 
 -------------------
-AGGREGATE Functions 
+1. AGGREGATE Functions 
 -------------------
 COUNT(), AVERAGE(), SUM() Functions
 https://www.w3schools.com/sql/sql_count_avg_sum.asp
@@ -41,7 +41,7 @@ MIN(), MAX()
 https://www.w3schools.com/sql/sql_min_max.asp
 
 ---------
-GROUP BY
+2. GROUP BY
 ---------
 
 GROUP BY - Often used with aggregate functions (COUNT, MAX, MIN, SUM, AVG) to group the result-set by one or more columns.
@@ -49,7 +49,7 @@ https://www.w3schools.com/sql/sql_groupby.asp
 See also Implicit_XREF.sql for more info. on GROUP BY.
 
 -----
-OVER
+3. OVER
 -----
 
 OVER Clause  ... uses PARTITION BY Clause.   Will allow you to join Detail and Summary Fields in the same Row.  
@@ -139,15 +139,62 @@ FROM [AdventureWorks2014].[HumanResources].[Employee]
    GROUP BY GENDER) AS S
    ON D.Gender = S.GENDER
 
+--------------
+4. ROW_NUMBER() OVER
+---------------
+
+09/23/2019 - I had A hard TIME mixing A Derived TABLE WITH a CTE.  I had TO CREATE A #TempTable USING 'SELECT INTO' TO make it WORK.
+
+ROW_NUMBER() Clause  ....  
+
+Needs the OVER (ORDER BY ... Clause
+
+ROW_NUMBER() Will start over with each Partition see second example
+
+Since ROW_NUMBER() starts over with each partition ... if you wanted to identify duplicates this could easily be done
+
+https://www.youtube.com/watch?v=cvrwOoGwgz8&index=109&list=PL08903FB7ACA1C2FB
+
+Use case of ROW_NUMBER() Function is that you can Delete all Duplicate Rows.
+Example:
+  WITH EmployeesCTE AS
+  (
+    SELECT *, ROW_NUMBER() OVER (PARTITION BY ID ORDER BY ID) AS RowNumber
+	FROM Employees
+  )
+  DELETE FROM EmployeesCTE WHERE RowNumber > 1
+
+--- See example below where Derived Query is used.
+*/
+
+SELECT 
+      JobTitle
+      ,[BirthDate]
+      ,[MaritalStatus]
+      ,Gender
+      ,[HireDate] 
+	  ,ROW_NUMBER() OVER (ORDER BY Gender) AS GEN 
+FROM [AdventureWorks2014].[HumanResources].[Employee] 
+
+
+SELECT 
+      JobTitle
+      ,[BirthDate]
+      ,[MaritalStatus]
+      ,Gender
+      ,[HireDate] 
+	  ,ROW_NUMBER() OVER (PARTITION BY Gender ORDER BY GENDER) AS GEN 
+FROM [AdventureWorks2014].[HumanResources].[Employee] 
+
 ------------------
-Analytic Functions
+5. Analytic Functions
 ------------------
 
 Analytic Functions
 https://docs.microsoft.com/en-us/sql/t-sql/functions/analytic-functions-transact-sql?view=sql-server-2017
 
 -----------------
-UNION, UNION ALL
+6. UNION, UNION ALL
 -----------------
 
 UNION - Does not include Duplicates.   Sorts the output.  There is a performance penalty since we have to do a Distinct SORT.
@@ -217,7 +264,7 @@ SELECT TOP 4 a.* FROM
 ) AS a
 ORDER BY Priority ASC
 -----------------------------------------------------------------------------
-ROLLUP  - Most Optimal when compared to UNION ALL and GROUP BY GROUPING SETS
+7. ROLLUP  - Most Optimal when compared to UNION ALL and GROUP BY GROUPING SETS
 -----------------------------------------------------------------------------
 
 ROLLUP - Used to do AGGREGATE Operation on Multiple Levels in a heirarchy. 
@@ -236,7 +283,7 @@ SELECT E.Gender
   GROUP BY ROLLUP(E.Gender, E.MaritalStatus)
 
 ------------------------------------
-GROUPING SETS compared to UNION ALL
+8. GROUPING SETS compared to UNION ALL
 ------------------------------------
  /*
  See GROUPING SETS for an easier more effecient way of doing the above
@@ -299,7 +346,7 @@ SELECT E.Gender
  
  /*
 -------------
-CUBE
+9. CUBE
 -------------
 
 CUBE Provides more subtotals than does ROLLUP.  CUBE Does totals on all possible combinations.  ROLLUP does totals based on the Heirarchy Order.
@@ -352,7 +399,7 @@ SELECT E.Gender
 	)
  
 --------------
-GROUPING_ID()
+10. GROUPING_ID()
 --------------- 
 GROUPING_ID() concatenates all of the GROUPING functions, performs the binary decimal conversion, and returns the equivalent integer.
 
@@ -384,7 +431,7 @@ SELECT ISNULL(E.Gender, '*') AS GENDER
   ORDER BY GP_ID
   
 ------------------
-GROUPING Function 
+11. GROUPING Function 
 -------------------
 
 GROUPING indicates whether a column in a GROUPBY list is aggregated or not. 
@@ -426,7 +473,7 @@ SELECT E.Gender
   GROUP BY E.Gender, E.MaritalStatus
 
 -------------
-HAVING Clause
+12. HAVING Clause
 --------------
 Syntax
 
@@ -449,52 +496,7 @@ https://www.tutorialspoint.com/sql/sql-having-clause.htm
 
 
   
---------------
-12. ROW_NUMBER()
----------------
 
-09/23/2019 - I had A hard TIME mixing A Derived TABLE WITH a CTE.  I had TO CREATE A #TempTable USING 'SELECT INTO' TO make it WORK.
-
-ROW_NUMBER() Clause  ....  
-
-Needs the OVER (ORDER BY ... Clause
-
-ROW_NUMBER() Will start over with each Partition see second example
-
-Since ROW_NUMBER() starts over with each partition ... if you wanted to identify duplicates this could easily be done
-
-https://www.youtube.com/watch?v=cvrwOoGwgz8&index=109&list=PL08903FB7ACA1C2FB
-
-Use case of ROW_NUMBER() Function is that you can Delete all Duplicate Rows.
-Example:
-  WITH EmployeesCTE AS
-  (
-    SELECT *, ROW_NUMBER() OVER (PARTITION BY ID ORDER BY ID) AS RowNumber
-	FROM Employees
-  )
-  DELETE FROM EmployeesCTE WHERE RowNumber > 1
-
---- See example below where Derived Query is used.
-*/
-
-SELECT 
-      JobTitle
-      ,[BirthDate]
-      ,[MaritalStatus]
-      ,Gender
-      ,[HireDate] 
-	  ,ROW_NUMBER() OVER (ORDER BY Gender) AS GEN 
-FROM [AdventureWorks2014].[HumanResources].[Employee] 
-
-
-SELECT 
-      JobTitle
-      ,[BirthDate]
-      ,[MaritalStatus]
-      ,Gender
-      ,[HireDate] 
-	  ,ROW_NUMBER() OVER (PARTITION BY Gender ORDER BY GENDER) AS GEN 
-FROM [AdventureWorks2014].[HumanResources].[Employee] 
 
 
 *********************

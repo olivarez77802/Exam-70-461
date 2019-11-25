@@ -33,6 +33,7 @@ Advantages - Uses
 -- Breaks down complex logic
 -- Simplifies reading
 -- Sneak "in" operations otherwise not allowed. e.g use an aggregate function on a where clause
+-- Allows you to use "ORDER BY" on a view with "TOP 1" which otherwise is not allowed on a view.
 
 DisAdvantages - Can often be replaced by a join
 -- Joins may perform faster

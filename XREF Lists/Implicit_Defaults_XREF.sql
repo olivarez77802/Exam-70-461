@@ -138,8 +138,14 @@ an object in the query plan.
 7. Manage Transactions
 -----------------------
 1. SQL's default Isolation Level is 'READ COMMITED'.  This means read only committed data.
+
 2. AUTOCOMMIT is the default transaction management mode.
-3. SET XACT_ABORT OFF  is the default.    Means the entire batch will not fail.  SET XACT_ABORT ON will rollback the entire batch.
+
+3. SET IMPLICIT_TRANSACTIONS OFF is the default.  When OFF, each of the preceding T-SQL statements is bounded by an 
+   unseen BEGIN TRANSACTION and unseen COMMIT TRANSACTION statement.  When OFF, we say the transaction mode is AUTOCOMMIT.
+   https://docs.microsoft.com/en-us/sql/t-sql/statements/set-implicit-transactions-transact-sql?view=sql-server-ver15
+
+4. SET XACT_ABORT OFF  is the default.    Means the entire batch will not fail.  SET XACT_ABORT ON will rollback the entire batch.
  
 
 See also ManageTransactions.sql and SET_XREF.sql for more info.

@@ -19,7 +19,7 @@ Manage Transactions
 All Operations that in any way write to the database are treated by SQL Server as transactions.  This includes
 1. DML - Data Manipulation Language statements such as INSERT, UPDATE, and DELETE
 2. DDL - Data Definition Languaage statements such as CREATE TABLE and CREATE INDEX.
-Technically, even signle SELECT statements are a type of transaction in SQL, these are called read-only transactions.
+Technically, even single SELECT statements are a type of transaction in SQL, these are called read-only transactions.
 
 A transaction is a group of database commands that change the data stored in a database.  A transaction, is treated as a single unit.
 A transaction ensures that, either all of the commands succeed, or none of them.  If one of the commands in the transaction
@@ -34,6 +34,8 @@ Transaction processing follows these steps:
        rollback the transaction
    else
        commit the transaction
+
+Note:  The transaction starts with the 'BEGIN' coommand and may include more than one SQL statement.
 
 The ACID acronym is used to describe the properties of transactions.
 
@@ -75,6 +77,12 @@ https://www.youtube.com/watch?v=VLc4ewu6lUI&list=PL08903FB7ACA1C2FB&index=58
 **********************************
 3. TRANSACTION MODES
 **********************************
+SET IMPLICIT_TRANSACTIONS {ON | OFF}
+When ON, the system is in IMPLICIT transaction mode.  This means that if @@TRANCOUNT = 0, any of the following 
+Transact-SQL Statements begins a new transaction.  It is equivalent to an unseen BEGIN TRANSACTION being exectuted first.
+ALTER TABLE, FETCH, REVOKE, BEGIN TRANSACTION, GRANT, SELECT, CREATE, INSERT, TRUNCATE TABLE, DELETE, OPEN, UPDATE, DROP.
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-implicit-transactions-transact-sql?view=sql-server-ver15
+
 @@TRANCOUNT -  Is really a variable to define Levels.
 
 TRANSACTIONS
@@ -98,12 +106,16 @@ SQL Server operates in the following transaction modes:
 
 https://docs.microsoft.com/en-us/sql/t-sql/language-elements/transactions-transact-sql?view=sql-server-2017
 
-Autocommit Mode
+Autocommit Mode (SET IMPLICIT TRANSACTIONS OFF)
+The database acts as if every single command is wrapped with BEGIN..COMMIT.
 In the autocommit mode, single data modification and DDL T-SQL statements are executed in the context of a transaction that will
 be automatically committed when the statement succeeds, or automatically rolled back if the statement fails.
 The autocommit mode is the default transaction management mode. The simple state diagram in Figure 12-1 illustrates the autocommit mode.
 https://www.youtube.com/watch?v=J9VP5CILdP4
  
+SET AUTOCOMMIT OFF - Have to explicitly type 'COMMIT' or 'ROLLBACK'.  
+SET AUTOCOMMIT ON  - COMMIT or ROLLBACK is Implicit.  This is the default.  SET IMPLICIT TRANSACTIONS OFF
+
 A transaction in autocommit mode with no COMMIT required.
 In the autocommit mode, you do not issue any surrounding transactional commands such as BEGIN TRAN, ROLLBACK TRAN, or COMMIT TRAN. 
 Further, the @@TRANCOUNT value (for the user session) is not normally detectable for that command, though it would be in a data 
