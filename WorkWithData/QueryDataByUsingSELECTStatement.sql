@@ -15,7 +15,7 @@ Query data by using SELECT statements
    2. LIKE Operator
    3. EXCEPT Operator
    4. INTERSECT Operator
-   5. JOIN Operator
+   5. JOIN Operator  (See also NULL_XREF.sql)
    6. DERIVED Tables
    7. RANK 
    8. SYNONYMS
@@ -175,6 +175,15 @@ as in col LIKE ‘ABC%’, because this form is considered a search argument. Recall
 filtered column prevents the predicate from being a search argument. For example, the form LEFT(col, 3) = ‘ABC’ 
 isn’t a search argument and will prevent SQL Server from being able to use an index efficiently.
 
+LIKE Operator using a Variable
+Example
+DECLARE @WS VARCHAR(1)
+DECLARE @SEARCHWS VARCHAR(2)
+SET @SEARCHWS = @WS+'%'
+SELECT *
+FROM dbo.Table AS T
+WHERE T.WS LIKE @SEARCHWS
+
 ***************
 3. EXCEPT Operator
 ***************
@@ -320,6 +329,20 @@ SELECT TOP 1000 PERS.BusinessEntityID
   FROM [AdventureWorks2014].[Person].[Person] AS PERS
   INNER JOIN Person.PersonPhone AS PHON
   ON PERS.BusinessEntityID = PHON.BusinessEntityID
+
+JOIN - Multiple Tables
+A multiple join is a use of more than one join in a single query. The joins used may be all of the same type, or their types can differ. 
+We’ll begin our discussion by showing an example query that uses two joins of the same type. Take a look at the query below.
+
+SELECT v.name, c.name,  p.lastname
+FROM vehicle v
+INNER JOIN color c ON  v.color_id = c.id
+INNER JOIN person p ON v.person_id = p.id ;
+
+The query invokes two INNER JOINs in order to join three tables: vehicle, person and color. Only those records that have a match in each table will be returned.
+
+If you have a lot of tables you are joining, it may be best to do preliminary work to create a 'base' from table and instead of doing inner joins, do a LEFT
+JOIN so that your results will always include records from the 'base' table.
 
 *******************
 6. DERIVED TABLES

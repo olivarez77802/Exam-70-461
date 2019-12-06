@@ -1,5 +1,6 @@
 /*
 NULL XREF - Listing Ways of Handling NULLS in SQL
+See also CombineDatasets.sql
 
 NULL is a mark for a missing value- Not a value in itself.  The correct usage of the term is either "NULL mark" or just "NULL".
 
@@ -9,7 +10,7 @@ NULL is a mark for a missing value- Not a value in itself.  The correct usage of
 4. Replacing a NULL Value
 5. Indexes
 6. Sorting
-7. JOINS
+7. JOINS (See also QueryDataByUsingSELECT.sql)
 8. Subqueries
 9. SET OPERATORS - UNION, INTERSECT, EXCEPT
 10. COUNT
@@ -121,6 +122,43 @@ WHERE region <> N'WA'
 See CombineDatasets.sql for more details.
 
 https://www.w3schools.com/sql/sql_null_values.asp
+
+USE ADVENTUREWORKS2014
+SELECT TOP 1000 
+       [Title]
+      ,[FirstName]
+      ,[MiddleName]
+      ,[LastName]
+      ,[Suffix]
+      ,COALESCE( Title, Suffix, MiddleName, LastName, 'Text') AS COALESCEX
+  FROM [AdventureWorks2014].[Person].[Person]
+
+ -- ISNULL - Will replace Null Values
+SELECT TOP 1000 
+       [Title]
+      ,[FirstName]
+      ,[MiddleName]
+      ,[LastName]
+      ,[Suffix]
+      ,ISNULL (Suffix,'No Suffix') AS SUFFIX 
+	  ,ISNULL (MiddleName, 'No Middle Name') AS MIDDLE
+  FROM [AdventureWorks2014].[Person].[Person]
+
+-- CASE Statement
+
+  SELECT TOP 1000 
+       [Title]
+      ,[FirstName]
+      ,[MiddleName]
+      ,[LastName]
+      ,[Suffix]
+      ,CASE 
+	    WHEN Title IS NULL THEN 'No Title'  
+		WHEN Suffix IS NULL THEN 'No Suffix' ELSE Title
+	  END	    
+  FROM [AdventureWorks2014].[Person].[Person]
+
+
 
 ---------------------------------------------------------------
 5. Indexes - Misuse of COALESCE will prevent them from being used.  

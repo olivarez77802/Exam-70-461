@@ -14,13 +14,39 @@ default values are established for each connection and remain set unless they ar
 https://www.mssqltips.com/sqlservertip/1415/determining-set-options-for-a-current-session-in-sql-server/
 
 Defaults - Run Code below to compare
-- ANSI_WARNINGS
-- ANSI_PADDING
-- ANSI_NULLS
-- ARITHABORT
-- QUOTED_IDENTIFIER
-- ANSI_NULL_DFLT_ON
-- CONCAT_NULL_YIELDS_NULL
+1.  ANSI_WARNINGS
+  When set to ON, if Null values appear in aggregates functions, such as SUM, AVG, MAX, MIN,
+  STDDEV, or COUNT, a warning is generated. When set to OFF, no warning is issued.
+
+2. ANSI_PADDING  
+  SET @VAR = 'A   '
+  'ON' SETTING - Trailing blanks in character values inserted into varchar columns are NOT trimmed @VAR= 'A   '.
+  'OFF' Setting ' - Trailing blanks in character values inserted into a varchar columnn are trimmed @VAR= 'A'.
+
+3. ANSI_NULLS
+   Means only 'IS NULL' will recognize NULL.  Won't find NULLS with '=' or '<>'.  This is the ISO standard.
+
+4. ARITHABORT
+   Terminates a QUERY when an overflow or divide-by-zero error occurs during execution.
+
+5. QUOTED_IDENTIFIER
+   You delimit string literals by using single quotation marks,
+   and use double quotation marks only to delimit T-SQL identifiers (in addition to square brackets).
+
+6. ANSI_NULL_DFLT_ON
+   Will allow NULL values to be inserted into a Table.
+
+7. CONCAT_NULL_YIELDS_NULL
+   When SET CONCAT_NULL_YIELDS_NULL is ON, concatenating a null value with a string yields a NULL result.
+   For example, 
+   SET CONCAT_NULL_YIELDS_NULL ON
+   SELECT 'abc' + NULL
+   yields NULL. When SET CONCAT_NULL_YIELDS_NULL is OFF, 
+   concatenating a null value with a string yields the string itself (the null value is treated as an empty string). 
+   For example, 
+   SET CONCAT_NULL_YIELDS_NULL OFF
+   SELECT 'abc' + NULL
+   yields abc.
 
 When dealing with indexes on computed columns and indexed views, four of the defaults must be set to ON.
 - ANSI_NULLS
@@ -29,15 +55,34 @@ When dealing with indexes on computed columns and indexed views, four of the def
 - QUOTED_IDENTIFIER
 
 Additional SET Options to Review 
-DISABLE_DEF_CNST_CHK
-IMPLICIT_TRANSACTIONS
-CURSOR_CLOSE_ON_COMMIT
-ARITHIGNORE
-NOCOUNT
-NUMERIC_ROUNDABORT
-XACT_ABORT
+1. DISABLE_DEF_CNST_CHK
 
+2. IMPLICIT_TRANSACTIONS
+   SET IMPLICIT_TRANSACTIONS OFF is the default.  When OFF, each of the preceding T-SQL statements is bounded by an 
+   unseen BEGIN TRANSACTION and unseen COMMIT TRANSACTION statement.  When OFF, we say the transaction mode is AUTOCOMMIT.
 
+3. CURSOR_CLOSE_ON_COMMIT
+   The default setting is OFF  This means that the server will not close cursors when you commit a transaction.
+
+4. ARITHIGNORE
+   SET ARITHIGNE OFF - Default - Will give message 'Overflow occured'.   Setting 'ON' will give message 'Divide by Zero occured'.
+
+5. NOCOUNT
+   SET NOCOUNT OFF is the Default.  The message will show the count of the number of rows affected after query.  You usually
+   want this ON when creating a stored procedure.
+
+6. NUMERIC_ROUNDABORT
+   SET NUMERIC_ROUNDABORT OFF is the default.  
+   When SET NUMERIC_ROUNDABORT is ON, an error is generated after a loss of precision occurs in an expression. If set to OFF, 
+   losses of precision don't generate error messages. The result is rounded to the precision of the column or variable storing the result. 
+
+7. XACT_ABORT
+  OFF is the default setting. When SET XACT_ABORT is OFF, in some cases only the Transact-SQL statement that raised the error is rolled back and the transaction
+  continues processing.
+  When SET XACT_ABORT is ON, if a Transact-SQL statement raises a run-time error, the entire transaction is terminated and rolled back.
+  
+  Depending upon the severity of the error, the entire transaction may be rolled back even when SET XACT_ABORT is OFF. OFF is the default setting in a T-SQL
+  statement, while ON is the default setting in a trigger.
 
 -- @@OPTIONS - Gets the settings for the current session
 -- When run this command returns an integer that represents the bit values.
@@ -49,6 +94,7 @@ SELECT @options = @@OPTIONS
 PRINT @options
 IF ( (1 & @options) = 1 ) PRINT 'DISABLE_DEF_CNST_CHK' 
 IF ( (2 & @options) = 2 ) PRINT 'IMPLICIT_TRANSACTIONS' 
+IF ( (2 & @options) = 0) PRINT 'IMPLICIT_TRANSACTIONS OFF' 
 IF ( (4 & @options) = 4 ) PRINT 'CURSOR_CLOSE_ON_COMMIT' 
 IF ( (8 & @options) = 8 ) PRINT 'ANSI_WARNINGS' 
 IF ( (16 & @options) = 16 ) PRINT 'ANSI_PADDING' 
@@ -62,7 +108,7 @@ IF ( (2048 & @options) = 2048 ) PRINT 'ANSI_NULL_DFLT_OFF'
 IF ( (4096 & @options) = 4096 ) PRINT 'CONCAT_NULL_YIELDS_NULL' 
 IF ( (8192 & @options) = 8192 ) PRINT 'NUMERIC_ROUNDABORT' 
 IF ( (16384 & @options) = 16384 ) PRINT 'XACT_ABORT'
-IF ( (2 & @options) = 0) PRINT 'Implicit transactions is off, explicit transaction is currently running'
+
 **********************************************************************************************
 DEFAULTS
 **********************************************************************************************
@@ -300,6 +346,11 @@ XACT_ABORT transfers control to the CATCH block, and as expected, any error is f
 (and XACT_STATE() returns a –1). Therefore, you cannot commit a transaction inside a CATCH block if XACT_ABORT is turned on; you must
 roll it back.
 
+When SET XACT_ABORT is ON, if a Transact-SQL statement raises a run-time error, the entire transaction is terminated and rolled back.
+When SET XACT_ABORT is OFF, in some cases only the Transact-SQL statement that raised the error is rolled back and the transaction continues processing.
+Depending upon the severity of the error, the entire transaction may be rolled back even when SET XACT_ABORT is OFF. OFF is the default setting in a T-SQL
+statement, while ON is the default setting in a trigger.
+
 https://docs.microsoft.com/en-us/sql/t-sql/statements/set-xact-abort-transact-sql?view=sql-server-2017 
 */
 
@@ -330,7 +381,12 @@ SELECT *
 GO  
 --------------------------------- END XACT_ABORT ------------------------------------------
 /*
+***************************************
 -- IMPLICIT TRANSACTION MODE
+***************************************
+
+See also ManageTranactions/3.Transaction Modes
+
 In the implicit transaction mode, when you issue one or more DML or DDL statements, or a 
 SELECT statement, SQL starts a transaction, increments @@TRANCOUNT, but does not automatically
 commit or roll back the statement.  You must issue a COMMIT or ROLLBACK interactively to finish
@@ -338,4 +394,56 @@ the transaction, even if all you issued was a SELECT statement.
 
 Implicit transaction mode is not the SQL default.  You enter that mode by entering command
 SET IMPLICIT_TRANSACTION ON
+
+*************************
+ARITHIGNORE
+*************************
+
+Default is SET ARITHIGNORE OFF.
+Controls whether error messages are returned from overflow or divide-by-zero errors during a query.
+
+SET ARITHABORT OFF;  
+SET ANSI_WARNINGS OFF  
+GO  
+  
+PRINT 'Setting ARITHIGNORE ON';  
+GO  
+-- SET ARITHIGNORE ON and testing.  
+SET ARITHIGNORE ON;  
+GO  
+SELECT 1 / 0 AS DivideByZero;  
+GO  
+SELECT CAST(256 AS TINYINT) AS Overflow;  
+GO  
+  
+PRINT 'Setting ARITHIGNORE OFF';  
+GO  
+-- SET ARITHIGNORE OFF and testing.  
+SET ARITHIGNORE OFF;  
+GO  
+SELECT 1 / 0 AS DivideByZero;  
+GO  
+SELECT CAST(256 AS TINYINT) AS Overflow;  
+
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-arithignore-transact-sql?view=sql-server-ver15
+
+*****************
+NOCOUNT
+*****************
+Stops the message that shows the count of the number of rows affected by a Transact-SQL statement or stored procedure from being returned as part of the result set.
+
+SET NOCOUNT OFF - Is the default.  The count is returned.
+SET NOCOUNT ON - The count is not returned.
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-nocount-transact-sql?view=sql-server-ver15
+
+********************
+NUMERIC_ROUNDABORT
+********************
+SET NUMERIC_ROUNDABORT OFF is the default.  
+
+When SET NUMERIC_ROUNDABORT is ON, an error is generated after a loss of precision occurs in an expression. If set to OFF, 
+losses of precision don't generate error messages. The result is rounded to the precision of the column or variable storing the result. 
+
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-numeric-roundabort-transact-sql?view=sql-server-ver15
+
 */

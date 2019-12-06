@@ -4,6 +4,24 @@ Query and manage XML Data
    and handling of XML data; XML data: how to handle in SQL Server and when and when not to use it, including
    XML Namespaces; import and export XML; XML indexing
 
+1. XML Overview
+2. XML Data
+3. XML Data Types
+4. XQUERY
+   A.  XPATH
+5. FOR XML 
+   - Use when you have a relational table and you want to convert it to XML.
+6. XML Schemas
+   - Used to place edits on XML Data
+7. XML Import and Export..OpenXML
+  - Use when someone sends you XML Data and you want to convert it to a relation SQL table.
+8. XML Indexes
+9. XML Website Links 
+
+
+**********************
+1. XML Overview
+**********************
 <!-- Any comment -->
 Syntax for comment.  Less than sign, Exclamation Mark, two dashes follow by two dashes and greater than sign.
 
@@ -13,6 +31,17 @@ XML was designed to store and transport data.
 XML was designed to be both machine and human readable.
 XML is often used to separate data from presentation.
 
+How SQL Server Implements XML
+a. XML Data Type - stores data within a column. XQUERY support allows query based
+   interaction with data stored in XML format.
+b. FOR XML - T-SQL clause provides the ability to display query results in XML Format.
+c. OpenXML - Function provides the ability to display XML into a rowset view.  This rowset
+can then be queried as relational data.
+https://www.youtube.com/watch?v=WIg64plWH80
+
+*******************
+2. XML Data
+*******************
 <?xml version="1.0" encoding="UTF-8"?> 
 Declaration - 1st line of xml document.  It is optional, but if it appears it must be at the top.
 The Declaration is also called the XML Prolog.  The XML Prolog does not have a closing tag!
@@ -48,6 +77,10 @@ xyz- attribute name  "a" - attribute value
 Attribute - specifies a single property for an element.  It consists of a 
 name and a value separated by an equal sign.  
 
+*********************
+3. XML Data Type
+*********************
+
 XML type limitations
 - XML type is not treated like character types
 - Does not support comparison (except to NULL)
@@ -59,6 +92,240 @@ XML type limitations
 - Cannot be declared with COLLATE
 -- Uses XML encodings
 -- Always stored as UNICODE UCS-2
+
+***********
+4. XQUERY
+***********
+
+XQUERY Tutorial
+XQUERY is to XML what SQL is to databases.
+https://www.w3schools.com/xml/xquery_intro.asp
+In XQuery, there are seven kinds of nodes:
+1. element
+2. attribute
+3. text
+4. namespace
+5. processing-instruction
+6. comment
+7. document (root)
+
+XQuery Syntax Rules
+1. XQuery is case sensitive
+2. XQuery elements, attributes, and variables must be valid XML Names
+3. An XQuery string value can be single or double quotes
+4. An XQuery variable is defined with a $ followed by a name, e.g. $bookstore
+5. XQuery comments are delimited by (: and :), e.g. (: XQuery Comment :)
+
+XQuery Conditional Expressions
+"If-Then-Else" expressions are allowed in XQuery.
+Example:
+for $x in doc("books.xml")/bookstore/book
+return if ($x/@category="children")
+then <child>{data($x/title)}</child>
+else <adult>{data($x/title)}</adult>
+
+*************
+4.A   XPATH
+*************
+XPath Syntax
+https://www.w3schools.com/xml/xpath_syntax.asp
+XPath uses path expressions to select nodes or node-sets in an XML Document.  
+Selecting Nodes:
+1. nodename  - selects all nodes with the name "nodename"
+2. /         - selects from the root node
+3. //        - selects nodes in the document from the current node that match the selection
+               no matter where they are.
+4. .         - The period '.' selects the current node
+5. ..        - The double '..' selects the parent of the current node
+6. @         - Selects attributes
+
+Selecting Unknown Nodes
+XPath Wildcards can be used to select unknow XML Nodes
+*         - Matches any Element   node
+@*        - Matches any Attribute node
+node()    - Matches any Node      of any kind 
+comment() - Matches amy comment   nodes
+processing-instruction() - Matches any processing instruction node
+text()    - Matches any Text      node (or nodes without any tags). 
+
+
+****************************************************************************************
+
+USE Development
+SELECT *
+FROM invoice_docs
+
+SELECT Invoice 
+FROM invoice_docs
+
+SELECT I.InvoiceID
+FROM invoice_docs as I
+
+USE Development
+SELECT invoice.query('
+(: this is a valid XQuery :)
+*
+')
+FROM invoice_docs
+
+-- XQuery Language Reference
+-- https://docs.microsoft.com/en-us/sql/xquery/xquery-language-reference-sql-server?view=sql-server-2017
+USE Development
+SELECT invoice.query('
+(: this is a valid XQuery :)
+declare namespace inv="urn:www-company-com:invoices";
+/inv:Invoice/inv:InvoiceID
+')
+FROM invoice_docs
+
+*****************
+5. FOR XML
+*****************
+RAW, AUTO, PATH
+Flavors of 'FOR XML':
+1. XML RAW -  Element name is named 'row'
+2. XML AUTO - Element name is the name of your Table 
+3. XML PATH - Looks more like traditional XML with 'row' as ROOT and Table Columns are child elements.
+4. XML EXPLICIT - Included for Backward compatiblity only.
+
+Optional Paramters
+ELEMENTS
+ROOT('People')
+
+Well formed document - XML AUTO, ROOT('People'), ELEMENT
+
+ATTRIBUTES versus ELEMENTS
+Elements - <row   />  or
+           <row>
+		     <FirstName> Syed</FirstName>
+			 <LastName> Abbas</LastName>
+		   </row>
+Attributes - FirstName="Sysed" LastName="Abbas"
+
+
+EXPLICIT and PATH options - You can manually define the XML returned.  With these two options,
+you have total control of the XML returned.  The PATH mode uses standard XML XPATH expressions
+to define the elements and attributes of the XML you are creating.
+
+In PATH mode, column names and aliases serve as XPath expressions. XPath expressions define the 
+path to the element in the XML generated.  Path is expressed in a heirarchial way; levels are 
+delimited with the slash (/) character.   By default, every column becomes an element; if you
+want to generate attribute-centric XML, prefix the alias name with the '@' characters.
+Example:
+
+Here is an example of a simple XPATH query.
+
+SELECT Customer.custid AS [@custid],
+ Customer.companyname AS [companyname]
+FROM Sales.Customers AS Customer
+WHERE Customer.custid <= 2
+ORDER BY Customer.custid
+FOR XML PATH ('Customer'), ROOT('Customers');
+
+The query returns the following output.
+
+<Customers>
+  <Customer custid="1">
+    <companyname>Customer NRZBB</companyname>
+  </Customer>
+  <Customer custid="2">
+    <companyname>Customer MLTDN</companyname>
+  </Customer>
+</Customers>
+
+*/
+USE AdventureWorks2014
+
+-- RAW - Every row is under a signal element named 'row'.
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Raw
+
+-- Auto - Automatically; Defaults to type nvarchar.  AUTO exchanges 'row' with Table Name. 
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Auto
+
+-- ELEMENTS - Can be used with AUTO and RAW to give you elements. Starts to look more like traditional XML.
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Raw, ELEMENTS 
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML AUTO, ELEMENTS 
+
+-- Auto - Automatically; Defaults to type nvarchar
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Auto
+
+-- Type set it to XML DataType
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Auto, TYPE
+
+-- Elements ...Nice format to show Elements.. Each column represented as Elements
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Auto, TYPE, ELEMENTS
+
+-- Adds Root Element
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Auto, TYPE, ELEMENTS, ROOT
+
+-- Put your own name on the ROOT
+SELECT TOP 5 *
+FROM HumanResources.Employee
+FOR XML Auto, TYPE, ELEMENTS, ROOT('RootName')
+
+-- Modify Column names
+SELECT BusinessEntityID AS myBusinessEntityID
+      ,OrganizationNode as myorgnode
+      ,LoginID AS myLoginID
+	  ,JobTitle AS myJobTitle
+	  ,BirthDate AS myBirthDate
+FROM HumanResources.Employee as Employees
+FOR XML AUTO, TYPE, ELEMENTS, Root('myRoot')
+
+-- RAW('myEmployees') Will override 'AS Employees'
+-- When you use RAW keyword and you have NULL Data the element is skipped
+-- Null data is also skipped using AUTO
+-- Look at OrganizationNode to see example of Null Data being skiped using
+-- both RAW and AUTO
+SELECT BusinessEntityID AS myBusinessEntityID
+      ,OrganizationNode as myorgnode
+      ,LoginID AS myLoginID
+	  ,JobTitle AS myJobTitle
+	  ,BirthDate AS myBirthDate
+FROM HumanResources.Employee as Employees
+FOR XML RAW('myEmployees'), TYPE, ELEMENTS, Root('myRoot')
+
+-- XML Namespaces
+-- https://docs.microsoft.com/en-us/sql/relational-databases/xml/add-namespaces-to-queries-with-with-xmlnamespaces?view=sql-server-2017
+--
+WITH XMLNAMESPACES ('uri' as ns1)  
+SELECT ProductID as 'ns1:ProductID',  
+       Name      as 'ns1:Name',   
+       Color     as 'ns1:Color'  
+FROM Production.Product  
+WHERE ProductID=316 or ProductID=317  
+FOR XML RAW ('ns1:Prod'), ELEMENTS  
+
+--- Example of doing a Bulk Import
+--- SINGLE_BLOB - Tells SQL Server to figure out the encoding, SINGLE_BLOB avoids encoding problems.
+USE Development
+INSERT INTO T(XmlCol)  
+SELECT * FROM OPENROWSET(  
+   BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\xmlresult.xml',  
+   SINGLE_BLOB) AS x;  
+
+
+/*
+
+*****************
+6. XML Schemas
+*****************
 
 XML Schema
 - Schema - Way of constraining the name of tags and order of tags.
@@ -73,7 +340,7 @@ XML Schema
 
 When you check whether an XML Document complies with a schema, you validate the document.
 A document with a predefined schema is said to be a Typed XML Document.
-
+*/
 -- Query all of the Schema Collections that are defined or have been built in.
 SELECT * FROM sys.xml_schema_collections
 -- All of the built in Types
@@ -211,89 +478,35 @@ BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\W
 SINGLE_BLOB) AS x
 GO
 
-***********************************************************************************
-XQUERY Tutorial
-XQUERY is to XML what SQL is to databases.
-https://www.w3schools.com/xml/xquery_intro.asp
-In XQuery, there are seven kinds of nodes:
-1. element
-2. attribute
-3. text
-4. namespace
-5. processing-instruction
-6. comment
-7. document (root)
-
-XQuery Syntax Rules
-1. XQuery is case sensitive
-2. XQuery elements, attributes, and variables must be valid XML Names
-3. An XQuery string value can be single or double quotes
-4. An XQuery variable is defined with a $ followed by a name, e.g. $bookstore
-5. XQuery comments are delimited by (: and :), e.g. (: XQuery Comment :)
-
-XQuery Conditional Expressions
-"If-Then-Else" expressions are allowed in XQuery.
-Example:
-for $x in doc("books.xml")/bookstore/book
-return if ($x/@category="children")
-then <child>{data($x/title)}</child>
-else <adult>{data($x/title)}</adult>
-
-**************************************************************************************
-XPath Syntax
-https://www.w3schools.com/xml/xpath_syntax.asp
-XPath uses path expressions to select nodes or node-sets in an XML Document.  
-Selecting Nodes:
-1. nodename  - selects all nodes with the name "nodename"
-2. /         - selects from the root node
-3. //        - selects nodes in the document from the current node that match the selection
-               no matter where they are.
-4. .         - The period '.' selects the current node
-5. ..        - The double '..' selects the parent of the current node
-6. @         - Selects attributes
-
-Selecting Unknown Nodes
-XPath Wildcards can be used to select unknow XML Nodes
-*         - Matches any Element   node
-@*        - Matches any Attribute node
-node()    - Matches any Node      of any kind 
-comment() - Matches amy comment   nodes
-processing-instruction() - Matches any processing instruction node
-text()    - Matches any Text      node (or nodes without any tags). 
+/*
+*******************
+7.
+*******************
+See SCHEMA above FOR Loading A SCHEMA COLLECTION FROM A FILE.
 
 
-****************************************************************************************
+Example OF taking an XML File and showing the Attributes
+*/
+DECLARE @XML_text VARCHAR (4000), @handle INT
+SELECT @XML_text = 
+'<People> 
+ <Person FirstName="Winston" LastName="Smith" />
+ <Person FirstName="Bjorn" LastName="Wilde" />
+ </People>'
 
-USE Development
-SELECT *
-FROM invoice_docs
+ EXEC sys.sp_xml_preparedocument @handle OUTPUT, @XML_text
 
-SELECT Invoice 
-FROM invoice_docs
+ SELECT * FROM OPENXML(@handle,'People/Person')
+         WITH (FirstName VARCHAR(50), LastName VARCHAR(50))
 
-SELECT I.InvoiceID
-FROM invoice_docs as I
+EXEC sys.sp_xml_removedocument @handle
 
-USE Development
-SELECT invoice.query('
-(: this is a valid XQuery :)
-*
-')
-FROM invoice_docs
-
--- XQuery Language Reference
--- https://docs.microsoft.com/en-us/sql/xquery/xquery-language-reference-sql-server?view=sql-server-2017
-USE Development
-SELECT invoice.query('
-(: this is a valid XQuery :)
-declare namespace inv="urn:www-company-com:invoices";
-/inv:Invoice/inv:InvoiceID
-')
-FROM invoice_docs
+https://www.youtube.com/watch?v=WIg64plWH80
 
 
-
-XML Indexes
+******************
+8. XML Indexes
+******************
 The XML data type is actually a large object type.  There can be up to 2GB of
 data in every single column value.  Scanning through XML data sequentially is
 not a very efficient way of retrieving a simple scalar value.  You can index XML 
@@ -331,6 +544,10 @@ XML Primary Index Details
 -- Only available on columns (not variables)
 -- Space Utilization is 2-5 times original data
 
+*********************
+9. XML Website Links
+*********************
+
 XML Tutorial
 https://www.w3schools.com/xml/default.asp
 
@@ -367,129 +584,4 @@ https://app.pluralsight.com/library/courses/sql-server-xml/table-of-contents
 
 BULK INSERT
 https://docs.microsoft.com/en-us/sql/t-sql/statements/bulk-insert-transact-sql?view=sql-server-2017
-
-RAW, AUTO, PATH
-Flavors of 'FOR XML':
-1. XML RAW -  Element name is named 'row'
-2. XML AUTO - Table names are your Elements
-3. XML PATH - Looks more like traditional XML with 'row' as ROOT and Table Columns are child elements.
-4. XML EXPLICIT - Included for Backward compatiblity only.
-
-EXPLICIT and PATH options - You can manually define the XML returned.  With these two options,
-you have total control of the XML returned.  The PATH mode uses standard XML XPATH expressions
-to define the elements and attributes of the XML you are creating.
-
-In PATH mode, column names and aliases serve as XPath expressions. XPath expressions define the 
-path to the element in the XML generated.  Path is expressed in a heirarchial way; levels are 
-delimited with the slash (/) character.   By default, every column becomes an element; if you
-want to generate attribute-centric XML, prefix the alias name with the '@' characters.
-Example:
-
-Here is an example of a simple XPATH query.
-
-SELECT Customer.custid AS [@custid],
- Customer.companyname AS [companyname]
-FROM Sales.Customers AS Customer
-WHERE Customer.custid <= 2
-ORDER BY Customer.custid
-FOR XML PATH ('Customer'), ROOT('Customers');
-
-The query returns the following output.
-
-<Customers>
-  <Customer custid="1">
-    <companyname>Customer NRZBB</companyname>
-  </Customer>
-  <Customer custid="2">
-    <companyname>Customer MLTDN</companyname>
-  </Customer>
-</Customers>
-
-*/
-USE AdventureWorks2014
-
--- RAW - Every row is under a signal element named 'row'.
-SELECT TOP 5 *
-FROM HumanResources.Employee
-FOR XML Raw
-
--- Auto - Automatically; Defaults to type nvarchar.  AUTO exchanges 'row' with Table Name. 
-SELECT TOP 5 *
-FROM HumanResources.Employee
-FOR XML Auto
-
--- ELEMENTS - Can be used with AUTO and RAW to give you elements. Starts to look more like traditional XML.
-SELECT TOP 5 *
-FROM HumanResources.Employee
-FOR XML Raw, ELEMENTS 
-SELECT TOP 5 *
-FROM HumanResources.Employee
-FOR XML AUTO, ELEMENTS 
-
--- Auto - Automatically; Defaults to type nvarchar
-SELECT TOP 5 *
-FROM HumanResources.Employee
-FOR XML Auto
-
--- Type set it to XML DataType
-SELECT TOP 5 *
-FROM HumanResources.Employee
-FOR XML Auto, TYPE
-
--- Elements ...Nice format to show Elements.. Each column represented as Elements
-SELECT TOP 5 *
-FROM HumanResources.Employee
-FOR XML Auto, TYPE, ELEMENTS
-
--- Adds Root Element
-SELECT TOP 5 *
-FROM HumanResources.Employee
-FOR XML Auto, TYPE, ELEMENTS, ROOT
-
--- Put your own name on the ROOT
-SELECT TOP 5 *
-FROM HumanResources.Employee
-FOR XML Auto, TYPE, ELEMENTS, ROOT('RootName')
-
--- Modify Column names
-SELECT BusinessEntityID AS myBusinessEntityID
-      ,OrganizationNode as myorgnode
-      ,LoginID AS myLoginID
-	  ,JobTitle AS myJobTitle
-	  ,BirthDate AS myBirthDate
-FROM HumanResources.Employee as Employees
-FOR XML AUTO, TYPE, ELEMENTS, Root('myRoot')
-
--- RAW('myEmployees') Will override 'AS Employees'
--- When you use RAW keyword and you have NULL Data the element is skipped
--- Null data is also skipped using AUTO
--- Look at OrganizationNode to see example of Null Data being skiped using
--- both RAW and AUTO
-SELECT BusinessEntityID AS myBusinessEntityID
-      ,OrganizationNode as myorgnode
-      ,LoginID AS myLoginID
-	  ,JobTitle AS myJobTitle
-	  ,BirthDate AS myBirthDate
-FROM HumanResources.Employee as Employees
-FOR XML RAW('myEmployees'), TYPE, ELEMENTS, Root('myRoot')
-
--- XML Namespaces
--- https://docs.microsoft.com/en-us/sql/relational-databases/xml/add-namespaces-to-queries-with-with-xmlnamespaces?view=sql-server-2017
---
-WITH XMLNAMESPACES ('uri' as ns1)  
-SELECT ProductID as 'ns1:ProductID',  
-       Name      as 'ns1:Name',   
-       Color     as 'ns1:Color'  
-FROM Production.Product  
-WHERE ProductID=316 or ProductID=317  
-FOR XML RAW ('ns1:Prod'), ELEMENTS  
-
---- Example of doing a Bulk Import
---- SINGLE_BLOB - Tells SQL Server to figure out the encoding, SINGLE_BLOB avoids encoding problems.
-USE Development
-INSERT INTO T(XmlCol)  
-SELECT * FROM OPENROWSET(  
-   BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\xmlresult.xml',  
-   SINGLE_BLOB) AS x;  
-
 

@@ -8,6 +8,7 @@ Implicit or Default XREF
 5. PIVOT (Determining Grouping Element)
 6. Views
 7. Manage Transactions Default
+8. SET Defaults - See SET_XREF.sql
 
 --------------
 1. GROUP BY
@@ -137,17 +138,24 @@ an object in the query plan.
 -----------------------
 7. Manage Transactions
 -----------------------
+See also ManageTransactions.sql and SET_XREF.sql for more info.
+
 1. SQL's default Isolation Level is 'READ COMMITED'.  This means read only committed data.
 
-2. AUTOCOMMIT is the default transaction management mode.
+2. AUTOCOMMIT is the default transaction management mode.  SET AUTOCOMMIT ON.  Other transaction modes are
+   Implicict(BEGIN TRANSACTION is done for you based on command) and Explicit (You manually type BEGIN TRANSACTION).
 
 3. SET IMPLICIT_TRANSACTIONS OFF is the default.  When OFF, each of the preceding T-SQL statements is bounded by an 
    unseen BEGIN TRANSACTION and unseen COMMIT TRANSACTION statement.  When OFF, we say the transaction mode is AUTOCOMMIT.
+      
+   SET IMPLICI_TRANSACTIONS ON means that if @@TRANCOUNT=0, any of the following Transact-SQL statements begins a new transaction 
+   (Equivalent to a BEGIN TRANSACTION being exectuted first): ALTER TABLE, FETCH, REVOKE, BEGIN TRANSACTION, GRANT, SELECT,
+   CREATE, INSERT, TRUNCATE TABLE, DELETE, OPEN, UPDATE, DROP.
    https://docs.microsoft.com/en-us/sql/t-sql/statements/set-implicit-transactions-transact-sql?view=sql-server-ver15
 
-4. SET XACT_ABORT OFF  is the default.    Means the entire batch will not fail.  SET XACT_ABORT ON will rollback the entire batch.
- 
+   
 
-See also ManageTransactions.sql and SET_XREF.sql for more info.
+4. SET XACT_ABORT OFF  is the default.    OFF will only rollback the SQL statement.  SET XACT_ABORT ON will rollback the entire batch.
+ 
 
 */

@@ -78,30 +78,35 @@ https://www.youtube.com/watch?v=VLc4ewu6lUI&list=PL08903FB7ACA1C2FB&index=58
 **********************************
 3. TRANSACTION MODES
 **********************************
+See Also 
+SET_XREF.sql
+Implicit_Defaults.sql
+
 SET IMPLICIT_TRANSACTIONS {ON | OFF}
 When ON, the system is in IMPLICIT transaction mode.  This means that if @@TRANCOUNT = 0, any of the following 
-Transact-SQL Statements begins a new transaction.  It is equivalent to an unseen BEGIN TRANSACTION being exectuted first.
+Transact-SQL Statements begins a new transaction.  It is equivalent to an unseen BEGIN TRANSACTION being exectuted first:
 ALTER TABLE, FETCH, REVOKE, BEGIN TRANSACTION, GRANT, SELECT, CREATE, INSERT, TRUNCATE TABLE, DELETE, OPEN, UPDATE, DROP.
 https://docs.microsoft.com/en-us/sql/t-sql/statements/set-implicit-transactions-transact-sql?view=sql-server-ver15
 
 @@TRANCOUNT -  Is really a variable to define Levels.
 
-TRANSACTIONS
+TRANSACTION Modes
 SQL Server operates in the following transaction modes:
-1. Autocommit transactions - Each individual statement is a transaction. (A Behind the scenes BEGIN and COMMIT is done)
-   You do not issue any surrounding transactional commands such as 'BEGIN TRAN, ROLLBACK TRAN, or COMMIT TRAN'.
-   The @@TRANCOUNT value is not normally detectable for that command.
+1. Autocommit transactions - Mode used when SET IMPLICIT TRANSACTIONS OFF (This is the default.) Each individual statement is a transaction. 
+   (A Behind the scenes BEGIN and COMMIT is done) You do not issue any surrounding transactional commands such as 'BEGIN TRAN, ROLLBACK TRAN, 
+   or COMMIT TRAN'.  The @@TRANCOUNT value is not normally detectable for that command.
 
-2. Implicit transactions - A new transaction is implicitly started when the prior transaction completes, but
+2. Implicit transactions - Mode used when SET IMPLICIT TRANSACTIONS ON.  A new transaction is implicitly started when the prior transaction completes, but
    each transaction is explicitly completed with a COMMIT or ROLLBACK statement.  Do not need a 'BEGIN TRANSACTION' this is implicit.
    In the implicit transaction mode, when you issue one or more DML or DDL statements, or a SELECT statement, SQL starts
    a transaction and increments @@TRANCOUNT to 1.
 
-3. Explicit transactions - Each transaction is explicitly started with the 'BEGIN TRANSACTION' statement
+3. Explicit transactions - Mode used when SET IMPLICIT TRANSACTION OFF (This is the default, so you may not see this command). 
+   Each transaction is explicitly started with the 'BEGIN TRANSACTION' statement
    and explicitly ended with a 'COMMIT' or 'ROLLBACK' statement.  In an explicit transaction, as soon as you issue
    the 'BEGIN TRAN' command, the value of @@TRANCOUNT is incremented by 1.
 
-4. Explicit transactions can be used in implicit transaction mode, but if you start an explicit transaction the 
+4. Explicit transactions can be used in implicit transaction mode (SET IMPLICIT TRANSACTION ON), but if you start an explicit transaction the 
    value of @@TRANCOUNT will increment from 0 to 2 immedidately after the 'BEGIN TRAN' command.  This is the 
    same as a nested transaction.  Not a good practice to do this.
 
@@ -133,6 +138,7 @@ You can also issue the following command. However, this command just effectively
 SET ANSI_DEFAULTS ON;
 As soon as you do any work—that is, make changes to the database data—a transaction automatically begins. 
 Figure 12-2 illustrates how this works.
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-ansi-defaults-transact-sql?view=sql-server-ver15
  
 Figure 12-2. An implicit transaction using COMMIT or ROLLBACK.
 As soon as you enter any command to change data, the value of @@TRANCOUNT becomes equal to 1, indicating that you
@@ -161,7 +167,7 @@ An explicit transaction occurs when you explicitly issue the BEGIN TRANSACTION o
 In an explicit transaction, as soon as you issue the BEGIN TRAN command, the value of @@TRANCOUNT is incremented by 1. Then you
 issue your DML or DDL commands, and when ready, issue COMMIT or ROLLBACK.
 You can run explicit transactions interactively or in code such as stored procedures.
-Explicit transactions can be used in implicit transaction mode, but if you start an explicit transaction when running your session
+Explicit transactions can be used in implicit transaction mode (SET IMPLICIT_TRANSACTIONS ON), but if you start an explicit transaction when running your session
 in implicit transaction mode, the value of @@TRANCOUNT will increment from 0 to 2 immediately after the BEGIN TRAN command. 
 This effectively becomes a nested transaction. As a result, it is not considered a good practice to let @@TRANCOUNT
 increase beyond 1 when using implicit transactions.
@@ -461,8 +467,5 @@ To preserve the isolation of transactions, SQL Server implements a set of lockin
 Can readers (shared locks) block readers?  No, because shared locks are compatible with other shared locks.
 .
 Can readers block writers (exclusive locks)?Yes, even if only momentarily, because any exclusive lock request has to wait until the shared lock is released.
-
-
-
 
 */
