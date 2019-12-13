@@ -6,7 +6,9 @@ Implement Error Handling.
   2. Use set based rather than row based logic
   3. Transaction Management
   4. Unstructured and Structured Error Handling
+     @@ERROR and TRY/CATCH
   5. XACT_ABORT
+  6. XACT_STATE
 
 *******************************
 1. Implement try/catch/throw
@@ -103,6 +105,13 @@ EXAM TIP
 The statement before the THROW statement must be terminated by a semicolon (;). This reinforces the best 
 practice to terminate all T-SQL statements with a semicolon.
 
+Implement Error Handling in Nested Procedures
+https://www.codemag.com/Article/0305111/Handling-SQL-Server-Errors-in-Nested-Procedures
+
+Logging SQL Errors
+https://stackoverflow.com/questions/1387527/logging-sql-errors
+
+
 *****************************
 3. TRANSACTION Management
 ****************************
@@ -188,26 +197,47 @@ error handling, XACT_ABORT transfers control to the CATCH block, and as expected
 left in an uncommittable state (and XACT_STATE() returns a –1). Therefore, you cannot commit a transaction inside a CATCH 
 block if XACT_ABORT is turned on; you must roll it back.
 
+*************************
+6. XACT_STATE
+*************************
+
+Determines if a transaction is capable of being committed.
+Values:
+1 - Transaction can be committed
+0 - No Active Transaction
+-1 - Has Active Transaction but an error has occurred.  Transaction cannot be committed.
+
+https://docs.microsoft.com/en-us/sql/t-sql/functions/xact-state-transact-sql?view=sql-server-ver15
+
 
 */
 --
+-- Notice the 'After error' is not printed.  This is because of the XACT_ABORT ON.   Actually nothing after the INSERT is done due to XACT_ABORT ON
 --
---
+USE JesseTest
+CREATE TABLE dbo.Production2 (
+    Supplier_id INT IDENTITY(1,1) PRIMARY KEY,
+	ProductName NVARCHAR(40) NOT NULL,
+    CategoryID INT NOT NULL,
+    UnitPrice MONEY NOT NULL,
+    Discontinued BIT NOT NULL
+);
 
---
--- Notice the 'After error' is not printed.  This is because of the XACT_ABORT ON
---
 USE JesseTest
 GO
 SET XACT_ABORT ON;
 PRINT 'Before error';
-SET IDENTITY_INSERT Production.Products ON;
-INSERT INTO Production.Products(productid, productname, supplierid, categoryid,
- unitprice, discontinued)
-    VALUES(1, N'Test1: Duplicate productid', 1, 1, 18.00, 0);
-SET IDENTITY_INSERT Production.Products OFF;
+SET IDENTITY_INSERT dbo.Production2 ON;
+INSERT INTO dbo.Production2(Supplier_id, ProductName, CategoryId,
+ UnitPrice, Discontinued)
+    VALUES(1, N'Test1: Duplicate productid', 1, 18.00, 0);
+SELECT XACT_STATE() AS STATE1
+SET IDENTITY_INSERT dbo.Production2 OFF;
 PRINT 'After error';
 GO
+-- Need TRY/CATCH Block for XACT_STATE() or @@TRANCOUNT to work
+SELECT XACT_STATE() AS STATE2,
+      @@TRANCOUNT AS TRANSCOUNT;
 PRINT 'New batch';
 SET XACT_ABORT OFF;
 --

@@ -428,10 +428,12 @@ commit transaction
 Insert into tblEmployees values (2, "Marcus")
 
 The first transaction gives a result of 2 rows, the second transaction gives a result of 3 rows.  This is because
-of phanom read.  Transactin 2 executes immediately.   The default is read committed.  To fix the phantom read problem
+of phantom read.  Transactin 2 executes immediately.   The default is read committed.  To fix the phantom read problem
 we will have to set the isolation leve to serializable and snapshot.  The other isolation levels have the phantom
 read problem.  Need to change transaction 1 so that the command 'set transaction isolation level serializable' is set
 to solve the problem.   Once this is done transaction 2 will be blocked until Transaction 1 has committed.
+
+To fix Phantom Reads you have to SET ISOLIATION LEVEL SERIALIZABLE or SET ISOLATION LEVEL SNAPSHOT
 
 https://www.youtube.com/watch?v=_UQ9Pu2W7Zg&index=74&list=PL08903FB7ACA1C2FB
 
@@ -441,8 +443,6 @@ https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-database-transact-sq
 
 MICROSOFT DOC - Locking and Row Versioning Basics
 https://docs.microsoft.com/en-us/sql/2014-toc/sql-server-transaction-locking-and-row-versioning-guide?view=sql-server-2014#Lock_Basics
-
-
 
 Differences between Serializable and Snapshot isolation Levels
 Serializable isolation is implemented by acquiring locks which means the resources are locked for the duration

@@ -76,7 +76,7 @@ Additional SET Options to Review
    When SET NUMERIC_ROUNDABORT is ON, an error is generated after a loss of precision occurs in an expression. If set to OFF, 
    losses of precision don't generate error messages. The result is rounded to the precision of the column or variable storing the result. 
 
-7. XACT_ABORT
+7. XACT_ABORT  (See also Error Handling.sql)
   OFF is the default setting. When SET XACT_ABORT is OFF, in some cases only the Transact-SQL statement that raised the error is rolled back and the transaction
   continues processing.
   When SET XACT_ABORT is ON, if a Transact-SQL statement raises a run-time error, the entire transaction is terminated and rolled back.
@@ -328,6 +328,9 @@ the 'rows affected' message is not returned to the client.
 ****************************************************************************************************************
 --  XACT_ABORT
 ****************************************************************************************************************
+See also:
+Error-Handling.sql
+
 XACT_ABORT - Controls Atomicity so it the A in A.C.I.D
 IF XACT_ABORT is OFF, which IS the DEFAULT, you can add code to decide whether to roll back the transaction or 
 commit it.

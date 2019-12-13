@@ -75,6 +75,8 @@ LEFT OUTER JOIN is the same as LEFT JOIN
 RIGHT OUTER JOIN is the same as RIGHT JOIN
 FULL OUTER JOIN is the same as FULL JOIN
 
+LEFT Join .. One record for every match with right table.   If there is more than one match then you will have a record for every match.
+
 --------------------
 3. CROSS JOIN
 --------------------
