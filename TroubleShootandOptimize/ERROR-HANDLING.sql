@@ -10,6 +10,31 @@ Implement Error Handling.
   5. XACT_ABORT
   6. XACT_STATE
 
+As a database develeoper, you have been asked to refactor a set of stored procedures.  You observed
+the stored procedures have practically no error handling, and when they do have it, it is adhoc and 
+unstructured.  None of the stored procedures are using transactions.  You need to put a plan to justify
+your activity.
+ 
+A. When should you recommend using explicit transactions ?
+   Whenever more than one data change occurs in a stored procedure, and it is more important that the
+   data changes be treated as a logical unit of work, you should add transaction logic to the stored procedure.
+    
+B. When should you recommend using a different isolation level ?
+   You need to adapt the isolation levels to the requirements for transactional consistency.  You should
+   investigate the current application and the database for instances of blocking and especially deadlocking.
+   If you find deadlocks and establish they are due to mistakes in T-SQL coding, you can use various methods
+   of lowering the isolation level in order to make deadlocks less likely.  However, be aware that some transactions
+   may require higher levels of isolation.
+
+C. What type of error handling should you recommend ?
+   You should use TRY/CATCH blocks in every stored procedure where errors might occur and encourage your team
+   to standardize on that usage.  By funneling all errors to the CATCH block, you can handle all errors in just
+   one place in the code.
+
+D. What plans should you include for refactoring dynamic SQL ?
+   Check the stored procedure for the use of dynamic SQL, and where possible, replace calls to the EXECUTE command
+   with the sp_executesql stored procedure.
+
 *******************************
 1. Implement try/catch/throw
 *******************************
