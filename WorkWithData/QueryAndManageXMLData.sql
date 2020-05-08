@@ -90,8 +90,8 @@ XML type limitations
 - Cannot be used as a KEY Column
 - Cannot be used in a UNIQUE Constraint
 - Cannot be declared with COLLATE
--- Uses XML encodings
--- Always stored as UNICODE UCS-2
+- Uses XML encodings
+- Always stored as UNICODE UCS-2
 
 ***********
 4. XQUERY
@@ -349,6 +349,7 @@ SELECT * FROM sys.xml_schema_types
 SELECT * FROM sys.column_xml_schema_collection_usages
 
 Example Schema Syntax
+USE JesseTest
 CREATE XML SCHEMA COLLECTION invcol
 AS '<xs:schema ...
      targetNamespace = "urn:invoices">
@@ -363,7 +364,8 @@ Example of Loading a Schema Collection from a File
 DECLARE @x XML
 SET @x = (
 SELECT * FROM OPENROWSET(
- BULK 'C:\invoice.xsd',
+ -- BULK 'C:\invoice.xsd',
+ BULK 'C:\Users\Jesse-Olivarez\Documents\Repositories\Exam-70-461\WorkWithData\XML\invoice.xsd',
         SINGLE_BLOB
 ) AS x
 

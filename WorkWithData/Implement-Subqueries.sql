@@ -23,7 +23,8 @@ fails at run time. If the scalar subquery returns an empty set, it is converted 
 
 Note: Compare with derived table.  A derived table is basically q subquery, except it is always in the FROM Clause
 of an SQL Statement.  The reason it is called a derived table is because it essentially functions as a table.
-See DERIVED_TABLES.sql
+See XREF/Tables..
+
 
 Subquery - Can be put on the WHERE or the FROM Line
 

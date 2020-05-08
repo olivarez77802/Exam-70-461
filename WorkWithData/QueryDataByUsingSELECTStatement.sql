@@ -184,6 +184,26 @@ SELECT *
 FROM dbo.Table AS T
 WHERE T.WS LIKE @SEARCHWS
 
+LIKE Operator using regular expressions.
+% - bl% finds bl, black, blue, and blob.
+LIKE 'a%'	Finds any values that starts with "a"  
+LIKE '%a'	Finds any values that ends with "a"
+[]	Represents any single character within the brackets	h[oa]t finds hot and hat, but not hit
+^	Represents any character not in the brackets	h[^oa]t finds hit, but not hot and hat
+'%[^A-Z0-9a-z_ -./><:%|*@]%'  - Finds all character that are NOT alphabetic or numbers, underscores, dash, periods, forward slash, inequality, delimiter, asterisk,@ sign.
+
+https://www.w3schools.com/sql/sql_wildcards.asp
+
+ SELECT DISTINCT WT_TYP_CD,
+  COUNT(WT_TYP_CD) OVER (PARTITION BY WT_TYP_CD ORDER BY WT_TYP_CD) AS CNT
+  FROM [FAMISMod].[dbo].[PAYTables]
+  WHERE WT_DATA LIKE '%[^A-Z0-9a-z_ -./><:%|*@]%'   
+   
+ SELECT * FROM 
+  [FAMISMod].[dbo].[PAYTables]
+  WHERE WT_TYP_CD = 'UB' AND  
+  WT_DATA LIKE '%[^A-Z0-9a-z_ -./><:%|*@]%'     
+
 ***************
 3. EXCEPT Operator
 ***************
