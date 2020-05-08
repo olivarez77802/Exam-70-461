@@ -6,7 +6,7 @@ ImplementAggregateQueries
 Query data by using SELECT statements
  - Use the ranking function to select top (X) rows for multiple categories in a single query; write and perform
    queries effeciently using the new (SQL 2005/8) oode items such as synonyms, and joins (except, intersect);
-   implement logic which uses dynamic SQL and system metadata; write effecient; technically complex SQL queries,
+   implement logic which uses dynamic SQL and system metadata; write effiient; technically complex SQL queries,
    including all types of joins versus the use of derived tables; determine what code may or may not execute
    based on the tables provided; given a table with constraints, determine which statement set would load
    a table; use and understand different data access technologies; case versus isnull versus coalesce.
@@ -19,7 +19,7 @@ Query data by using SELECT statements
    6. DERIVED Tables
    7. RANK 
    8. SYNONYMS
-   9. Dynamic Sql
+   9. Dynamic Sql  (See \XREF List\SQLInjection.sql)
    10. CASE - See Modifying Data/Combine datasets; Setting_Variable
    
 
