@@ -575,4 +575,101 @@ for executing dynamic SQL. It both generates and executes a dynamic SQL string.
 The ability to parameterize means that sp_excutesql avoids simple concatenations like those used in the EXEC
 statement. As a result, it can be used to help prevent SQL injection.
 
+/*************************************************************************************************************
+Program: Temp
+Author : Jesse Olivarez
+Date : 2020/05/18
+Purpose:
+Program allow you to select Predict table to search based on @Choice Paramter.  Will find
+characters that are not in @SRCHVAL for field @TB_TABLE_TYPE
+
+Results Columns
+Table   - Table Name
+Found   - Number of records found that are Potentialy Binary
+
+Detail information can be looked at by uncommenting code at the bottom, entering specific table
+and re-running from top
+
+*/
+
+DECLARE @SRCHVAL NVARCHAR(30)
+DECLARE @TBLNM VARCHAR(40)
+DECLARE @TB_TABLE_TYPE VARCHAR (30)
+DECLARE @TB_DATA VARCHAR (30)
+DECLARE @DYNSQL NVARCHAR (MAX)
+
+SET @SRCHVAL = N'%[^A-Z0-9a-z_ -./><:%|*@=;?]%' 
+DECLARE @CHOICE  VARCHAR (3)
+--
+-- !! SET CHOICE BEFORE RUNNING
+--
+-- 1 - Predict Name 'IAPAY-TABLES
+-- 2 - Predict Name 'IASYS-TABLES
+-- 3 - Predict Name 'IAZSS-DOCUMENTATION'
+-- 4 - Predict Name 'IAFPR-CONTROL-TABLES'
+-- 5 - Predict Name 'IAFRS-BUDGET-TABLES'
+-- 6 - Predict Name 'IASYS-DATA'
+SET @CHOICE = 1
+--
+--
+SELECT @TBLNM = 
+CASE @CHOICE
+-- Predict Name 'IAPAY-TABLES'
+WHEN 1 THEN '[FAMISMod].[dbo].[PayTables]'
+WHEN 2 THEN '[FAMISMod].[dbo].[SYSTables]'
+WHEN 3 THEN '[FAMISMod].[dbo].[ZSSDocumentation]'
+WHEN 4 THEN '[FAMISMod].[dbo].[FPRControlTables]'
+WHEN 5 THEN '[FAMISMod].[dbo].[FRSBudgetTables]'
+WHEN 6 THEN '[FAMISMod].[dbo].[SYSData]'
+ELSE 'UNKNOWN'
+END;
+SELECT @TB_TABLE_TYPE = 
+CASE @CHOICE 
+WHEN 1 THEN 'WT_TYP_CD'
+WHEN 2 THEN 'TB_GEN_TABLE_TYPE'
+WHEN 3 THEN 'ZD_TOPIC_ID'
+WHEN 4 THEN 'PT_TABLE_TYPE'
+WHEN 5 THEN 'BX_GEN_TABLE_TYPE'
+WHEN 6 THEN 'DA_TABLE_TYPE'
+ELSE 'UNKNONW'
+END;
+SELECT @TB_DATA = 
+CASE @CHOICE
+WHEN 1 THEN 'WT_DATA'
+WHEN 2 THEN 'TB_GEN_DATA'
+WHEN 3 THEN 'ZD_TOPIC_NAME'
+WHEN 4 THEN 'PT_TBL_DATA'
+WHEN 5 THEN 'BX_GEN_DATA'
+WHEN 6 THEN 'DA_DATA_1'
+ELSE 'UNKNONWN'
+END;          
+
+
+SET @DYNSQL = ' 
+  SELECT DISTINCT ' + @TB_TABLE_TYPE + ',' +  
+  'COUNT(' + @TB_TABLE_TYPE +  ') OVER (ORDER BY ' + @TB_TABLE_TYPE + 
+  ') AS FOUND
+  FROM ' + @TBLNM + ' WHERE ' + @TB_DATA + ' LIKE  ''' + @SRCHVAL + '''' 
+
+-- SELECT @DYNSQL 
+
+EXECUTE sp_executesql @DYNSQL
+
+-- 
+-- Uncomment to show detail for tables - set @TB-TABLE_TYPE_VALUE
+-- Run again from top
+--
+--DECLARE @DYNSQL2 NVARCHAR (MAX)
+--DECLARE @TB_TABLE_TYPE_VALUE   VARCHAR(30)
+--SET @TB_TABLE_TYPE_VALUE = 'PATTERN2007ME'
+--SET @DYNSQL2 = 
+--'SELECT ' + @TB_TABLE_TYPE + ',' + @TB_DATA + ' FROM ' +  @TBLNM  +
+--' WHERE ' +  @TB_TABLE_TYPE + ' = ''' + @TB_TABLE_TYPE_VALUE +  '''' + ' AND '  
+--+ @TB_DATA + ' LIKE ''' +  @SRCHVAL + ''''    
+
+---- Only uncomment if you want to see actual SQL
+------SELECT @DYNSQL2 
+
+--EXECUTE sp_executesql @DYNSQL2
+
 */
