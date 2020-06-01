@@ -185,6 +185,26 @@ SELECT *
 FROM dbo.Table AS T
 WHERE T.WS LIKE @SEARCHWS
 
+LIKE Operator using regular expressions.
+% - bl% finds bl, black, blue, and blob.
+LIKE 'a%'	Finds any values that starts with "a"  
+LIKE '%a'	Finds any values that ends with "a"
+[]	Represents any single character within the brackets	h[oa]t finds hot and hat, but not hit
+^	Represents any character not in the brackets	h[^oa]t finds hit, but not hot and hat
+'%[^A-Z0-9a-z_ -./><:%|*@]%'  - Finds all character that are NOT alphabetic or numbers, underscores, dash, periods, forward slash, inequality, delimiter, asterisk,@ sign.
+
+https://www.w3schools.com/sql/sql_wildcards.asp
+
+ SELECT DISTINCT WT_TYP_CD,
+  COUNT(WT_TYP_CD) OVER (PARTITION BY WT_TYP_CD ORDER BY WT_TYP_CD) AS CNT
+  FROM [FAMISMod].[dbo].[PAYTables]
+  WHERE WT_DATA LIKE '%[^A-Z0-9a-z_ -./><:%|*@]%'   
+   
+ SELECT * FROM 
+  [FAMISMod].[dbo].[PAYTables]
+  WHERE WT_TYP_CD = 'UB' AND  
+  WT_DATA LIKE '%[^A-Z0-9a-z_ -./><:%|*@]%'     
+
 ***************
 3. EXCEPT Operator
 ***************
@@ -539,6 +559,7 @@ WHERE TerritoryID IS NOT NULL AND SalesYTD <> 0;
 ****************
 9.  Dynamic SQL
 ****************
+/*
 See example of Dynamic SQL in:
 1. Set xref - SET ANSI_NULLS
   
@@ -560,5 +581,129 @@ Implement Logic which uses Dynamic Sql and System Metadata.
 
 List all Tables in a sql Server.
 https://www.youtube.com/watch?v=z1HFiXt6KKQ
+
+*************************************************************************************************************
+
+Program: Temp
+Author : Jesse Olivarez
+Date : 2020/05/18
+Purpose:
+Program allow you to select Predict table to search based on @Choice Paramter.  Will find
+characters that are not in @SRCHVAL for field @TB_TABLE_TYPE
+
+Results Columns
+Table   - Table Name
+Found   - Number of records found that are Potentialy Binary
+
+Detail information can be looked at by uncommenting code at the bottom, entering specific table
+and re-running from top
+
+*/
+
+DECLARE @SRCHVAL NVARCHAR(30)
+DECLARE @TBLNM VARCHAR(40)
+DECLARE @TB_TABLE_TYPE VARCHAR (30)
+DECLARE @TB_DATA VARCHAR (30)
+DECLARE @DYNSQL NVARCHAR (MAX)
+
+SET @SRCHVAL = N'%[^A-Z0-9a-z_ -./><:%|*@=;?]%' 
+DECLARE @CHOICE  VARCHAR (3)
+--
+-- !! SET CHOICE BEFORE RUNNING
+--
+-- 1 - Predict Name 'IAPAY-TABLES
+-- 2 - Predict Name 'IASYS-TABLES
+-- 3 - Predict Name 'IAZSS-DOCUMENTATION'
+-- 4 - Predict Name 'IAFPR-CONTROL-TABLES'
+-- 5 - Predict Name 'IAFRS-BUDGET-TABLES'
+-- 6 - Predict Name 'IASYS-DATA'
+SET @CHOICE = 1
+--
+--
+SELECT @TBLNM = 
+CASE @CHOICE
+-- Predict Name 'IAPAY-TABLES'
+WHEN 1 THEN '[FAMISMod].[dbo].[PayTables]'
+WHEN 2 THEN '[FAMISMod].[dbo].[SYSTables]'
+WHEN 3 THEN '[FAMISMod].[dbo].[ZSSDocumentation]'
+WHEN 4 THEN '[FAMISMod].[dbo].[FPRControlTables]'
+WHEN 5 THEN '[FAMISMod].[dbo].[FRSBudgetTables]'
+WHEN 6 THEN '[FAMISMod].[dbo].[SYSData]'
+ELSE 'UNKNOWN'
+END;
+SELECT @TB_TABLE_TYPE = 
+CASE @CHOICE 
+WHEN 1 THEN 'WT_TYP_CD'
+WHEN 2 THEN 'TB_GEN_TABLE_TYPE'
+WHEN 3 THEN 'ZD_TOPIC_ID'
+WHEN 4 THEN 'PT_TABLE_TYPE'
+WHEN 5 THEN 'BX_GEN_TABLE_TYPE'
+WHEN 6 THEN 'DA_TABLE_TYPE'
+ELSE 'UNKNONW'
+END;
+SELECT @TB_DATA = 
+CASE @CHOICE
+WHEN 1 THEN 'WT_DATA'
+WHEN 2 THEN 'TB_GEN_DATA'
+WHEN 3 THEN 'ZD_TOPIC_NAME'
+WHEN 4 THEN 'PT_TBL_DATA'
+WHEN 5 THEN 'BX_GEN_DATA'
+WHEN 6 THEN 'DA_DATA_1'
+ELSE 'UNKNONWN'
+END;          
+
+-- Note! the LIKE Verb and the Quotes that are necessary without using a Parm
+--SET @DYNSQL = ' 
+--  SELECT DISTINCT ' + @TB_TABLE_TYPE + ',' +  
+--  'COUNT(' + @TB_TABLE_TYPE +  ') OVER (ORDER BY ' + @TB_TABLE_TYPE + 
+--  ') AS FOUND
+--  FROM ' + @TBLNM + ' WHERE ' + @TB_DATA + ' LIKE  ''' + @SRCHVAL + '''' 
+
+-- SELECT @DYNSQL 
+
+-- EXECUTE sp_executesql @DYNSQL
+
+-- Note! Much Nicer using Parm, Using Parms is also better to prevent SQL Injection
+SET @DYNSQL = ' 
+  SELECT DISTINCT ' + @TB_TABLE_TYPE + ',' +  
+  'COUNT(' + @TB_TABLE_TYPE +  ')  AS FOUND
+  FROM ' + @TBLNM + ' WHERE ' + @TB_DATA + ' LIKE  @SRCHVALParm ' +
+  'GROUP BY ' + @TB_TABLE_TYPE 
+
+
+SELECT @DYNSQL 
+
+-- EXECUTE sp_executesql @DYNSQL
+EXECUTE sys.sp_executesql @statement = @DYNSQL,@params = N'@SRCHVALParm NVARCHAR(30)',@SRCHVALParm = @SRCHVAL
+
+-- 
+-- Uncomment to show detail for tables - set @TB-TABLE_TYPE_VALUE
+-- Run again from top
+--
+--DECLARE @DYNSQL2 NVARCHAR (MAX)
+--DECLARE @TB_TABLE_TYPE_VALUE   VARCHAR(30)
+--SET @TB_TABLE_TYPE_VALUE = 'PATTERN2007ME'
+--SET @DYNSQL2 = 
+--'SELECT ' + @TB_TABLE_TYPE + ',' + @TB_DATA + ' FROM ' +  @TBLNM  +
+--' WHERE ' +  @TB_TABLE_TYPE + ' = ''' + @TB_TABLE_TYPE_VALUE +  '''' + ' AND '  
+--+ @TB_DATA + ' LIKE ''' +  @SRCHVAL + ''''    
+
+---- Only uncomment if you want to see actual SQL
+------SELECT @DYNSQL2 
+
+--EXECUTE sp_executesql @DYNSQL2
+
+-- Note! Above was re-written to use Parms @SRCHVALParm
+SET @DYNSQL2 = 
+'SELECT ' + @TB_TABLE_TYPE + ',' + @TB_DATA + ' FROM ' +  @TBLNM  +
+' WHERE ' +  @TB_TABLE_TYPE + ' = ''' + @TB_TABLE_TYPE_VALUE +  '''' + ' AND '  
++ @TB_DATA + ' LIKE @SRCHVALParm '    
+ 
+
+-- Only uncomment if you want to see actual SQL
+--SELECT @DYNSQL2 
+
+EXECUTE sp_executesql 
+@statement = @DYNSQL2,@params = N'@SRCHVALParm NVARCHAR(30)',@SRCHVALParm = @SRCHVAL
 
 */

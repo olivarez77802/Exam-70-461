@@ -13,6 +13,16 @@ XML Schema
 When you check whether an XML Document complies with a schema, you validate the document.
 A document with a predefined schema is said to be typed XML Document.
 
+Instructions to review a Schema.
+1. Open invoice.xsd in Visual Studio
+2. Double click invoice.xsd .. Notice targetNamespace="urn:www.company-com:invoices"
+3. Open invoice.xml... Notice Invoice xmlns:inv="urn:wwww-company.com:invoices"
+4. Could not Bulk Insert - Believe this was a permission issue.  I had to manually Hardcode XSD and XML
+5. Load XSD .. You can then use commands to see collection
+6. Once Loaded the Insert will fail if it doesn't meet XSD criteria.
+
+Create an XSD File
+https://www.youtube.com/watch?v=22d3PN_l-Wg
 
 */
 
@@ -38,7 +48,8 @@ int id IDENTITY PRIMARY KEY,
 DECLARE @x XML
 SET @x = (
 SELECT * FROM OPENROWSET(
- BULK 'C:\invoice.xsd',
+-- BULK 'C:\invoice.xsd'
+ BULK 'C:\Users\Jesse-Olivarez\Documents\Repositories\Exam-70-461\WorkWithData\XML\invoice.xsd',
         SINGLE_BLOB
 ) AS x
 
@@ -55,14 +66,57 @@ SELECT * FROM OPENROWSET(
 			elementFormDefault="qualified">
  
 -- Load XML Schema from a file
-USE Development
+--USE Development
+USE JesseTest
+ --    BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\invoice.xsd',
 DECLARE @x XML
 SET @x = 
-(
-SELECT * FROM OPENROWSET(
-     BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\invoice.xsd',
-	   SINGLE_BLOB) AS x
-)
+--(
+--SELECT * FROM OPENROWSET(
+--	-- BULK 'C:\Users\Jesse-Olivarez\Documents\Repositories\Exam-70-461\WorkWithData\XML\invoice.xsd',
+--	-- BULK 'C:\Users\Jesse-Olivarez\Documents\Repositories\Exam-70-461\WorkWithData\XML\invoice.xsd',
+--	   BULK 'C:\Users\Jesse-Olivarez\Documents\invoice.xsd',
+--	   SINGLE_BLOB) AS x
+--) 
+N'
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="urn:www-company-com:invoices"
+         targetNamespace="urn:www-company-com:invoices"
+         elementFormDefault="qualified">
+
+	<!-- named typedefs and element decls -->
+	<xsd:simpleType name="skuType">
+		<xsd:restriction base="xsd:integer">
+			<xsd:minInclusive value="100" />
+			<xsd:maxInclusive value ="999" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:complexType name="LineItem">
+		<xsd:sequence>
+			<xsd:element name="Sku" type="tns:skuType"/>
+			<xsd:element name="Description" type="xsd:string"/>
+			<xsd:element name="Price" type="xsd:double"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="LineItems">
+		<xsd:sequence>
+			<xsd:element name="LineItem" type="tns:LineItem"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Invoice">
+		<xsd:sequence>
+			<xsd:element name="InvoiceID" type="xsd:string"/>
+			<xsd:element name="CustomerName" type="xsd:string"/>
+			<xsd:element name="LineItems" type="tns:LineItems"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element name="Invoice" type="tns:Invoice"/>
+</xsd:schema>
+';
 
 
 -- Example of using variable to create an XML Schema Collection
@@ -84,22 +138,38 @@ SELECT * FROM sys.xml_schema_namespaces
 SELECT * FROM sys.column_xml_schema_collection_usages
 
 -- Insert an Invoice
-INSERT INTO invoice_docs(invoice)
-SELECT * FROM OPENROWSET(
-BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\invoice.xml',
-SINGLE_BLOB) AS x
+insert invoice_docs values('
+<inv:Invoice xmlns:inv="urn:www-company-com:invoices" >
+ <inv:InvoiceID>1000</inv:InvoiceID>
+ <inv:CustomerName>Jane Smith</inv:CustomerName>
+ <inv:LineItems>
+   <inv:LineItem>
+     <inv:Sku>134</inv:Sku>
+     <inv:Description>Cola</inv:Description>
+	   <inv:Price>0.95</inv:Price>
+   </inv:LineItem>
+ </inv:LineItems>
+</inv:Invoice>')
+
+
+--INSERT INTO invoice_docs(invoice)
+--SELECT * FROM OPENROWSET(
+---- BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\invoice.xml',
+--BULK 'C:\Users\Jesse-Olivarez\Documents\Repositories\Exam-70-461\WorkWithData\XML\invoice.xml',
+--SINGLE_BLOB) AS x
 GO
 
 -- If you try to Insert will give error because it doesn't follow Schema Definition
-USE Development
-INSERT INTO invoice_docs(invoice)
-SELECT * FROM OPENROWSET(
-BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\invoice2.xml',
-SINGLE_BLOB) as x
-GO
+--USE Development
+--INSERT INTO invoice_docs(invoice)
+--SELECT * FROM OPENROWSET(
+--BULK 'C:\Users\olivarez77802\Documents\SQL Server Management Studio\Exam70-461\WorkWithData\invoice2.xml',
+--SINGLE_BLOB) as x
+--GO
 
 -- Sku number has to be between 100 and 999 
-USE DEVELOPMENT
+-- USE DEVELOPMENT
+USE JesseTest
 insert invoice_docs values('
 <inv:Invoice xmlns:inv="urn:www-company-com:invoices">
   <inv:InvoiceID>1000</inv:InvoiceID>
