@@ -644,16 +644,29 @@ WHEN 6 THEN 'DA_DATA_1'
 ELSE 'UNKNONWN'
 END;          
 
-
-SET @DYNSQL = ' 
-  SELECT DISTINCT ' + @TB_TABLE_TYPE + ',' +  
-  'COUNT(' + @TB_TABLE_TYPE +  ') OVER (ORDER BY ' + @TB_TABLE_TYPE + 
-  ') AS FOUND
-  FROM ' + @TBLNM + ' WHERE ' + @TB_DATA + ' LIKE  ''' + @SRCHVAL + '''' 
+-- Note! the LIKE Verb and the Quotes that are necessary without using a Parm
+--SET @DYNSQL = ' 
+--  SELECT DISTINCT ' + @TB_TABLE_TYPE + ',' +  
+--  'COUNT(' + @TB_TABLE_TYPE +  ') OVER (ORDER BY ' + @TB_TABLE_TYPE + 
+--  ') AS FOUND
+--  FROM ' + @TBLNM + ' WHERE ' + @TB_DATA + ' LIKE  ''' + @SRCHVAL + '''' 
 
 -- SELECT @DYNSQL 
 
-EXECUTE sp_executesql @DYNSQL
+-- EXECUTE sp_executesql @DYNSQL
+
+-- Note! Much Nicer using Parm, Using Parms is also better to prevent SQL Injection
+SET @DYNSQL = ' 
+  SELECT DISTINCT ' + @TB_TABLE_TYPE + ',' +  
+  'COUNT(' + @TB_TABLE_TYPE +  ')  AS FOUND
+  FROM ' + @TBLNM + ' WHERE ' + @TB_DATA + ' LIKE  @SRCHVALParm ' +
+  'GROUP BY ' + @TB_TABLE_TYPE 
+
+
+SELECT @DYNSQL 
+
+-- EXECUTE sp_executesql @DYNSQL
+EXECUTE sys.sp_executesql @statement = @DYNSQL,@params = N'@SRCHVALParm NVARCHAR(30)',@SRCHVALParm = @SRCHVAL
 
 -- 
 -- Uncomment to show detail for tables - set @TB-TABLE_TYPE_VALUE
@@ -671,5 +684,18 @@ EXECUTE sp_executesql @DYNSQL
 ------SELECT @DYNSQL2 
 
 --EXECUTE sp_executesql @DYNSQL2
+
+-- Note! Above was re-written to use Parms @SRCHVALParm
+SET @DYNSQL2 = 
+'SELECT ' + @TB_TABLE_TYPE + ',' + @TB_DATA + ' FROM ' +  @TBLNM  +
+' WHERE ' +  @TB_TABLE_TYPE + ' = ''' + @TB_TABLE_TYPE_VALUE +  '''' + ' AND '  
++ @TB_DATA + ' LIKE @SRCHVALParm '    
+ 
+
+-- Only uncomment if you want to see actual SQL
+--SELECT @DYNSQL2 
+
+EXECUTE sp_executesql 
+@statement = @DYNSQL2,@params = N'@SRCHVALParm NVARCHAR(30)',@SRCHVALParm = @SRCHVAL
 
 */
