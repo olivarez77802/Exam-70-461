@@ -6,7 +6,7 @@ ImplementAggregateQueries
 Query data by using SELECT statements
  - Use the ranking function to select top (X) rows for multiple categories in a single query; write and perform
    queries effeciently using the new (SQL 2005/8) oode items such as synonyms, and joins (except, intersect);
-   implement logic which uses dynamic SQL and system metadata; write effiient; technically complex SQL queries,
+   implement logic which uses dynamic SQL and system metadata; write effecient; technically complex SQL queries,
    including all types of joins versus the use of derived tables; determine what code may or may not execute
    based on the tables provided; given a table with constraints, determine which statement set would load
    a table; use and understand different data access technologies; case versus isnull versus coalesce.
@@ -20,6 +20,7 @@ Query data by using SELECT statements
    7. RANK 
    8. SYNONYMS
    9. Dynamic Sql  (See \XREF List\SQLInjection.sql)
+      Implement Logic which uses dynamic SQL and system metadata.
    10. CASE - See Modifying Data/Combine datasets; Setting_Variable
    
 
@@ -561,6 +562,7 @@ WHERE TerritoryID IS NOT NULL AND SalesYTD <> 0;
 ****************
 9.  Dynamic SQL
 ****************
+/*
 See example of Dynamic SQL in:
 1. Set xref - SET ANSI_NULLS
   
@@ -578,7 +580,13 @@ for executing dynamic SQL. It both generates and executes a dynamic SQL string.
 The ability to parameterize means that sp_excutesql avoids simple concatenations like those used in the EXEC
 statement. As a result, it can be used to help prevent SQL injection.
 
-/*************************************************************************************************************
+Implement Logic which uses Dynamic Sql and System Metadata.
+
+List all Tables in a sql Server.
+https://www.youtube.com/watch?v=z1HFiXt6KKQ
+
+*************************************************************************************************************
+
 Program: Temp
 Author : Jesse Olivarez
 Date : 2020/05/18
