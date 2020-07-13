@@ -72,6 +72,7 @@ Elements of a SELECT Statement
 4. GROUP BY - Arranges rows by groups - Used with Aggregate Functions
 5. HAVING - Filters groups by predicate.  Filters by group.
 6. ORDER BY - Sorts the results
+7. FOR XML  See WORKWITHDATA\QueryAndManageXMLData.sql
 
 Logical Order - The order in which a query is written is not the order
                 in which it is evaluated in SQL Server.
@@ -82,6 +83,7 @@ Logical Order - The order in which a query is written is not the order
 3. GROUPBY  <group by list>
 4. HAVING   <search condition>
 6. ORDER BY <order by list>
+7. FOR XML  See WORKWITHDATA\QueryAndManageXMLData.sql
 
 -A typical mistake made by people who don't understand logical query processing is attempting to
 refer in the 'WHERE' clause to a column alias defined in the 'SELECT' clause.  This isn't allowed

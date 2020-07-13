@@ -23,7 +23,7 @@ TOP XREF - Filters similar to a WHERE Clause.
 6. OFFSET and FETCH Variables
 
 **********************************************
-Finding Rows containing a value with WildCard
+1. Finding Rows containing a value with WildCard
 **********************************************
 
 SELECT EmployeeKey, LastName
@@ -31,7 +31,7 @@ FROM DimEmployee
 WHERE LastName LIKE ('%Smi%');
 
 *********************************************
-Finding Rows that are in a List of Values
+2. Finding Rows that are in a List of Values
 *********************************************
 
 SELECT EmployeeKey, LastName
@@ -39,7 +39,7 @@ FROM DimEmployee
 WHERE LastName IN ('Smith', 'Godfrey', 'Johnson');
 
 *************************************************
-Finding Rows that have a value between values
+3. Finding Rows that have a value between values
 *************************************************
 SELECT EmployeeKey, LastName
 FROM DimEmployee
@@ -49,7 +49,7 @@ SELECT orderid, unitprice, qty
 FROM Sales.Orderdetails
 WHERE qty BETWEEN @Lowqty AND @Highqty
 *************************************************
-INSERT using WHERE
+4. INSERT using WHERE
 *************************************************
 INSERT INTO TABLE1
 SELECT * FROM TABLE2
@@ -61,7 +61,7 @@ FROM tbl_B
 WHERE NOT EXISTS (SELECT col FROM tbl_A A2 WHERE A2.col = tbl_B.col);  
 
 ******************
-DELETE using WHERE
+5. DELETE using WHERE
 ******************
 DELETE FROM CUSTOMERS
 WHERE ID = 6;
@@ -147,7 +147,7 @@ GROUP BY column_name
 HAVING aggregrate_function(column_name) operator value
 
 ****************************
-WHERE used in DERIVED Query
+9 . WHERE used in DERIVED Query
 ****************************
 Select DeptName, TotalEmployees
 from
@@ -172,7 +172,7 @@ FROM (
 WHERE sub.resolution = 'NONE'
 
 ************************
-WHERE used with SubQuery
+10.  WHERE used with SubQuery
 SQL EXISTS Operator - https://www.w3schools.com/sql/sql_exists.asp
 ************************
 SELECT C.Firstname,
@@ -187,9 +187,10 @@ SELECT C.Firstname,
        C.Lastname,
 	   C.EmailAddress
 FROM PersonContact AS C
-WHERE EXIST IN (SELECT soh.ContactID
+WHERE EXISTS (SELECT soh.ContactID
                 FROM Sales.SalesOderHeader AS soh
-				WHERE soh.Contactid = c.Contactid);
+				WHERE soh.Contactid = c.Contactid)
+ORDER BY C.Lastname
 --
 INSERT tbl_A (col, col2)  
 SELECT col, col2   
@@ -197,11 +198,23 @@ FROM tbl_B
 WHERE NOT EXISTS (SELECT col FROM tbl_A A2 WHERE A2.col = tbl_B.col);  
 
 ****************************
-WHERE used with a Scalar UDF
+11. WHERE used with a Scalar UDF
 ****************************
 A scalar UDF in the WHERE clause that restricts a result set is executed once
 for every row in the referenced table.
 See WorkWithFunctions.sql
+
+
+*******************************************************************************
+
+TOP XREF - Filters similar to a WHERE Clause. 
+1. TOP and Parentheses
+2. TOP with a variable
+3. TOP with TIES
+4. OFFSET and FETCH
+5. OFFSET AND FETCH - SELECT NULL
+6. OFFSET and FETCH Variables
+
 
 ************************
 1. TOP and Parentheses
@@ -228,6 +241,21 @@ ORDER BY orderdate DESC;
 SELECT TOP (3) WITH TIES orderid, orderdate, custid, empid
 FROM Sales.Orders
 ORDER BY orderdate DESC;
+
+Must be used with the order by clause.
+If you (order by id) then the result set will include all matching (or ties) to id
+
+https://www.youtube.com/watch?v=fgKrP9LwZiM
+
+USE ADVENTUREWORKS2014
+SELECT TOP(10) PERCENT WITH TIES  
+pp.FirstName, pp.LastName, e.JobTitle, e.Gender, r.Rate  
+FROM Person.Person AS pp   
+    INNER JOIN HumanResources.Employee AS e  
+        ON pp.BusinessEntityID = e.BusinessEntityID  
+    INNER JOIN HumanResources.EmployeePayHistory AS r  
+        ON r.BusinessEntityID = e.BusinessEntityID  
+ORDER BY Rate DESC;  
 
 ************************
 4. OFFSET and FEECH
