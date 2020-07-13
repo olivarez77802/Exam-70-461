@@ -48,6 +48,10 @@ WHERE EmployeeKey Between 100 and 200;
 SELECT orderid, unitprice, qty
 FROM Sales.Orderdetails
 WHERE qty BETWEEN @Lowqty AND @Highqty
+
+The BETWEEN operator is inclusive: begin and end values are included.
+https://www.w3schools.com/sql/sql_between.asp
+
 *************************************************
 4. INSERT using WHERE
 *************************************************

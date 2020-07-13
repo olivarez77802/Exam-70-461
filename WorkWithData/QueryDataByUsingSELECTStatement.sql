@@ -128,8 +128,6 @@ SELECT * FROM tblPerson Where Age BETWEEN 20 AND 25
 SELECT * FROM tblPerson Where City LIKE 'L%'
 
 
-
-
 -- Example - Get Age
 SELECT dbo.fnComputeAge('11/30/2005')
 
@@ -164,6 +162,11 @@ Set @Age = CAST(@years as nvarchar(4)) + ' Years ' + CAST(@months as nvarchar(2)
 return @Age
 -- SELECT @years AS Years, @months AS Months, @days as Days
 END
+
+See also WorkWithFunctions
+* Understand deterministic, non-determininistic; scalar and table values; apply built in scalar
+  functions; create and alter user-defined functions (UDFs)
+
 
 ***************
 2. LIKE Operator
