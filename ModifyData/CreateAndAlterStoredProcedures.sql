@@ -1,5 +1,12 @@
 /*
-Stored Procedure
+ModifyData/CreateAndAlterStoredProcedures (simple statements)
+- Write a stored procedure to meet a given set of requirements; branching logic;
+  create stored procedures and other programmmatic objects; techniques for developing
+  stored procedures; different types of storeproc result; create stored procedure for
+  data access layer; program stored procedures, triggers, functions with T-SQL.
+
+1. Write a stored procedure to meet a given set of requirements
+2. Create and Alter Functions
 
 See also XREF/Table_or_Virtual_Tables (#TempTables)
 

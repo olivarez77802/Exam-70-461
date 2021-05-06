@@ -1,6 +1,8 @@
+
 /*
 See Also:
 ImplementAggregateQueries
+WHERE_XREF.sql (Discuss TOP filters similar to WHERE Clause).
 
 
 Query data by using SELECT statements
@@ -15,7 +17,7 @@ Query data by using SELECT statements
    2. LIKE Operator
    3. EXCEPT Operator
    4. INTERSECT Operator
-   5. JOIN Operator  (See also NULL_XREF.sql)
+   5. JOIN Operator  (See also NULL_XREF.sql and Implicit_Defaults.sql)
    6. DERIVED Tables
    7. RANK 
    8. SYNONYMS
@@ -43,6 +45,7 @@ So Order of Precedence is:
 ***************
 1. SELECT
 ***************
+See Also ModifyingData\WorkWithFunctions.sql
 
 SELECT Statement
 https://www.youtube.com/watch?v=R9pXnHIFj_8&index=10&list=PL08903FB7ACA1C2FB
@@ -69,7 +72,7 @@ Elements of a SELECT Statement
 2. FROM - Defines table to query
 3. WHERE - Filters returned data using a predicate  --- May not be used with Aggregate Functions
            'Where' filtering cluase is evaluated per row - not per group.
-4. GROUP BY - Arranges rows by groups - Used with Aggregate Functions
+4. GROUP BY - Arranges rows by groups - Used with Aggregate Functions. 
 5. HAVING - Filters groups by predicate.  Filters by group.
 6. ORDER BY - Sorts the results
 7. FOR XML  See WORKWITHDATA\QueryAndManageXMLData.sql
@@ -80,10 +83,12 @@ Logical Order - The order in which a query is written is not the order
 5. SELECT   <select list>
 1. FROM     <table source>
 2. WHERE    <search condition>
-3. GROUPBY  <group by list>
-4. HAVING   <search condition>
-6. ORDER BY <order by list>
-7. FOR XML  See WORKWITHDATA\QueryAndManageXMLData.sql
+3. GROUP BY  <group by list>  Note! Only columns in GROUP BY or aggregate functions can be referenced from this point in query.
+4. HAVING   <search condition>  Used with GROUP BY.  Columns must be Aggregate or in GROUP BY Clause.
+6. ORDER BY <order by list>    If GROUP BY clause is used, Columns must be Aggregate or in GROUP BY clause.  
+                               Note! You can use column alias since ORDER BY Logical Order is after SELECT. 
+7. OFFSET and FETCH (See WHERE_XREF.sql)  ORDER BY is required.
+8. FOR XML  See WORKWITHDATA\QueryAndManageXMLData.sql
 
 -A typical mistake made by people who don't understand logical query processing is attempting to
 refer in the 'WHERE' clause to a column alias defined in the 'SELECT' clause.  This isn't allowed
@@ -115,6 +120,7 @@ https://www.w3schools.com/sql/sql_distinct.asp
 - Below query will give you DISTINCT country, region, and city (not just DISTINCT Country).
 SELECT DISTINCT country, region, city
 FROM HR.Employees;
+
 
 --------------------------------------------------------------------------------------------
 Examples
@@ -163,7 +169,7 @@ return @Age
 -- SELECT @years AS Years, @months AS Months, @days as Days
 END
 
-See also WorkWithFunctions
+See also ModifyingData\WorkWithFunctions
 * Understand deterministic, non-determininistic; scalar and table values; apply built in scalar
   functions; create and alter user-defined functions (UDFs)
 
@@ -191,12 +197,19 @@ FROM dbo.Table AS T
 WHERE T.WS LIKE @SEARCHWS
 
 LIKE Operator using regular expressions.
+%  -  Specifies zero or more characters
+_  -  Specifies exacly one characters
+[] -  Any character with in the brackets
+[^] - Not any character with in the brackets
+
+
 % - bl% finds bl, black, blue, and blob.
 LIKE 'a%'	Finds any values that starts with "a"  
 LIKE '%a'	Finds any values that ends with "a"
 []	Represents any single character within the brackets	h[oa]t finds hot and hat, but not hit
 ^	Represents any character not in the brackets	h[^oa]t finds hit, but not hot and hat
 '%[^A-Z0-9a-z_ -./><:%|*@]%'  - Finds all character that are NOT alphabetic or numbers, underscores, dash, periods, forward slash, inequality, delimiter, asterisk,@ sign.
+ZIP LIKE '_____[^-]%' - There are 5 underscores so it finds any character, the 6th character, I am looking for anything that is not a '-'.
 
 https://www.w3schools.com/sql/sql_wildcards.asp
 

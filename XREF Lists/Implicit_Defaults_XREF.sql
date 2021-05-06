@@ -9,6 +9,8 @@ Implicit or Default XREF
 6. Views
 7. Manage Transactions Default
 8. SET Defaults - See SET_XREF.sql
+9. SQL Case Insensitive
+
 
 --------------
 1. GROUP BY
@@ -158,6 +160,16 @@ See also ManageTransactions.sql and SET_XREF.sql for more info.
    
 
 4. SET XACT_ABORT OFF  is the default.    OFF will only rollback the SQL statement.  SET XACT_ABORT ON will rollback the entire batch.
- 
+
+***************************
+9. SQL Case Insensitive
+***************************
+SQL is Case Insensitive by Default.  You can run the below command to verify.
+https://docs.microsoft.com/en-us/sql/relational-databases/collations/collation-and-unicode-support?redirectedfrom=MSDN&view=sql-server-ver15
+
+SELECT SERVERPROPERTY('COLLATION')
+
+
+
 
 */

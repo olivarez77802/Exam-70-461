@@ -1,3 +1,4 @@
+
 /*
 WHERE XREF - Different ways of using WHERE Clause
 
@@ -14,7 +15,8 @@ WHERE XREF - Different ways of using WHERE Clause
 11. WHERE used with a SCALAR UDF (User defined function)
 https://docs.microsoft.com/en-us/sql/t-sql/queries/where-transact-sql?view=sql-server-2017
 
-TOP XREF - Filters similar to a WHERE Clause. 
+TOP XREF - Filters similar to a WHERE Clause.   - See Bottom.
+
 1. TOP and Parentheses
 2. TOP with a variable
 3. TOP with TIES
@@ -51,6 +53,8 @@ WHERE qty BETWEEN @Lowqty AND @Highqty
 
 The BETWEEN operator is inclusive: begin and end values are included.
 https://www.w3schools.com/sql/sql_between.asp
+
+More info on BETWEEN can be found in DATES.sql
 
 *************************************************
 4. INSERT using WHERE
@@ -229,6 +233,8 @@ but that’s only for backward-compatibility reasons. The correct syntax is with p
 SELECT TOP (3) orderid, orderdate, custid, empid
 FROM Sales.Orders;
 
+See NULL_XREF.sql (6.Sorting).  Best Practice is to use ORDER BY with TOP
+
 *************************
 2. TOP with Variable
 *************************
@@ -275,6 +281,16 @@ SELECT orderid, orderdate, custid, empid
 FROM Sales.Orders
 ORDER BY orderdate DESC, orderid DESC
 OFFSET 50 ROWS FETCH NEXT 25 ROWS ONLY;
+
+Using OFFSET and FETCH to Filter Query
+* Provides opportunity to return a window of results
+* Use OFFSET to specify number of rows to skip before query
+* Use FETCH to specify number of rows to return after Query
+* Requires ORDER BY
+* Use OFFSET in ORDER BY without FETCH
+* However, use FETCH only with OFFSET
+* OFFSET and FETCH cannot be used in same query as TOP
+
 
 **************************
 5. SELECT NULL

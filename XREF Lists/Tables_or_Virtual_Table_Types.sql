@@ -56,7 +56,10 @@ WHERE VAC_HOURS > 0
 - Lasts for a session
 - If you create a temporary table in one stored procedure (Proc1), that temporary table is visible to all
   other stored procedures called from Proc1.   However, that temporary table is not visible to any other
-  procedures that call Proc1.
+  procedures that call Proc1.  So the visibility is downwards but not upwards.
+
+-- Note!!  An INSERT EXEC statement cannot be nested.  So you cannot have a nested stored procecure where
+   the nested stored procedure has a INSERT INTO #.. EXEC
 
 -- See 'SELECT INTO' below if you don't want to define columns.
 
@@ -223,6 +226,19 @@ from
     )
 as EmployeeCount
 Where TotalEmployees >= 2
+
+Example 2.
+
+SELECT p.LastName AS Name, d.City
+FROM Person.Person AS p
+INNER JOIN HumanResources.Employee ON p.BusinessEntityID = e.BusinessEntityID
+INNER JOIN
+  (SELECT ba.BusinessEntityID, a.City
+   FROM Person.Address AS a
+   INNER JOIN Person.BusinessEntityAddress AS ba
+   ON a.AddressID = ba.AddressID) AS d         /* Derived Table
+ON p.BusinessEntityID = d.BusinessEntityID
+ORDER BY p.LastName
 
 ****************************
 5. Inline Table Valued Function

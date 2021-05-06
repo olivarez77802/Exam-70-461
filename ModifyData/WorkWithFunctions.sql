@@ -5,6 +5,12 @@ Work with functions
 * Understand deterministic, non-determininistic; scalar and table values; apply built in scalar
   functions; create and alter user-defined functions (UDFs)
 
+1. Determininstic and Non-Deterministic
+2. Create and Alter functions (UDFs)
+3. SQL Server built in functions (String Functions)
+   https://www.w3schools.com/sql/sql_ref_sqlserver.asp
+   
+
 Deterministic versus Non-Deterministic
 - Deterministic Functions - Always return the same result anytime they are called provided 
   the database state has not changed.  All aggregate functions are deterministic functions. 
@@ -29,6 +35,19 @@ Specifically, scalar UDFs need to be very efficient because they are executed on
 result set or sometimes for an entire table.   A scalare UDF in the SELECT list, when applied to column
 values, is executed for every single row retrieved.   A scalar UDF in the WHERE clause that restricts
 a result set is executed once for every row in the referenced table.
+
+Ensuring Ordering is Deterministic (We know the Query will always be the same)
+* Include all columns or expressions from the SELECT statement in ORDER BY Clause
+  Otherwise, the query results are not guarenteed to be deterministic.
+Example:
+SELECT ProductID, SUM(OrderQty) AS 'Total Orders'
+FROM Sales.SalesOrderDetail
+WHERE UnitPrice < 50.00
+GROUP BY ProductID
+HAVING SUM(OrderQty) > 4000
+ORDER BY SUM(OrderQty) DESC, ProductID
+
+* To be deterministic ordering must be unique.
 
 --------------------------------------------------------------------------------------------------------------
 Difference in:
@@ -220,8 +239,9 @@ ON E.BusinessEntityID = P.BusinessEntityID
 Select * From  dbo.fn_EmployeesByGender('F')
 
 
-
-String Functions
+--------------------------------------------------------------------------------------------
+3. SQL Server Built in Functions (String Functions)
+--------------------------------------------------------------------------------------------
 
 ASCII(Character expression)  - Returns the ASCII code of a given character expression
 CHAR(Integer expression) - Converts an Integer ASCII code to a character.
@@ -249,6 +269,7 @@ second occurence.
 SUBSTRING('Expression','Start','Length') - Returns substring(part of the string), from the given expression.
 https://www.youtube.com/watch?v=vN4sy5nHn6k&list=PL08903FB7ACA1C2FB&index=23
 Example: SUBSTRING('abcde',1,3) returns 'abc'.
+Note!  SUBSTRING can be used in a WHERE Clause... Neat!
 
 REPLICATE(String to Replicate, Number of Times to Replicate)
 SPACE(Number of spaces)

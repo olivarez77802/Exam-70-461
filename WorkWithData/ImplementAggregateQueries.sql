@@ -1,3 +1,4 @@
+
 /*
 See also:
 WorkwithData/QueryDatabyUsingSelect.sql
@@ -36,6 +37,8 @@ Implement Aggregate queries
 -------------------
 COUNT(), AVERAGE(), SUM() Functions
 https://www.w3schools.com/sql/sql_count_avg_sum.asp
+
+Note! - Null Values are ignored
 
 MIN(), MAX()
 https://www.w3schools.com/sql/sql_min_max.asp
