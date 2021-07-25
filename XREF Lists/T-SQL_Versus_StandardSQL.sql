@@ -29,6 +29,10 @@ Examples of when to choose standard form:
 
 7. CASE (Standard) VERSUS IIF (T-SQL.)
 
+Per Rick:
+CURRENT_TIMESTAMP is an ANSI SQL function whereas GETDATE is the T-SQL version of that same function.One interesting thing to note however, is that CURRENT_TIMESTAMP is converted to GETDATE() when creating 
+the object within SSMS. Both functions retrieve their value from the operating system in the same way.
+
 
 
 

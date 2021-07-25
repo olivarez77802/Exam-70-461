@@ -5,16 +5,17 @@ See also CombineDatasets.sql
 NULL is a mark for a missing value- Not a value in itself.  The correct usage of the term is either "NULL mark" or just "NULL".
 
 1. Overview
-2. 3 Valued Logic
+2. 3 Valued Predicate Logic
 3. IS NULL
 4. Replacing a NULL Value
 5. Indexes
 6. Sorting
-7. JOINS (See also QueryDataByUsingSELECT.sql)
+7. JOINS (See also QueryDataByUsingSELECT.sql and Implicit_Defaults.sql)
 8. Subqueries
 9. SET OPERATORS - UNION, INTERSECT, EXCEPT
 10. COUNT
 11. TRY_CONVERT and TRY_PARSE
+12. Aggregate Functions (See also WorkWithData\ImplementAggreateFunctions).
 
 *****************
 1. Overview
@@ -28,9 +29,21 @@ with every piece of code you write with T-SQL, you want to ask yourself whether 
 interacting with.  If the answere is yes, you want to make sure you understand the treatment of NULLs in your query, and
 ensure that your tests address treatment of NULLs specifically.
 
----------------------
-2. 3 Valued Logic
-----------------------
+----------------------------
+2. 3 Valued Predicate Logic
+----------------------------
+
+NULL's use three valued logic
+1. TRUE
+2. FALSE
+3. UNKNOWN - You will get this when comparing two NULLs and the row is filtered out.
+Note! - Two NULLS are not considered equal to each other.   You should not use region <> N'WA' or region=NULL.
+T-SQL provides the predicate 'IS NULL' to return true when the tested operand is NULL.
+
+* Query Filters  ON, WHERE, HAVING accept true cases only - rejecting false and NULL
+* IF,WHILE, and the WHEN of a CASE expression accepts true cases
+  - rejecting false and NULL
+* CHECK constraint - enforcing declarative integrity - rejects false casesand hence accepts both true and NULL. 
 
 -- CONCATENATION
 T-SQL supports two ways to concatenate strings- one with the plus(+) operator, and another with the CONCAT function.
@@ -46,7 +59,7 @@ a NULL is encountered.  Another way of doing this is to use CONCAT Function whic
 a NULL input with an empty string.  Example CONCAT(country, N',' + region,N',' + city).
 
 -- Using Indexes
-COALESCE and ISNULL can impact performance when you are cobmining datasets; for example, with
+COALESCE and ISNULL can impact performance when you are combining datasets; for example, with
 joins or when you are filtering data.  Example: You have two tables T1 and T2 and you need to 
 join them based on a match between T1.col1 and T2.col1.  The attributes do allow NULLS.  Normally,
 a comparison between to NULLs yields unknown, and this causes the row to be discarded.  You want
@@ -88,12 +101,6 @@ FROM Sales.Orders
 WHERE shippeddate = @dt
    OR (shippeddate IS NULL AND @dt IS NULL);
 
-NULL's use three valued logic
-1. TRUE
-2. FALSE
-3. UNKNOWN - You will get this when comparing two NULLs and the row is filtered out.
-Note! - Two NULLS are not considered equal to each other.   You should not use region <> N'WA' or region=NULL.
-T-SQL provides the predicate 'IS NULL' to return true when the tested operand is NULL.
 
 ------------------------
 3. IS NULL
@@ -115,9 +122,9 @@ WHERE region <> N'WA'
 -----------------------
 
 4 Different ways of replacing a Null Value:
-  A. COALESCE
-  B. CASE
-  C. ISNULL
+  A. COALESCE (Standard)
+  B. CASE (Standard) versus IIF (T-SQL)
+  C. ISNULL (T-SQL)
   D. CONCAT - Substitutes a NULL input with an empty string (or skips the string)
 See CombineDatasets.sql for more details.
 
@@ -193,6 +200,38 @@ SQL says that NULLs should sort together, but leaves it to the implementation to
 sort them before or after non-NULL values. In SQL Server the decision was to sort them before non-NULLs 
 (when using an ascending direction).
 
+* SQL Server sorts NULLS before non-NULLS(when ascending)
+* For sorting, SQL Server regards all NULLS as equal to each other
+
+ORDER BY
+* Evaluated after SELECT (FROM,WHERE,GROUP BY,HAVING,SELECT,ORDER BY)
+* Ascending is the default order.
+* Can use column Alias.
+* If GROUP BY is used ORDER BY Columns limited to Aggregate or GROUP BY columns.
+* Use OFFSET to specify number of rows to skip before returning rows to a query.
+* Use FETCH to specify number of rows to return after OFFSET
+
+Limitations for ORDER BY
+* Not valid in VIEWS, inline functions, derived tables, and subqueries unless
+  accompanied by TOP or OFFSET and FETCH Clauses.
+* When DISTINCT, UNION, EXCEPT, or INTERSECT used, ORDER BY limited to columns,
+  or their alias in SELECT.
+
+Best Practices
+* Always use ORDER BY in SELECT TOP(N)
+
+Ensuring Ordering is Deterministic (We know the Query will always be the same)
+See also WorkWithFunctions.sql
+* Include all columns or expressions from the SELECT statement in ORDER BY Clause
+  Otherwise, the query results are not guarenteed to be deterministic.
+Example:
+SELECT ProductID, SUM(OrderQty) AS 'Total Orders'
+FROM Sales.SalesOrderDetail
+WHERE UnitPrice < 50.00
+GROUP BY ProductID
+HAVING SUM(OrderQty) > 4000
+ORDER BY SUM(OrderQty) DESC, ProductID
+
 -----------------------
 7. JOINS
 -----------------------
@@ -267,4 +306,13 @@ SELECT TRY_PARSE('B' AS INTEGER);
 The first string converts to an integer, so the TRY_PARSE function returns the value as an integer. The second string,
 ‘B’, will not convert to an integer, so the function returns NULL. The TRY_PARSE function follows the syntax of the 
 PARSE and CAST functions.
+
+---------------------------------------------------------------------------
+12. Aggregate Functions (See also WorkWithData\ImplementAggreateFunctions).
+---------------------------------------------------------------------------
+COUNT(), AVERAGE(), SUM() Functions
+https://www.w3schools.com/sql/sql_count_avg_sum.asp
+
+Note! - Null Values are ignored
+
 */

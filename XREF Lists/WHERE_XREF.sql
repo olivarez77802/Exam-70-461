@@ -1,3 +1,4 @@
+
 /*
 WHERE XREF - Different ways of using WHERE Clause
 
@@ -14,7 +15,8 @@ WHERE XREF - Different ways of using WHERE Clause
 11. WHERE used with a SCALAR UDF (User defined function)
 https://docs.microsoft.com/en-us/sql/t-sql/queries/where-transact-sql?view=sql-server-2017
 
-TOP XREF - Filters similar to a WHERE Clause. 
+TOP XREF - Filters similar to a WHERE Clause.   - See Bottom.
+
 1. TOP and Parentheses
 2. TOP with a variable
 3. TOP with TIES
@@ -23,7 +25,7 @@ TOP XREF - Filters similar to a WHERE Clause.
 6. OFFSET and FETCH Variables
 
 **********************************************
-Finding Rows containing a value with WildCard
+1. Finding Rows containing a value with WildCard
 **********************************************
 
 SELECT EmployeeKey, LastName
@@ -31,7 +33,7 @@ FROM DimEmployee
 WHERE LastName LIKE ('%Smi%');
 
 *********************************************
-Finding Rows that are in a List of Values
+2. Finding Rows that are in a List of Values
 *********************************************
 
 SELECT EmployeeKey, LastName
@@ -39,7 +41,7 @@ FROM DimEmployee
 WHERE LastName IN ('Smith', 'Godfrey', 'Johnson');
 
 *************************************************
-Finding Rows that have a value between values
+3. Finding Rows that have a value between values
 *************************************************
 SELECT EmployeeKey, LastName
 FROM DimEmployee
@@ -52,8 +54,10 @@ WHERE qty BETWEEN @Lowqty AND @Highqty
 The BETWEEN operator is inclusive: begin and end values are included.
 https://www.w3schools.com/sql/sql_between.asp
 
+More info on BETWEEN can be found in DATES.sql
+
 *************************************************
-INSERT using WHERE
+4. INSERT using WHERE
 *************************************************
 INSERT INTO TABLE1
 SELECT * FROM TABLE2
@@ -65,7 +69,7 @@ FROM tbl_B
 WHERE NOT EXISTS (SELECT col FROM tbl_A A2 WHERE A2.col = tbl_B.col);  
 
 ******************
-DELETE using WHERE
+5. DELETE using WHERE
 ******************
 DELETE FROM CUSTOMERS
 WHERE ID = 6;
@@ -151,7 +155,7 @@ GROUP BY column_name
 HAVING aggregrate_function(column_name) operator value
 
 ****************************
-WHERE used in DERIVED Query
+9 . WHERE used in DERIVED Query
 ****************************
 Select DeptName, TotalEmployees
 from
@@ -176,7 +180,7 @@ FROM (
 WHERE sub.resolution = 'NONE'
 
 ************************
-WHERE used with SubQuery
+10.  WHERE used with SubQuery
 SQL EXISTS Operator - https://www.w3schools.com/sql/sql_exists.asp
 ************************
 SELECT C.Firstname,
@@ -191,9 +195,10 @@ SELECT C.Firstname,
        C.Lastname,
 	   C.EmailAddress
 FROM PersonContact AS C
-WHERE EXIST IN (SELECT soh.ContactID
+WHERE EXISTS (SELECT soh.ContactID
                 FROM Sales.SalesOderHeader AS soh
-				WHERE soh.Contactid = c.Contactid);
+				WHERE soh.Contactid = c.Contactid)
+ORDER BY C.Lastname
 --
 INSERT tbl_A (col, col2)  
 SELECT col, col2   
@@ -201,11 +206,23 @@ FROM tbl_B
 WHERE NOT EXISTS (SELECT col FROM tbl_A A2 WHERE A2.col = tbl_B.col);  
 
 ****************************
-WHERE used with a Scalar UDF
+11. WHERE used with a Scalar UDF
 ****************************
 A scalar UDF in the WHERE clause that restricts a result set is executed once
 for every row in the referenced table.
 See WorkWithFunctions.sql
+
+
+*******************************************************************************
+
+TOP XREF - Filters similar to a WHERE Clause. 
+1. TOP and Parentheses
+2. TOP with a variable
+3. TOP with TIES
+4. OFFSET and FETCH
+5. OFFSET AND FETCH - SELECT NULL
+6. OFFSET and FETCH Variables
+
 
 ************************
 1. TOP and Parentheses
@@ -215,6 +232,8 @@ T-SQL supports specifying the number of rows to filter using the TOP option in S
 but that’s only for backward-compatibility reasons. The correct syntax is with parentheses.
 SELECT TOP (3) orderid, orderdate, custid, empid
 FROM Sales.Orders;
+
+See NULL_XREF.sql (6.Sorting).  Best Practice is to use ORDER BY with TOP
 
 *************************
 2. TOP with Variable
@@ -233,6 +252,21 @@ SELECT TOP (3) WITH TIES orderid, orderdate, custid, empid
 FROM Sales.Orders
 ORDER BY orderdate DESC;
 
+Must be used with the order by clause.
+If you (order by id) then the result set will include all matching (or ties) to id
+
+https://www.youtube.com/watch?v=fgKrP9LwZiM
+
+USE ADVENTUREWORKS2014
+SELECT TOP(10) PERCENT WITH TIES  
+pp.FirstName, pp.LastName, e.JobTitle, e.Gender, r.Rate  
+FROM Person.Person AS pp   
+    INNER JOIN HumanResources.Employee AS e  
+        ON pp.BusinessEntityID = e.BusinessEntityID  
+    INNER JOIN HumanResources.EmployeePayHistory AS r  
+        ON r.BusinessEntityID = e.BusinessEntityID  
+ORDER BY Rate DESC;  
+
 ************************
 4. OFFSET and FEECH
 ************************
@@ -247,6 +281,16 @@ SELECT orderid, orderdate, custid, empid
 FROM Sales.Orders
 ORDER BY orderdate DESC, orderid DESC
 OFFSET 50 ROWS FETCH NEXT 25 ROWS ONLY;
+
+Using OFFSET and FETCH to Filter Query
+* Provides opportunity to return a window of results
+* Use OFFSET to specify number of rows to skip before query
+* Use FETCH to specify number of rows to return after Query
+* Requires ORDER BY
+* Use OFFSET in ORDER BY without FETCH
+* However, use FETCH only with OFFSET
+* OFFSET and FETCH cannot be used in same query as TOP
+
 
 **************************
 5. SELECT NULL
