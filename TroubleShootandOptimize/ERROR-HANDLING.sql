@@ -99,6 +99,47 @@ https://docs.microsoft.com/en-us/sql/t-sql/language-elements/raiserror-transact-
 
 Execution of the CATCH block continues after the RAISERROR statement.
 
+Example:
+
+CREATE PROCEDURE [dbo].[spProcessEmployees]
+	@timeDimKey INT
+AS
+BEGIN
+BEGIN TRY
+
+	EXEC spDeleteEmployeesAsOf @timeDimKey
+
+	-- Insert all employees
+	-- Identify base criteria that determines whether they are eligible to be reported to TRS
+	EXEC spProcessEmployeeStaging @timeDimKey
+
+	-- Insert all records from EmployeeStaging for the current time period
+	EXEC spInsertEmployeeHistory @timeDimKey
+
+	-- Detect and insert changes from the previous and current time periods in EmployeeHistory
+	EXEC spInsertEmployeeChange @timeDimKey
+
+	-- Find new or updated employee records in EmployeeChange, insert the records into their respective tables
+	EXEC spInsertEmployeeNew
+	EXEC spInsertEmployeeUpdated
+END TRY
+BEGIN CATCH
+    DECLARE @ErrorMessage NVARCHAR(4000);
+	DECLARE @ErrorSeverity INT;
+	DECLARE @ErrorState INT;
+	DECLARE @ErrorProcedure NVARCHAR(128);
+	DECLARE @ErrorLine INT;
+
+	SELECT @ErrorMessage = ERROR_MESSAGE(),
+	       @ErrorSeverity = ERROR_SEVERITY(),
+	       @ErrorState = ERROR_STATE(),
+	       @ErrorProcedure = ERROR_PROCEDURE(),
+	       @ErrorLine = ERROR_LINE();
+
+     RAISERROR ('Err* Message: %s Procedure: %s Line: %d ', @ErrorSeverity, @ErrorState, @ErrorMessage, @ErrorProcedure, @ErrorLine);
+END CATCH
+
+
 2. THROW() 
 
 https://docs.microsoft.com/en-us/sql/t-sql/language-elements/throw-transact-sql?view=sql-server-2017

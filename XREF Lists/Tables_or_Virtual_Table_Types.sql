@@ -16,6 +16,13 @@ Different ways Tables can be created or ways to simulate a table:
 9. Table Variables versus Multi Statement table valued function
 
 
+-- Deleting a Temp Table
+IF OBJECT_ID('tempdb..#payroll') IS NOT NULL
+   DROP TABLE #payroll
+
+Note!! - If your changing the definition of a table it may be better to just Drop the table instead of checking for NULL.
+
+
 
 ********************
 1. CTE                            
@@ -132,7 +139,7 @@ SELECT * FROM #Person_Details
 SELECT name FROM tempdb..sysobjects 
 
 *********************************************************************************************
-2. Temp Tables - No Column Definition
+2. Temp Tables - No Column Definition - Newer Technique is to use Table Variables. 
 Using 'SELECT INTO' Syntax you do not need to define the columns.  The columns are defined 
 behind the scenes. 
 *********************************************************************************************
@@ -167,9 +174,10 @@ FROM @TempPerson
 
 
 ******************
-3. Table Variable
+3. Table Variable-  Developed in Sql SErver 2000 to replace using Temporary Tables.
 ******************
-- Table is created and dropped automatically with each run so it does not last the whole session like the temp table
+- Table is created and dropped automatically with each run(Nice!!!! when compared to how temp tables work)
+  so it does not last the whole session like the temp table
   You won't have to drop the Table Variable if you decide to re-run.
 - Using a Table Variable results in few recompilations of a stored procedure compared to a tempory table.
 - Table Variable requires less locking and logging resources, because table variables have limited scope
@@ -179,6 +187,8 @@ FROM @TempPerson
   database similar to temporary tables.  If memory is available, both table variables and temporary tables
   are created and processed while in memory (data cache).
 - Table Variables cannot have indexes
+
+- Disadvantage is that you cannot use 'INSERT INTO' to load a table using Table Variables like you can with Temporary Tables. 
 
 - See TRS dbo.fncGetPayHistoryDaysHoursWorkedAsOf
 

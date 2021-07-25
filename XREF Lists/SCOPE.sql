@@ -17,6 +17,11 @@ https://docs.microsoft.com/en-us/sql/t-sql/language-elements/variables-transact-
 ************************************************
 2. Table Variables
 ************************************************
+
+- Table is created and dropped automatically with each run(Nice!!!! when compared to how temp tables work)
+  so it does not last the whole session like the temp table
+  You won't have to drop the Table Variable if you decide to re-run.
+
 Transaction scope and lifetime
 Just like any local variable we create with a DECLARE statement, a table variable is also scoped to the stored procedure, batch, or user-defined 
 function. On the other hand, temporary tables are only available to the current connection to the database for the current user. They are dropped

@@ -7,7 +7,7 @@ Create database objects
 SYNTAX
 http://www.cheat-sheets.org/sites/sql.su/
 
-CREATE TABLE,  CREATE TABLE using another Table
+CREATE TABLE,  CREATE TABLE using another Table.  
 https://www.w3schools.com/sql/sql_create_table.asp
 
 CREATE TABLE with Constraints
