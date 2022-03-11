@@ -35,6 +35,7 @@ Defaults - Run Code below to compare
 
 6. ANSI_NULL_DFLT_ON
    Will allow NULL values to be inserted into a Table.
+   https://docs.microsoft.com/en-us/sql/t-sql/statements/set-ansi-null-dflt-on-transact-sql?view=sql-server-ver15
 
 7. CONCAT_NULL_YIELDS_NULL
    When SET CONCAT_NULL_YIELDS_NULL is ON, concatenating a null value with a string yields a NULL result.
