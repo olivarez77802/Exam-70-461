@@ -4,7 +4,7 @@ DATES
 Data that is supposed to represent dates, people have a tendancy to use DATETIME.
 DATETIME - Uses 8 bytes of storage.
 DATE - Uses 3 bytes of storage.  Does not include Time
-DATETIM2 - Usees 6 to 8 bytes of storage.  Provides a wider range of dates and improved
+DATETIM2 - Uses 6 to 8 bytes of storage.  Provides a wider range of dates and improved
            controllable precision.
 SMALLDATETIME - Uses 4 bytes of storage, recommended if it's within range.
 

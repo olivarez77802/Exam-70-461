@@ -270,6 +270,11 @@ easier to use set operators.  With join, you have to add predicates to get such 
 ------------------------------------------
 10. COUNT
 ------------------------------------------
+See also:
+WorkWithData/ImplementAggregateQueries.sql
+XREF Lists/Implicit_Defaults.sql  (for GROUP BY and COUNT)
+XREF Lists/Distinct_Versus_Diplicate.sql (GROUP BY removes duplicates)
+
 SELECT shipperid,
   COUNT(*) AS numorders,
   COUNT(shippeddate) AS shippedorders,
