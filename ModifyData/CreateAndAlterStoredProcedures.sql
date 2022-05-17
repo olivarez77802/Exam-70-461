@@ -10,6 +10,20 @@ ModifyData/CreateAndAlterStoredProcedures (simple statements)
 
 See also XREF/Table_or_Virtual_Tables (#TempTables)
 
+Useful system stored procedures
+sp_help procedure_name - View the information about the stored procedure, like parameter names,
+their datatypes etc.  sp_help can be used with any database object, like tables, views, SP's,
+triggers, etc.  Alternatively, you can also press ALT+F1, when the name of the object is 
+highlighted.
+
+sp_helptext procedure_name - View the Text of the stored procedure
+
+sp_depends procedure_name - View the dependencies of the stored procedure.  The system
+SP is very useful, especially if you want to check if there are any stored procedures
+that are referencing a table that you are about to drop.  sp_depends can also be used
+with ohter database objects like table, etc.
+https://www.youtube.com/watch?v=bldBshxuhMk
+
 Wise Owl Tutorial
 https://www.youtube.com/watch?v=fjNsRV4zLdc&index=1&list=PLNIs-AWhQzcleQWADpUgriRxebMkMmi4H
 
@@ -26,6 +40,8 @@ https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedur
   stored procedure, your call of the stored procedure will still work.
 - The NOCOUNT setting of ON or OFF stays with the stored procedure when it is created. Placing a SET NOCOUNT ON
   at the beginning of every stored procedure prevents the procedure from returning that message to the client.
+  SET NOCOUNT OFF is the Default.  The message will show the count of the number of rows affected after query.  You usually
+  want this ON when creating a stored procedure.
   In addition, SET NOCOUNT ON can improve the performance of frequently executed stored procedures because there 
   is less network communication required when the “rows(s) affected” message is not returned to the client.
 - Whenever a RETURN is executed, execution of the stored procedure ends and control returns to the caller.
@@ -51,16 +67,45 @@ CREATE PROC spFilmList
 	  )
 AS
 BEGIN  --  Not Required but nice to use (Same with END Statement)
-SELECT
-  FilmName,
-  FilmRunMinutes
+SELECT @FilmCount = Count(*)
 FROM 
   tblFilm
 WHERE FileRunMinutes >= @MinLength  AND
       FilmRunMinutes <= @MaxLength AND
 	  FilmName LIKE '%' + @Title + '%'
-ORDER BY FilmName ASC
 END
+
+Stored procedure with 'output' parameters
+https://www.youtube.com/watch?v=bldBshxuhMk
+
+
+------------------------
+Tricky Stored Procedure
+------------------------
+DataSet:
+Userid    UserName
+1         User1
+1         User2
+2         User3
+3         User4
+4         User5
+5         User6
+6         User7
+7         User8 
+CREATE PROCEDURE GetUserCount
+  @userID INT = NULL,                    /* Defaults to NULL if a value is not supplied */
+  @userCount INT OUTPUT
+AS
+BEGIN
+  IF @userID IS NULL                     /* Thinking IF STATEMENT ends after Return since there is no block */
+     RETURN(-1)
+ SET @userCount = (SELECT COUNT(*) Users WHERE UserID = @userID
+END
+/* Output Parameters are both Input and Output */
+/* A value of 7 is supplied for @userid so the default of NULL is not used */
+EXEC GetUserCount 7, @userCount=@result OUTPUT               
+
+Returns a value of 1.
 
 ----------------
 IF/ELSE

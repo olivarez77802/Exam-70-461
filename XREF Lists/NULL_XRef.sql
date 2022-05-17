@@ -13,7 +13,7 @@ NULL is a mark for a missing value- Not a value in itself.  The correct usage of
 7. JOINS (See also QueryDataByUsingSELECT.sql and Implicit_Defaults.sql)
 8. Subqueries
 9. SET OPERATORS - UNION, INTERSECT, EXCEPT
-10. COUNT
+10. AGGREGATE Functions (COUNT,SUM)
 11. TRY_CONVERT and TRY_PARSE
 12. Aggregate Functions (See also WorkWithData\ImplementAggreateFunctions).
 
@@ -268,13 +268,16 @@ consider them the same, which is not the case with JOINS.  When this is the desi
 easier to use set operators.  With join, you have to add predicates to get such behavior.
 
 ------------------------------------------
-10. COUNT
+10. AGGREGATE FUNCTIONS (COUNT,SUM,MIN,MAX)
 ------------------------------------------
 See also:
 WorkWithData/ImplementAggregateQueries.sql
 XREF Lists/Implicit_Defaults.sql  (for GROUP BY and COUNT)
 XREF Lists/Distinct_Versus_Diplicate.sql (GROUP BY removes duplicates)
 
+----------
+COUNT
+----------
 SELECT shipperid,
   COUNT(*) AS numorders,
   COUNT(shippeddate) AS shippedorders,
@@ -286,6 +289,11 @@ GROUP BY shipperid;
 
 -- COUNT(*) - Counts NULLS
 -- COUNT(shippeddate) - Skips NULLS
+
+----------------
+MIN, MAX
+----------------
+Ignores NULL Values when Evaluating.   Will return NULL if field being evaluated is NULL.
 
 ------------------------------
 11. TRY_CONVERT and TRY_PARSE  

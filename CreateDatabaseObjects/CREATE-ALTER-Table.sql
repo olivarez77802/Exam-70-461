@@ -34,6 +34,32 @@ be explicitly dropped using DROP VIEW or DROP PROCEDURE
 To get a list of dependencies on a table, use
   sys.dm_sql_referencing_entities
 
+Examples: 
+Select * from sys.dm_sql_referencing_entities('dbo.sp_GetEmployeesandDepartments','Object')
+Select * from sys.dm_sql_referenced_entities('dbo.sp_GetEmployeesandDepartments','Object')
+
+Difference between referencing entity and referenced entity
+A dependency is created between two objects when one object appears by name inside a SQL statement
+stored in another object.  The object which is appearing inside the SQL expression is known as
+REFERENCED ENTITY and the object which has the SQL expression is known as REFERENCING ENTITY
+
+Referencing entities sys.dm_sql_referencing_entities
+Referenced entitites sys.dm_sql_referenced_entities
+
+Create view VwEmployees   --> REFERENCING ENTITY
+as
+Select * from Employees   --> REFERENCED 
+
+Difference between Schema-bound dependency and Non-Schema-bound dependency.
+Schema-bound-dependency:Schema-bound dependency prevents referenced objects
+from being dropped or modified as log as the referencing object exists.
+Example:  A view created with SCHEMABINDING, or a table created with foreign key constraint.
+
+Non-schema bound dependency: A non-schema-bound dependency doesn't prevent the referenced object
+from being dropped or modified.
+
+https://www.youtube.com/watch?v=c1NCzfo2_jo
+
 DELETE tablename - A table exists even if you delete all rows in a table
 using DELETE tablename.
 TRUNCATE tablename - removes all the table names from the table, but the

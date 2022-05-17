@@ -49,6 +49,20 @@ ORDER BY SUM(OrderQty) DESC, ProductID
 
 * To be deterministic ordering must be unique.
 
+WITH ENCRYPTION and SCHEMABINDING
+Encrypting a function definition using WITH ENCRYPTION Option:
+You can encrypt stored procedures text using WITH ENCRYPTION OPTION.  Along the same
+lines, you can also encrypt a function text.  Once encrypted, you cannot view the
+text of the function, using sp_helptext system stored procedure.  If you try, you will
+get a message stating 'The text for object is encrypted.' 
+
+Create a function WITH SCHEMABINDING option:
+Schemabinding, specified the function is bound to the database objects that it references.
+When SCHEMABINDING is specified, the base objects cannot be modifed in any way that
+would affect the function defiintion.  The function definition itself must first be modified
+or dropped to removed dependencies on the object that is to be modified.
+https://www.youtube.com/watch?v=WNoTgfg3mGc
+
 --------------------------------------------------------------------------------------------------------------
 Difference in:
 Stored Procedure, Scalar Function, Inline Table Function, Table Variable, Multistatement Table Value Function

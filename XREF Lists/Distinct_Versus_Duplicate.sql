@@ -9,12 +9,18 @@ WorkWithData\ImplementAggregateQueries
 2. UNION ALL - Duplicate rows
 3. INTERSECT - Distinct rows
 4. EXCEPT - Distict rows
-5. DISTINCT - Removes Duplicates
+5a. DISTINCT - Removes Duplicates
+5b. COUNT
 6. GROUP BY - Removes Duplicates
 7. ROW_NUMBER() (Used with Partition) - Can be used to remove duplicates
 
 -------------------
-5. DISTINCT
+4. EXCEPT
+-------------------
+See QueryDataByUsingSelect.sql
+
+-------------------
+5a. DISTINCT
 -------------------
 DISTINCT (Does remove duplicates)
 
@@ -36,7 +42,16 @@ GROUP BY shipperid;
 Note that the DISTINCT option is available not only to the COUNT function, but also to other general set functions. However, 
 it’s more common to use it with COUNT.
 
+-----------------------
+5b. COUNT
+-----------------------
+https://docs.microsoft.com/en-us/sql/t-sql/functions/count-transact-sql?view=sql-server-ver15
 
+COUNT(*) returns the number of items in a group. This includes NULL values and duplicates.
+
+COUNT(ALL expression) evaluates expression for each row in a group, and returns the number of nonnull values.
+
+COUNT(DISTINCT expression) evaluates expression for each row in a group, and returns the number of unique, nonnull values.
 
 ----------------
 6. GROUP BY

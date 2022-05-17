@@ -5,6 +5,14 @@ WorkwithData/QueryDatabyUsingSelect.sql
 WorkwithData/ImplementSubQueries.sql
 XREFLists/Tables_or_Virtual_Tables.sql
 
+All Aggregate Functions are determininistic functions.  
+Examples: SQUARE(); POWER(); SUM();AVG() and COUNT().
+Deterministic functions always return the same result any
+time they are called with a specific set of input values
+and given the same state of the database.
+See ModifyingData\WorkWithFunctions.sql
+https://www.youtube.com/watch?v=WNoTgfg3mGc
+
 Grouped Query
 - Contains a grouping function, GROUP BY, or both
 - Arranges queries rows in groups
@@ -63,21 +71,32 @@ Implement Aggregate queries
      A4. OFFSET
      A5. FRAMING https://learnsql.com/blog/define-window-frame-sql-window-functions/
 
--------------------
+-----------------------
 1. AGGREGATE Functions 
--------------------
+-----------------------
 COUNT(), AVERAGE(), SUM() Functions
 https://www.w3schools.com/sql/sql_count_avg_sum.asp
 
 Note! - Null Values are ignored
 See also NULL_XREF.sql (COUNT) for more information on how Nulls are ignored.
 
+COUNT(*) returns the number of items in a group.  This includes NULL values and duplicates
+COUNT(ALL expression) evaluates expression for each row in a group, and returns the number of nonnull values.
+COUNT(DISTINCT expression) evaluates expression for each row in a group, and returns the number of unique, nonnull values.
+https://docs.microsoft.com/en-us/sql/t-sql/functions/count-transact-sql?view=sql-server-ver15
+
+
 MIN(), MAX()
 https://www.w3schools.com/sql/sql_min_max.asp
 
----------
+-------------
 2. GROUP BY
----------
+-------------
+
+GROUP BY
+ - required when non-aggregate fields are in SELECT statement
+ - Returns NULL instead of zero if the field value is NULL
+ - HAVING replaces WHERE in aggregation
 
 GROUP BY - Often used with aggregate functions (COUNT, MAX, MIN, SUM, AVG) to group the result-set by one or more columns.
 https://www.w3schools.com/sql/sql_groupby.asp
@@ -160,7 +179,11 @@ ORDER BY Priority ASC
 -----------------------------------------------------------------------------
 
 ROLLUP - Used to do AGGREGATE Operation on Multiple Levels in a heirarchy. 
-So it will automatically give you the subtotals and Grand Totals.
+So it will automatically give you the subtotals and Grand Totals.   
+
+The question you have to ask to determine if you can use ROLLUP, is do 
+I want totals on all of the columns in the SELECT clause (you will get totals
+on all the Aggregate functions used in SELECT).
 
 UNION ALL and GROUP SETS could also be used, however, the ROLLUP verb is the easiest way
 to achieve Subtotals and Grand Totals.

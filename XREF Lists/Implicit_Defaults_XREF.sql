@@ -20,7 +20,7 @@ FROM Sales.Orders
 - Because there is no explicit GROUP BY clause, all rows queried from the Sales.Orders table 
 are arranged in one group, and then the COUNT(*) function counts the number of rows in that
 group.   Grouped queries return one result row per group, and because the query defines only
-one group, it returns only one row in the result set.
+one group, it returns only one row in the result set.  See also Distinct_Versus_Duplicates.sql
 
 SELECT shipperid, COUNT(*) AS numorders
 FROM Sales.Orders

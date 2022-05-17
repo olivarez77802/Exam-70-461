@@ -6,6 +6,10 @@ Tables_or_Tables.sql
 Scope.sql
 WorkwithData/QueryDataByUsingSelect
 
+SQL Server Functions
+https://www.w3schools.com/sql/sql_ref_sqlserver.asp
+
+
 Functions versus Stored Procedures
 Calling a Function
 
