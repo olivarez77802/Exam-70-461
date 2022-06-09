@@ -97,6 +97,9 @@ https://www.youtube.com/watch?v=nCAEgNxC7nU&list=PLNIs-AWhQzcleQWADpUgriRxebMkMm
 **************************************
 Stored Procedure with Input Parameters
 **************************************
+Note!  When calling the stored procedure you don't have to define the parameters.  The paramters are
+define in the stored procedure.
+
 EXEC spFilmList 150, 180, 'star'  - Can be done after the Stored Procedure is executed
 EXEC spFileList @MinLength=150, @MaxLength=180, @Title='star'  - Alternate way of writing parameters
 EXEC spFileList @MaxLength=180, @Title='star'  - Uses Default Value for MinLength since it is optional 
@@ -147,8 +150,15 @@ BEGIN
   SET @FilmList = @Films
 
 END
-
------ Below is how you would call above stored procedure
+/*
+Below is how you would call above stored procedure
+Note!  Both the Stored Procedure and the Calling Procedure
+are defined with OUTPUT.
+Note!  The variables are defined in the stored procedure.  The calling
+procedure does not define the variables.  The exception to this is
+where you want to put the OUTPUT after the stored procedure is called e.g.
+@Names, @Count.
+*/
 DECLARE @Names VARCHAR(MAX)
 DECLARE @Count INT
 

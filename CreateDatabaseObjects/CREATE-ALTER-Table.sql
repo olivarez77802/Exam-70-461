@@ -111,6 +111,22 @@ https://docs.microsoft.com/en-us/sql/t-sql/statements/create-sequence-transact-s
 NEXT VALUE FOR
 https://docs.microsoft.com/en-us/sql/t-sql/functions/next-value-for-transact-sql?view=sql-server-ver15
 
-    
+   
+Examples:
+IF OBJECT_ID('HumanResources.Programmers') IS NOT NULL DROP TABLE HumanResources.Programmers;
+GO
+
+CREATE TABLE HumanResources.Programmers
+(
+  entityID INT NOT NULL IDENTIY(1,1)
+      CONSTRAINT PK_Programmers_entityID PRIMARY KEY,
+	  loginID nvarchar(256) NOT NULL,
+	  JobTitle nvarchar(50) NOT NULL,
+	  HireDate DATE NOT NULL
+	    CONSTRAINT DFT_Programmers_HireDate DEFAULT (CAST(SYSDATETIME() AS DATE)),
+	  VacationHours smallint NOT NULL
+
+);
+
 
 */

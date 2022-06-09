@@ -217,7 +217,7 @@ Options when setting up Cascading referential integrity constraint:
 1. No Action: This is the default behavior.  No Actions specifies that if an
 attempt is made to delete or update a row with a key referenced by foreign
 keys in exsting rows in other tables, an error is raised and the DELETE
-or UPDATE is rolled back.
+or UPDATE is rolled back.  Get error message '547'
 
 2. Cascade: Specifies that if an attempt is made to delete or update a row
 with a key referenced by foreign keys in an existing rows in other tables,
@@ -231,6 +231,19 @@ rows containing those foreighn keys are set to NULL.
 with a key referenced by foreign keys in existing rows in other tables, all
 rows containing those foreign keys are set to default values.
 https://www.youtube.com/watch?v=ETepOVi7Xk8
+
+Example: See explanation above for 'No Action' and 'Cascade'.  Different actions for Delete and Update.
+Please Note, the above 4 are all Cascading Referential Integrity Options.  This is confusing since one of 
+the options is 'Cascade'.  The 'No Action' option is still a Cascade Referential Integrity option.
+CREATE TABLE Ref(
+  RefID int PRIMARY KEY,
+  RefData varchar(200))
+CREATE TABLE Referencing(
+  ReferID int,
+  RefId int FOREIGN KEY REFERENCES Ref(RefID)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION)
+
 
 Indexing the FOREIGN KEY
 Note:

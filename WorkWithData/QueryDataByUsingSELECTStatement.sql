@@ -280,18 +280,20 @@ ON TableA.Id = TableB.Id
 Joins
 
 Types of Joins
-* INNER JOIN - Returns rows when there is a match in both tables.
-* LEFT (OUTER) JOIN - Returns all rows from the left table, returns matching rows on Right table.
-* RIGHT (OUTER) JOIN - Returns all rows from the right table, and matched records from Left Table. 
-* FULL (OUTER) JOIN - Returns rows when there is a match in one of the tables.
-* SELF JOIN - Used to join a table to itself as if the table where two tables.
-* CARTESIAN (CROSS) JOIN - Returns the Cartesian product of the sets of records from two or more joined tables.
+1. INNER JOIN - Returns rows when there is a match in both tables.
+2. LEFT (OUTER) JOIN - Returns all rows from the left table, returns matching rows on Right table.
+3. RIGHT (OUTER) JOIN - Returns all rows from the right table, and matched records from Left Table. 
+4. FULL (OUTER) JOIN - Returns rows when there is a match in one of the tables.
+
+5. CROSS (CARTESIAN) JOIN - Returns the Cartesian product of the sets of records from two or more joined tables.
                            For example. if we have 10 rows in the Employee table and the Department table we
 						   have 4 rows.  A cross join between these 2 tables produces 40 rows. 
 						   Note! - A Cross Join will not have a 'ON' Clause.  Syntax:
 						   Select Name, Gender, Salary, DepartmentName
 						   FROM tblEmployee
-						   CROSS JOIN tblDepartment.
+						   CROSS JOIN tblDepartment
+						   
+6. SELF JOIN - Used to join a table to itself as if the table where two tables.
  
  See Also Apply Operator in Implement-Subqueries.sql
  CROSS APPLY - Same as INNER JOIN
