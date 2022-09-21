@@ -52,8 +52,23 @@ Select * from Employees   --> REFERENCED
 
 Difference between Schema-bound dependency and Non-Schema-bound dependency.
 Schema-bound-dependency:Schema-bound dependency prevents referenced objects
-from being dropped or modified as log as the referencing object exists.
+from being dropped or modified as log as the referencing object exists.  You
+can't drop table 'Employees' if the view exists.
 Example:  A view created with SCHEMABINDING, or a table created with foreign key constraint.
+So the SCHEMABINDING statement will be in the view when it is defined.  The forieign key constraint
+will be done when the table is defined.
+
+Create view VwEmployees  --> Referencing Entity
+WITH SCHEMABINDING
+AS
+Select * from Employees  --> Referenced Entity
+
+Tables
+Departments
+Employees   (references Departments)
+Note! You have to delete Employees first (Referencing table) before you can delete Departments.   This is because Employees 
+references Departments.  
+
 
 Non-schema bound dependency: A non-schema-bound dependency doesn't prevent the referenced object
 from being dropped or modified.
