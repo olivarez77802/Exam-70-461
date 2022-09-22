@@ -53,8 +53,23 @@ Select * from Employees   --> REFERENCED
 
 Difference between Schema-bound dependency and Non-Schema-bound dependency.
 Schema-bound-dependency:Schema-bound dependency prevents referenced objects
-from being dropped or modified as log as the referencing object exists.
+from being dropped or modified as log as the referencing object exists.  You
+can't drop table 'Employees' if the view exists.
 Example:  A view created with SCHEMABINDING, or a table created with foreign key constraint.
+So the SCHEMABINDING statement will be in the view when it is defined.  The forieign key constraint
+will be done when the table is defined.
+
+Create view VwEmployees  --> Referencing Entity
+WITH SCHEMABINDING
+AS
+Select * from Employees  --> Referenced Entity
+
+Tables
+Departments
+Employees   (references Departments)
+Note! You have to delete Employees first (Referencing table) before you can delete Departments.   This is because Employees 
+references Departments.  
+
 
 Non-schema bound dependency: A non-schema-bound dependency doesn't prevent the referenced object
 from being dropped or modified.
@@ -112,6 +127,22 @@ https://docs.microsoft.com/en-us/sql/t-sql/statements/create-sequence-transact-s
 NEXT VALUE FOR
 https://docs.microsoft.com/en-us/sql/t-sql/functions/next-value-for-transact-sql?view=sql-server-ver15
 
-    
+   
+Examples:
+IF OBJECT_ID('HumanResources.Programmers') IS NOT NULL DROP TABLE HumanResources.Programmers;
+GO
+
+CREATE TABLE HumanResources.Programmers
+(
+  entityID INT NOT NULL IDENTIY(1,1)
+      CONSTRAINT PK_Programmers_entityID PRIMARY KEY,
+	  loginID nvarchar(256) NOT NULL,
+	  JobTitle nvarchar(50) NOT NULL,
+	  HireDate DATE NOT NULL
+	    CONSTRAINT DFT_Programmers_HireDate DEFAULT (CAST(SYSDATETIME() AS DATE)),
+	  VacationHours smallint NOT NULL
+
+);
+
 
 */

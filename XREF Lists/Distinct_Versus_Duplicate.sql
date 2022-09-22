@@ -5,6 +5,7 @@ See also
 QueryDataByUsingSelectStatement.sql
 WorkWithData\ImplementAggregateQueries
 
+
 1. UNION - Distinct rows
 2. UNION ALL - Duplicate rows
 3. INTERSECT - Distinct rows

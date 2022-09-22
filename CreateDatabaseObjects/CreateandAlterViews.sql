@@ -99,6 +99,13 @@ This would ultimately update the base table CUSTOMERS and the same would reflect
 Examples
 -- Using WHERE Clauses
 Select * FROM vEmployee WHERE EID = 3
+
+DROPPING A VIEW
+- Your database has a view called CustView and you remove it with DROP VIEW CustView;
+  You then issue the below INSERT
+   INSERT INTO Cust.CustView (CustId, CustName) VALUES (1, 'Fred')
+   The above INSERT is successful because the DROP VIEW defaulted to the dbo Schema.
+   This is one reason it is important to always specify the schema.
 */
 
 SP_HELPTEXT vEmp

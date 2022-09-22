@@ -97,6 +97,16 @@ https://www.youtube.com/watch?v=nCAEgNxC7nU&list=PLNIs-AWhQzcleQWADpUgriRxebMkMm
 **************************************
 Stored Procedure with Input Parameters
 **************************************
+Note!  When calling the stored procedure you don't have to define the parameters.  The paramters are
+define in the stored procedure.   Note!  The below doesn't apply to functions, you cannot leave a parameter
+blank with Functions.  In order to use the default you must use the key word 'DEFAULT' for functions.  You
+could also use keyword 'DEFAULT' for stored procedures.
+DEFAULT with stored procedures
+https://docs.microsoft.com/en-us/sql/relational-databases/stored-procedures/specify-parameters?view=sql-server-ver16
+
+DEFAULT with Functions
+http://dba.fyicenter.com/1000952_DEFAULT-Providing_Default_Values_to_Function_Parameters_in_SQL_Server.html
+
 EXEC spFilmList 150, 180, 'star'  - Can be done after the Stored Procedure is executed
 EXEC spFileList @MinLength=150, @MaxLength=180, @Title='star'  - Alternate way of writing parameters
 EXEC spFileList @MaxLength=180, @Title='star'  - Uses Default Value for MinLength since it is optional 
@@ -147,8 +157,15 @@ BEGIN
   SET @FilmList = @Films
 
 END
-
------ Below is how you would call above stored procedure
+/*
+Below is how you would call above stored procedure
+Note!  Both the Stored Procedure and the Calling Procedure
+are defined with OUTPUT.
+Note!  The variables are defined in the stored procedure.  The calling
+procedure does not define the variables.  The exception to this is
+where you want to put the OUTPUT after the stored procedure is called e.g.
+@Names, @Count.
+*/
 DECLARE @Names VARCHAR(MAX)
 DECLARE @Count INT
 

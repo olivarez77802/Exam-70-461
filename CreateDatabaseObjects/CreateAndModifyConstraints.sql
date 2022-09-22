@@ -181,7 +181,7 @@ FOREIGN KEY Requirements
 - Declare the FOREIGN KEY in the table where it is foreign
 - Use ALTER TABLE in the foreign table to define the key
 - Use WITH CHECK to check for violations to key with existing table data
-- Add the lookup column (REFERENCES) while defining the FORIEGN KEY
+- Add the lookup column (REFERENCES) while defining the FOREIGN KEY
 - Column being referenced must be a primary key or unique constraint
 - Columns referenced in each table must have same data type
 Best Practice: Use FK_ as a prefix in the foreign key name
@@ -217,7 +217,7 @@ Options when setting up Cascading referential integrity constraint:
 1. No Action: This is the default behavior.  No Actions specifies that if an
 attempt is made to delete or update a row with a key referenced by foreign
 keys in exsting rows in other tables, an error is raised and the DELETE
-or UPDATE is rolled back.
+or UPDATE is rolled back.  Get error message '547'
 
 2. Cascade: Specifies that if an attempt is made to delete or update a row
 with a key referenced by foreign keys in an existing rows in other tables,
@@ -225,12 +225,25 @@ all rows containing those foreign keys are also deleted or updated.
 
 3. SET NULL: Specifies that if an attempt is made to delete or update a row
 with a key referenced by foreign keys in existing rows in other tables, all
-rows containing those foreighn keys are set to NULL.
+rows containing those foreign keys are set to NULL.
 
 4. Set Default: Specifies that if an attempt is made to delete or update a row
 with a key referenced by foreign keys in existing rows in other tables, all
 rows containing those foreign keys are set to default values.
 https://www.youtube.com/watch?v=ETepOVi7Xk8
+
+Example: See explanation above for 'No Action' and 'Cascade'.  Different actions for Delete and Update.
+Please Note, the above 4 are all Cascading Referential Integrity Options.  This is confusing since one of 
+the options is 'Cascade'.  The 'No Action' option is still a Cascade Referential Integrity option.
+CREATE TABLE Ref(
+  RefID int PRIMARY KEY,
+  RefData varchar(200))
+CREATE TABLE Referencing(
+  ReferID int,
+  RefId int FOREIGN KEY REFERENCES Ref(RefID)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION)
+
 
 Indexing the FOREIGN KEY
 Note:
@@ -253,7 +266,21 @@ Example:
   ALTER TABLE Production.Products
     DROP CONSTRAINT FK_Products_Categories;
 
-*/
+
+Comments!
+If you want to create a map of Referencing Tables with Foreign Keys and Ref Tables follow
+the below procedure.
+1.  Open up a Table example.  TAMUS.dbo.FRSBatchAbrGrFb.
+2.  Open Keys Folder.  You will see Primary Key and Foreighn Key Listed.
+3.  Open Foreign Key.  You will see: 
+ALTER TABLE [dbo].[FRSBatchAbrGrFb]  WITH NOCHECK ADD  CONSTRAINT [FRSBatchAbrGrFb_FKY] FOREIGN KEY([ISN])
+REFERENCES [dbo].[FRSTables] ([ISN])
+ON DELETE CASCADE
+4.  The above tells you the REF table is dbo.FRSTables and a join can be done by ISN. 
+5.  The above is also defined as 'CASCADE' so that means that if a row is deleted from FRSTables then it 
+    will get deleted from all rows in FRSBatchAbrGrFb.  It also means that if a row is updated from FRSTablles
+	then it will get updated when you use foriegn key in dbo.FRSBatchAbrGrFb.  Wow!  
+ 
 
 /*
 --------------------
@@ -306,7 +333,7 @@ SELECT *
 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
 WHERE CONSTRAINT_TYPE = 'CHECK';
 
--- Retyrb the name of CHECK Constraint
+-- Retry the name of CHECK Constraint
 SELECT name FROM sys.objects
 WHERE type = 'C'
 
