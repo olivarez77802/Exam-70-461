@@ -149,6 +149,16 @@ https://www.c-sharpcorner.com/UploadFile/manas1/tryparse-tryconvert-and-trycast-
 Styles
 https://www.experts-exchange.com/articles/12315/SQL-Server-Date-Styles-formats-using-CONVERT.html
 
+Example
+USE Development
+  INSERT INTO DIVDETAIL	
+  SELECT CAST(StatementDATE AS DATE),
+  Account,
+  Fund,
+  TRY_CONVERT(Money,Dividend)		
+  FROM DIVDTL
+
+
 
 ********************
 5. Date and Time Styles
