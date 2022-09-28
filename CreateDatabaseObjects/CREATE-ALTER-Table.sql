@@ -1,3 +1,4 @@
+
 /*
 Create database objects
 - Create and alter tables using T-SQL Syntax (simple statements)

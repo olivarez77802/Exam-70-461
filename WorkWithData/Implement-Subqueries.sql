@@ -265,7 +265,7 @@ SELECT Y, X, Aggregate(Z) AS A
 FROM Table
 GROUP BY X, Y
 )
-SELECT Y, X-value, x-value, x-value, .. FROM CTE AS P
+SELECT Y, x-value, x-value, x-value, .. FROM CTE AS P
 PIVOT (Aggregate(A) FOR X IN (X-value, X-value, X-value, ...)) AS PVT;
        
 */
@@ -282,3 +282,21 @@ SELECT GenderCode AS Gender,
   )
   SELECT Gender, A, C, D, E, F, G, H, I, J, K, L, M, N, O, P, R, S, T, V, W, X FROM PWORKER AS P 
     PIVOT (SUM(TS) FOR WS IN (A, C, D, E, F, G, H, I, J, K, L, M, N, O, P, R, S, T, V, W, X)) AS pvt;
+
+/*
+Example 2
+*/
+WITH PWORKER AS (
+SELECT YEAR(StatementDATE) AS YSDT,
+      MONTH(StatementDate) AS MSDT,
+SUM(DIVIDEND) AS DSUM
+FROM DIVDETAIL
+GROUP BY YEAR(STATEMENTDATE)
+ ,MONTH(STATEMENTDATE)
+-- ORDER BY YEAR(STATEMENTDATE) 
+)
+-- SELECT *
+-- FROM PWORKER;
+SELECT YSDT, [1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12]
+FROM PWORKER AS P
+PIVOT (SUM(DSUM) FOR MSDT IN ([1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12])) AS PVT

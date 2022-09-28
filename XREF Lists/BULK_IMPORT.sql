@@ -30,6 +30,15 @@ WITH
 )
 https://www.youtube.com/watch?v=cCcIwKLUCEw
 
+Example2:
+USE Development
+BULK INSERT Fund
+FROM 'C:\Users\olivarez77802\Documents\Jesse\Book2.csv'
+WITH
+(
+  ROWTERMINATOR='\n',
+  Fieldterminator=','
+)
 
 ****************************************
 Example of Importing pipe delimited file
