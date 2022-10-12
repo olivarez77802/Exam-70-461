@@ -100,6 +100,7 @@ Tricks:
 1. If you have a text file comma at the end of the file, you can easily elimante the comma by importing the 
 file into excel and separating the fields by commma.  then resaving as a csv and rename again to .txt.
 2. If you have to do special editing, Notepad's 'Find' and 'Replace' can be very useful.
+3. If you have comma's in big numbers and want to remove comma, then Format table and use \'@\'
 
 USE JesseTest
 CREATE TABLE dbo.DatabaseVer2 (
