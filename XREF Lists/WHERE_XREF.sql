@@ -1,31 +1,29 @@
+WHERE XREF - Different ways OF USING WHERE Clause
 
-/*
-WHERE XREF - Different ways of using WHERE Clause
-
-1. Finding Rows containing a value with WildCard
-2. Finding Rows that are in a List of Values
-3. Finding Rows that have a value between values
+1. Finding ROWS containing A value WITH WildCard
+2. Finding ROWS that ARE IN A LIST OF VALUES
+3. Finding ROWS that have A value BETWEEN VALUES
 4. INSERT using WHERE
 5. DELETE using WHERE
-6. JOIN using WHERE. Differences between WHERE and ON
-7. VIEWS using WHERE
-8. HAVING used with WHERE
-9. WHERE used in DERIVED Query
-10. WHERE used in SubQuery
-11. WHERE used with a SCALAR UDF (User defined function)
-https://docs.microsoft.com/en-us/sql/t-sql/queries/where-transact-sql?view=sql-server-2017
+6. JOIN USING WHERE. Differences BETWEEN WHERE AND ON
+7. VIEWS USING WHERE
+8. HAVING USED WITH WHERE
+9. WHERE USED IN DERIVED Query
+10. WHERE USED IN SubQuery
+11. WHERE USED WITH a SCALAR UDF (USER defined FUNCTION)
+https://docs.microsoft.com/en-us/SQL/t-SQL/queries/WHERE-transact-SQL?VIEW=SQL-SERVER-2017
 
-TOP XREF - Filters similar to a WHERE Clause.   - See Bottom.
+TOP XREF - Filters similar TO A WHERE Clause.   - See Bottom.
 
-1. TOP and Parentheses
-2. TOP with a variable
-3. TOP with TIES
-4. OFFSET and FETCH
+1. TOP AND Parentheses
+2. TOP WITH a variable
+3. TOP WITH TIES
+4. OFFSET AND FETCH
 5. OFFSET AND FETCH - SELECT NULL
-6. OFFSET and FETCH Variables
+6. OFFSET AND FETCH Variables
 
 **********************************************
-1. Finding Rows containing a value with WildCard
+1. Finding ROWS containing A value WITH WildCard
 **********************************************
 
 SELECT EmployeeKey, LastName

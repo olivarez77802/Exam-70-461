@@ -78,6 +78,27 @@ END
 Stored procedure with 'output' parameters
 https://www.youtube.com/watch?v=bldBshxuhMk
 
+-------------------------
+OPTION(RECOMPILE)
+-------------------------
+https://blog.sqlauthority.com/2019/12/31/sql-server-parameter-sniffing-and-option-recompile/
+Here is what we have learned so far. It is extremely easy to overcome the problem of parameter sniffing. However, it is extremely difficult to overcome
+the performance problem which is introduced due to the parameter sniffing issue. There is no sure solution to overcome the problem if your stored procedure
+has sniffed the parameter and used that to build the execution plan. It is quite possible that even though we use the average value due to statistics 
+the performance problem has yet not resolved.
+
+There is only one sure resolution of the performance issue if the SQL Server execution plan is building execution plan which is not efficient for the parameter 
+passed and that is the Recompilation of the stored procedure at every single run with the query hint OPTION (RECOMPILE).
+
+There is only one sure resolution of the performance issue if the SQL Server execution plan is building execution plan which is not efficient 
+for the parameter passed and that is the Recompilation of the stored procedure at every single run with the query hint OPTION (RECOMPILE).
+
+CREATE OR ALTER PROC GetCustomerOrders (@CustomerID INT)
+AS
+SELECT *
+FROM WideWorldImporters.Sales.Orders
+WHERE CustomerID = @CustomerID
+OPTION (RECOMPILE)
 
 ------------------------
 Tricky Stored Procedure
@@ -165,5 +186,15 @@ BEGIN
 	 SET @count += 1;
 END;
 
-
+------------------------
+Quick Exit
+-------------------------
+The RETURN statement is used to unconditionally and immediately terminate an SQL procedure by returning the flow of control to the caller of the stored procedure.
+It is mandatory that when the RETURN statement is executed that it return an integer value. If the return value is not provided, the default is 0.
+https://www.ibm.com/docs/en/db2oc?topic=procedures-return-statement-in-sql
+DECLARE	@return_value int
+EXEC	@return_value = [dbo].[GetDepartmentInfo]
+        @DepartmentName = 'Human Resource'
+SELECT	'Return Value' = @return_value
+GO
 */

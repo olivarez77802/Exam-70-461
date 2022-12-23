@@ -64,6 +64,8 @@ skipped, and the statements, after the CATCH block are executed.
 Errors trapped by by a CATCH block are not returned to the calling application.  If any
 part of the error information must be returned to the application, the code in the CATCH
 block must do so by using RAISERROR() Function.
+https://learn.microsoft.com/en-us/sql/t-sql/language-elements/raiserror-transact-sql?view=sql-server-ver16
+Note! The RAISERROR statement does not honor SET XACT_ABORT. New applications should use THROW instead of RAISERROR. 
 
 In the scope of the CATCH block, there are several system functions, that are used to 
 retrieve more information about the error that occurred.  These functions return

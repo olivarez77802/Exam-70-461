@@ -106,6 +106,8 @@ The following code fails
 The below code reurns a NULL
    SELECT TRY_CAST('abc' AS INT);
 
+Example.
+PRINT 'TIME ' + CAST(GETDATE() AS VARCHAR(20))
 ********************************
 4. TRY_CAST, TRY_CONVERT, TRY_PARSE
 ********************************

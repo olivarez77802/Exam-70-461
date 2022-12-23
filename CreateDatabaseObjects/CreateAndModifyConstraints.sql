@@ -250,10 +250,19 @@ Note:
 To improve query performance when creating joins, you will need to
 create a nonclustered index on the FOREIGN KEY in the referencing table.
 
+-- Example 1
 Listing Foreign Keys for a database
 SELECT *
 FROM sys.foreign_keys
 
+-- Example 2   (Nice!!)
+SELECT
+  name AS [Foreign Key],
+  OBJECT_NAME(parent_object_id) AS [Parent Object Name],
+  OBJECT_NAME(referenced_object_id) AS [Referenced Object Name]
+FROM sys.foreign_keys
+
+-- Example 3
 Use INFORMATION_SCHEMA.TABLE_CONSTRAINTS
 SELECT *
 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
@@ -337,6 +346,19 @@ WHERE CONSTRAINT_TYPE = 'CHECK';
 SELECT name FROM sys.objects
 WHERE type = 'C'
 
+https://database.guide/what-you-should-know-about-with-nocheck-when-enabling-a-check-constraint-in-sql-server/
+
+-- Review Check Constraints.  Gets name of contraints
+SELECT 
+  name,
+  is_disabled,
+  is_not_trusted,
+  definition
+FROM sys.check_constraints;
+
+-- Disable the Constraints
+ALTER TABLE Occupation  
+NOCHECK CONSTRAINT chkJobTitle;    -- Where chkJobTitle is the name of constaint in your database
 ----------------------
 5. DEFAULT Constraint
 ----------------------

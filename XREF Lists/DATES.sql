@@ -57,6 +57,7 @@ Modify Data - Work with Functions.
 
 GETDATE is T-SQL Specific, returning the current date and time in the DATETIME data type.
 CURRENT_TIMESTAMP is the same, is the same only it's the standard and hence the recommended one to use.
+PRINT 'TIME ' + CAST(GETDATE() AS VARCHAR(20))
 
 To get the current date, use CAST(SYSDATETIME() AS DATE).
 

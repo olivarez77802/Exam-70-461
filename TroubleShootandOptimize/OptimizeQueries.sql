@@ -155,4 +155,33 @@ Displaying Query Statistics
 -- Example 3
 	DBCC SHOW_STATISTICS (table, index)  <-- Provide Distribution Statistics
 	DBCC SHOW_STATISTICS ('Employee', PK_Employee)  
+
+************************************
+Query Plans
+************************************
+SET STATISTICS PROFILE ON   - Very Useful to put on top of your query's.
+https://learn.microsoft.com/en-us/sql/t-sql/statements/set-statistics-profile-transact-sql?view=sql-server-ver16
+When STATISTICS PROFILE is ON, each executed query returns its regular result set, followed by an additional result set that shows a profile of the query execution.
+The additional result set contains the SHOWPLAN_ALL columns for the query and these additional columns.
+Rows 	Actual number of rows produced by each operator
+Executes 	Number of times the operator has been executed
+
+SET STATISTIC PROFILE ON
+SELECT *
+FROM dbo.table AS T1
+JOIN dbo.table2 as T2
+   ON T1.key = T2.key
+
+SET STATISTICS IO, TIME ON
+
+****************************************
+POOR Performing Operators
+****************************************
+-SCAN
+-PARRALLELISM
+-IMPLICIT CONVERSION
+
+
+
+
 */
