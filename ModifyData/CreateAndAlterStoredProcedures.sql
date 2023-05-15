@@ -10,6 +10,10 @@ ModifyData/CreateAndAlterStoredProcedures (simple statements)
 
 See also XREF/Table_or_Virtual_Tables (#TempTables)
 
+List of Stored Procedures
+Select * 
+from sys.procedures
+
 Useful system stored procedures
 sp_help procedure_name - View the information about the stored procedure, like parameter names,
 their datatypes etc.  sp_help can be used with any database object, like tables, views, SP's,

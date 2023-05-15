@@ -442,7 +442,8 @@ MICROSOFT DOC - DATABASE SET Options
 https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-database-transact-sql-set-options?view=sql-server-2017
 
 MICROSOFT DOC - Locking and Row Versioning Basics
-https://docs.microsoft.com/en-us/sql/2014-toc/sql-server-transaction-locking-and-row-versioning-guide?view=sql-server-2014#Lock_Basics
+https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide?view=sql-server-ver16
+
 
 Differences between Serializable and Snapshot isolation Levels
 Serializable isolation is implemented by acquiring locks which means the resources are locked for the duration

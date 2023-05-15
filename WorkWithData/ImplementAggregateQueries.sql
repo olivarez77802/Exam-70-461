@@ -68,6 +68,11 @@ Implement Aggregate queries
      A2. ROW_NUMBER OVER                 
      A3. RANK (See QueryDataByUsingSelect.sql) -- ORDER BY is required.
      A4. OFFSET
+	     1. LAG - Returns a value from a row that is a specified number of rows before current row
+         2. LEAD - Returns a value from a row that is a specified number of rows after the current row
+         3. FIRST_VALUE - Returns first value in the window frame
+         4. LAST_VALUE - Returns last value in the window frame
+
      A5. FRAMING https://learnsql.com/blog/define-window-frame-sql-window-functions/
 
 -----------------------
@@ -590,6 +595,13 @@ Window OFFSET functions
   3. FIRST_VALUE - Returns first value in the window frame
   4. LAST_VALUE - Returns last value in the window frame
 
+Example:   Wow, This is really Powerful!  
+
+  SELECT caseID, processOrder, processTime,   
+         DATEDIFF(minute, LAG(processTime) 
+          OVER (PARTITION BY caseID 
+                 ORDER BY processOrder), processTime) AS timePassed 
+  FROM processTable
   
 *********************
 SO-EDW-SQL2

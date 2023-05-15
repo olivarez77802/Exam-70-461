@@ -1,6 +1,6 @@
 /*
 Implement Error Handling.
-  Implement try/catch/throw; use set baed rather than row based logic; transaction management.
+  Implement try/catch/throw; use set based rather than row based logic; transaction management.
 
   1. Implement try/catch/throw
   2. Use set based rather than row based logic

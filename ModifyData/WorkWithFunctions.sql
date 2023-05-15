@@ -259,6 +259,8 @@ Select * From  dbo.fn_EmployeesByGender('F')
 
 ASCII(Character expression)  - Returns the ASCII code of a given character expression
 CHAR(Integer expression) - Converts an Integer ASCII code to a character.
+TRIM(CHARACTER expression) - Removes FROM Beginning AND END but NOT IN middle
+SELECT TRIM('#! ' FROM '    #SQL R#!cks Tutorial!     ') AS TrimmedString; 
 LTRIM(Character expression) - Removes blanks on the left handside of the given character
 RTRIM(Character expression) - Removes blanks on the right hand side of the given character expression
 LOWER(Character expression) - Converts all characters in the given Character expression to lowercase letters.
@@ -319,7 +321,7 @@ SELECT RIGHT('ABCDEF',4)
 /* A third parameter Start Location is optional */
 DECLARE @EMAIL VARCHAR(30)
 SET @EMAIL = 'pam@bbb.com'
-SELECT CHARINDEX('@', @EMAIL)
+SELECT CHARINDEX('@', @EMAIL)   /* Result is 4 */
 
 SELECT SUBSTRING(@EMAIL,6,7)
 
@@ -338,5 +340,33 @@ SELECT @EMAIL,
 
 SELECT @EMAIL,
        REPLACE(@EMAIL,'.com','.net')
+
+FORMAT
+Syntax
+FORMAT(value, format, culture)
+value 	Required. The value to be formatted
+format 	Required. The format pattern
+culture 	Optional. Specifies a culture (from SQL Server 2017)
+https://www.w3schools.com/sql/func_sqlserver_format.asp
+SELECT FORMAT(123456789, '##-##-#####'); 
+
+TRANSLATE
+Return the string from the first argument AFTER the characters specified in the second argument are translated into the characters specified in the third argument:
+Syntax
+TRANSLATE(string, characters, translations)
+string 	Required. The input string
+characters 	Required. The characters that should be replaced
+translations 	Required. The new characters 
+https://www.w3schools.com/sql/func_sqlserver_translate.asp
+SELECT TRANSLATE('3*[2+1]/{8-4}', '[]{}', '()()'); // Results in 3*(2+1)/(8-4) 
+SELECT TRANSLATE('Monday', 'Monday', 'Sunday'); // Results in Sunday
+
+-- REPLACE and TRANSLATE produce same 'This is a test'
+SELECT REPLACE (REPLACE (REPLACE (REPLACE ('th!5 !s @ +es+', '+', 't'), '@', 'a'), '!', 'i'), '5', 's')
+SELECT TRANSLATE ('th!5 !s @ +es+', '+@!5', 'tais')
+
+SELECT TRANSLATE ('Rem#ove $Spe*cial','$#*','123')
+SELECT TRANSLATE ('Rem#ove $Spe*cial','$#*','   ')
+SELECT REPLACE(TRANSLATE ('Rem#ove $Spe*cial','$#*','***'),'*','')
 
 SELECT STUFF(@EMAIL, 2, 3, '*****')

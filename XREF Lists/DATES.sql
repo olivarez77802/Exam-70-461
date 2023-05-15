@@ -110,4 +110,30 @@ SELECT DATENAME(weekday, '2012-08-30 19:45:31.793') -- returns Thursday
 SELECT DATEADD(DAY, 20, '2012-08-30 19:45:31.793')  -- Returns 2012-09-19 19:45:31.793
 SELECT DATEDIFF(MONTH, '11/30/2005', '01/31/2006')  -- Returns 2
 
+
+-- Calculates age in years.  365.25 days x 24 hours = 8766 hours.  Note!  There is no such thing as SYSDATE
+DECLARE @bday DATETIME;
+SET @bday = '1990-01-01';
+SELECT GETDATE(),SYSDATETIME()
+SELECT DATEDIFF(hour,@bday,GETDATE())/8766
+SELECT DATEDIFF(hour,@bday,SYSDATETIME())/8766
+
+
 -- https://www.youtube.com/watch?v=eYsizQVa_EU&index=27&list=PL08903FB7ACA1C2FB
+
+Quarter FUNCTION  (Works IN MySQL 4.0, we seem TO NOT support MYSQL functions at this time 2022/04/27.  QUARTER FUNCTION does NOT work)
+-- Below will tell you we are using Microsoft SQL Server 2017 on 2022/04/27
+SELECT @@VERSION   
+The QUARTER() function returns the quarter of the year for a given date value (a number from 1 to 4).
+
+    January-March returns 1
+    April-June returns 2
+    July-Sep returns 3
+    Oct-Dec returns 4
+
+https://www.w3schools.com/sql/func_mysql_quarter.asp
+
+SELECT GETDATE()
+SELECT QUARTER("2012-08-30");
+SELECT QUARTER(GETDATE());
+

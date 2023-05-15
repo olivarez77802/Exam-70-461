@@ -98,6 +98,15 @@ Select Id, Name, DateOfBirth, CAST(DateOfBirth as nvarchar(11)) as ConvertedDOB 
 Select Id, Name, DateOfBirth, CONVERT(nvarchar, DateOfBirth) as ConvertedDOB from tblEmployees
 https://www.youtube.com/watch?v=8GHUfb5k-a8&index=28&list=PL08903FB7ACA1C2FB
 
+Date and TimeStyles
+https://learn.microsoft.com/en-us/sql/t-sql/functions/cast-and-convert-transact-sql?view=sql-server-ver16
+SELECT CONVERT(nvarchar,GETDATE())   -- Apr 27 2023 11:58AM  Default Style
+SELECT CONVERT(nvarchar,GETDATE(),0) -- Same as Default Style
+SELECT CONVERT(nvarchar,GETDATE(),1) -- 4/27/23 
+SELECT CONVERT(nvarchar,GETDATE(),101) -- 4/27/2023
+SELECT CONVERT(nvarchar,GETDATE(),20) 
+SELECT CONVERT(nvarchar,GETDATE(),120) 
+
 The difference between functions without the TRY and their counterparts with the TRY is that
 those without the TRY fail if the value isn't convertible, whereas those with the TRY return
 NULL in such a case.  Example:

@@ -81,6 +81,24 @@ using DELETE tablename.
 TRUNCATE tablename - removes all the table names from the table, but the
 table structure, column constraints, indexes, etc. will remain.
 
+SQL Server DROP TABLE IF EXISTS Examples
+https://www.mssqltips.com/sqlservertip/6769/sql-server-drop-table-if-exists/
+f you try to do a DROP TABLE first and the table does not exist, 
+it will also fail with the error "Msg 3701 Level 11 State 5, 25 Cannot drop the table because it does not exist or you do not have permission".
+
+Four options to Drop a Table
+ 1.   OBJECT_ID() function (all supported versions)
+ 2.   Querying the sys.tables System View (all supported versions)
+ 3.   Querying the INFORMATION_SCHEMA.TABLES View (all supported versions)
+ 4.   DROP TABLE with IF EXISTS (SQL Server 2016 and up)
+
+Instead of having to look and see if whether or not the table exists with one T-SQL statement then running DROP TABLE if it does, and ignored if not, executing DROP TABLE IF EXISTS will do both for you in one line.
+-- use database
+USE [MyDatabase];
+GO
+-- attempt to run DROP TABLE only if it exists 
+DROP TABLE IF EXISTS [dbo].[MyTable0];
+GO
 
 
 Identity Column on SQL Server
