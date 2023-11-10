@@ -9,6 +9,7 @@ Work with functions
 2. Create and Alter functions (UDFs)
 3. SQL Server built in functions (String Functions)
    https://www.w3schools.com/sql/sql_ref_sqlserver.asp
+4. SQL Server Math/Numeric Functions
    
 
 Deterministic versus Non-Deterministic
@@ -370,3 +371,22 @@ SELECT TRANSLATE ('Rem#ove $Spe*cial','$#*','   ')
 SELECT REPLACE(TRANSLATE ('Rem#ove $Spe*cial','$#*','***'),'*','')
 
 SELECT STUFF(@EMAIL, 2, 3, '*****')
+
+-----------------------------------------------------
+4. SQL SERVER Math/Numeric Functions
+-----------------------------------------------------
+https://www.w3schools.com/sql/sql_ref_sqlserver.asp
+/*
+The SIGN() function returns the sign of a number.
+
+This function will return one of the following:
+
+    If number > 0, it returns 1
+    If number = 0, it returns 0
+    If number < 0, it returns -1
+
+Example:
+SELECT SIGN(255.5)    -- Returns 1
+SELECT SIGN(0.00)     -- Returns 0
+SELECT SIGN(-3)       -- Return -1 
+*/

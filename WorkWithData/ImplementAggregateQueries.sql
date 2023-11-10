@@ -68,8 +68,8 @@ Implement Aggregate queries
      A2. ROW_NUMBER OVER                 
      A3. RANK (See QueryDataByUsingSelect.sql) -- ORDER BY is required.
      A4. OFFSET
-	     1. LAG - Returns a value from a row that is a specified number of rows before current row
-         2. LEAD - Returns a value from a row that is a specified number of rows after the current row
+	     1. LAG - Returns a value from a row that is a specified number of rows before (PRIOR) current row
+         2. LEAD - Returns a value from a row that is a specified number of rows after (SUBSEQUENT) the current row
          3. FIRST_VALUE - Returns first value in the window frame
          4. LAST_VALUE - Returns last value in the window frame
 

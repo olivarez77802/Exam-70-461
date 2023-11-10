@@ -55,7 +55,7 @@ Benefits of using Temporal Tables
 - Auditing data changes and performing data forensices
 - Reconstructing state of the data as of any date
 - Calculating trends over time
-- Maintaing a slowly changing dimension for decision support applications
+- Maintaining a slowly changing dimension for decision support applications
 - Recovering from accidental data loss
 
 System Versioned Tables
@@ -81,7 +81,7 @@ Creating Temporal Tables
 Create Table in usual manner.  It will then create an additonal table
 called dbo.PostsTemporal
 
-CREAT  TABLE Posts (
+CREATE TABLE Posts (
 
 )
 WITH
@@ -156,6 +156,20 @@ Functions used for reading data from many sources
 - Returns a table with a single column
   * Bulk
   * Loads entire file content as a text value
+
+SYNTAX:
+OPENROWSET
+( { 'provider_name' 
+    , { 'datasource' ; 'user_id' ; 'password' | 'provider_string' }
+    , {   <table_or_view> | 'query' }
+   | BULK 'data_file' ,
+       { FORMATFILE = 'format_file_path' [ <bulk_options> ]
+       | SINGLE_BLOB | SINGLE_CLOB | SINGLE_NCLOB }
+} )
+
+Provider name examples are Microsoft.Jet.OLEDB.4.0, SQLNCLI, or MSDASQL.
+Data source can be file path C:\SAMPLES\Northwind.mdb' for Microsoft.Jet.OLEDB.4.0 provider, or connection string Server=Seattle1;Trusted_Connection=yes; for SQLNCLI provider.
+
 
 Example:
 DECLARE @JSONFILE VARCHAR (MAX);

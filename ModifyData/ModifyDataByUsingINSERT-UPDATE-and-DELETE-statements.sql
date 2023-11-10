@@ -21,7 +21,7 @@ Best practices before Modifying Data
 
 Methods of Inserting Data
 - INSERT VALUES - Inserts single or multiple rows of data into table
-- INSERT SELECT - Inserts teh result set of a query into specified table
+- INSERT SELECT - Inserts the result set of a query into specified table
 - INSERT EXEC - Uses the EXECUTE clause to call a stored procedure or dynamic batch that contains the SELECT statement
                 which contains the SELECT statement which inserts the result set into the specified table.
 - SELECT INTO - Creates target table defines table and inserts query results
