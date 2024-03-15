@@ -350,6 +350,18 @@ format 	Required. The format pattern
 culture 	Optional. Specifies a culture (from SQL Server 2017)
 https://www.w3schools.com/sql/func_sqlserver_format.asp
 SELECT FORMAT(123456789, '##-##-#####'); 
+/*
+Used in dbo.spFRSVoucherBatDt
+
+	Send the UIN with a leading 0 and so it's 9 digits to match program FCAR196.   If you don't send a leading 0 then SQL will send '30177663' and
+	when it computes it for zoned decimal to prepare for packed field it will generate the value 301776630 with the 0 trailing so the FORMAT 
+	statement ensures there's a leading 0 for the 9 digit field.
+	*/
+	SELECT FORMAT(ISN,'000000000') AS '** ISN',
+	     VoVchr, 
+	   VoItemNbr 
+	FROM #TempVoucherTbl
+*/
 
 TRANSLATE
 Return the string from the first argument AFTER the characters specified in the second argument are translated into the characters specified in the third argument:

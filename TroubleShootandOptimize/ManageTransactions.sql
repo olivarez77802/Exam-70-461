@@ -11,6 +11,7 @@ Manage Transactions
 5. Nested Transactions
 6. Isolation Levels
 7. Scope and Type of Locks
+8. Examples
 
 
 **********************************
@@ -304,10 +305,15 @@ SQL Server Transaction Isolation Levels / Concurrency problem XREF
 
 https://www.youtube.com/watch?v=TWv2jpmxaf8&list=PL08903FB7ACA1C2FB&index=70
 
+SSMS - You can verify the ISOLATION LEVEL by going to Query Tab, selecting Query Options, selecting Advanced
+and it will show you the ISOLATION LEVEL (currently set to 'READ COMMITTED').  The Query Tab is for the
+individual session.  If you wanted to change it for ALL Sessions, you can go to 'Tools' and select 'Options'
+select 'Query Execution', select 'SQL Server', select 'Advanced' and it will show you the ISOLATION LEVEL.
+
 READ COMMITTED This is the default isolation level. All readers in that session will only read data changes
 that have been committed. So all the SELECT statements will attempt to acquire shared locks, and any underlying
 data resources that are being changed by a different session, and therefore have exclusive locks, will block 
-the READ COMMITTED session.
+the READ COMMITTED session.   
 
 READ UNCOMMMITED This isolation level allows readers to read uncommitted data. This setting removes the shared 
 locks taken by SELECT statements so that readers no longer are blocked by writers. However, the results of a 
@@ -468,5 +474,38 @@ To preserve the isolation of transactions, SQL Server implements a set of lockin
 Can readers (shared locks) block readers?  No, because shared locks are compatible with other shared locks.
 .
 Can readers block writers (exclusive locks)?Yes, even if only momentarily, because any exclusive lock request has to wait until the shared lock is released.
+
+*******************************************
+8. Examples
+*******************************************
+Executed with the Default Isolation level 'Read Committed'.  In Session1 you update the transaction but you haven't committed.  Session2 will try to query the 
+the record but will go into spin mode since session 1 had the record on hold.   Session 2 WITH (NOLOCK) will show the uncommited value for the flag.  So (NOLOCK)
+forces the Dirty Read.
+
+Session1
+BEGIN TRANSACTION
+UPDATE dbo.PAYEmployee
+SET EmInsMasterCdPrint = 'Y'
+WHERE EmUin = '123004444'
+SET EmInsMasterCdPrint = 'Y'
+
+Session2
+USE FAMISMod
+SELECT EmInsMasterCdPrint 
+FROM dbo.PAYEmployee
+WHERE EmUin = '123004444'
+
+Session 2 WITH (NOLOCK)
+USE FAMISMod
+SELECT EmInsMasterCdPrint 
+FROM dbo.PAYEmployee WITH (NOLOCK)
+WHERE EmUin = '123004444'
+
+Changed The Isolation Level to 'SET TRANSACTION LEVEL READ UNCOMMITTED'.  Now Session 2 instead of going into spin mode gives me the value.  If you were to change 
+the FROM to use the (NOLOCK) then you would not see a difference unlike when the Transaction Level is set to 'READ COMMITTED'.
+Session 2
+SELECT EmInsMasterCdPrint 
+FROM dbo.PAYEmployee
+WHERE EmUin = '123004444'
 
 */
