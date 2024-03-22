@@ -137,7 +137,7 @@ Implicit transaction mode is not the SQL Server default. You enter that mode by 
 SET IMPLICIT_TRANSACTIONS ON;
 You can also issue the following command. However, this command just effectively issues the first command for you.
 SET ANSI_DEFAULTS ON;
-As soon as you do any work—that is, make changes to the database data—a transaction automatically begins. 
+As soon as you do any workï¿½that is, make changes to the database dataï¿½a transaction automatically begins. 
 Figure 12-2 illustrates how this works.
 https://docs.microsoft.com/en-us/sql/t-sql/statements/set-ansi-defaults-transact-sql?view=sql-server-ver15
  
@@ -146,21 +146,21 @@ As soon as you enter any command to change data, the value of @@TRANCOUNT become
 are one level deep in the transaction. You must then manually issue a COMMIT or a ROLLBACK statement to finish the
 transaction. If you issue more DML or DDL statements, they also become part of the transaction.
 Some advantages to using implicit transactions are:
-•	You can roll back an implicit transaction after the command has been completed.
-•	Because you must explicitly issue the COMMIT statement, you may be able to catch mistakes after the command is finished.
+ï¿½	You can roll back an implicit transaction after the command has been completed.
+ï¿½	Because you must explicitly issue the COMMIT statement, you may be able to catch mistakes after the command is finished.
 Some disadvantages to using implicit transactions are:
-•	Any locks taken out by your command are held until you complete the transaction. Therefore, you could end up blocking
+ï¿½	Any locks taken out by your command are held until you complete the transaction. Therefore, you could end up blocking
     other users from doing their work.
-•	Because this is not the standard method of using SQL Server, you must constantly remember to set it for your session.
-•	The implicit transaction mode does not work well with explicit transactions because it causes the @@TRANCOUNT value
+ï¿½	Because this is not the standard method of using SQL Server, you must constantly remember to set it for your session.
+ï¿½	The implicit transaction mode does not work well with explicit transactions because it causes the @@TRANCOUNT value
     to increment to 2 unexpectedly.
-•	If you forget to commit an implicit transaction, you may leave locks open.
+ï¿½	If you forget to commit an implicit transaction, you may leave locks open.
 
 Note that implicit transactions can span batches.
 
 MORE INFO IMPLICIT TRANSACTIONS
 For more details about implicit transactions, see the Books Online for SQL Server 2012 article
-“SET IMPLICIT_TRANSACTIONS (Transact-SQL)” at http://msdn.microsoft.com/en-us/library/ms187807.aspx.
+ï¿½SET IMPLICIT_TRANSACTIONS (Transact-SQL)ï¿½ at http://msdn.microsoft.com/en-us/library/ms187807.aspx.
 
 Explicit Transaction Mode
 An explicit transaction occurs when you explicitly issue the BEGIN TRANSACTION or BEGIN TRAN command to start a transaction.  
@@ -177,7 +177,7 @@ but others, such as foreign key violations do not cause all the statements to ro
 you need to add error handling to your code.
 
 EXAM TIP
-Note that transactions can span batches. This includes both implicit transactions and explicit transactions—that is, GO statements.
+Note that transactions can span batches. This includes both implicit transactions and explicit transactionsï¿½that is, GO statements.
 However, it is often a best practice to make sure that each transaction takes place in one batch.
 
 Log File Information
@@ -202,7 +202,7 @@ BEGIN TRANSACTION Tran1;
 Note that SQL Server only records transaction names for the outermost transaction. If you have nested transactions, any names for the nested transactions are ignored.
 
 Named transactions are used for placing a mark in the transaction log in order to specify a point to which one or more databases can be restored. When the transaction
-is recorded in the database’s transaction log, the transaction mark is also recorded, as shown in the following example.
+is recorded in the databaseï¿½s transaction log, the transaction mark is also recorded, as shown in the following example.
 
 USE TSQL2012;
 BEGIN TRAN Tran1 WITH MARK;
@@ -234,7 +234,7 @@ You can add RECOVERY to the WITH list, but it has no effect.
 ***************************
 
 NESTED TRANSACTIONS
-When explicit transactions are nested—that is, placed within each other—they are called nested transactions. The behavior of 
+When explicit transactions are nestedï¿½that is, placed within each otherï¿½they are called nested transactions. The behavior of 
 COMMIT and ROLLBACK changes when you nest transactions.
 
 EXAM TIP
@@ -242,7 +242,7 @@ An inner COMMIT statement has no real effect on the transaction, only decrementi
 the one executed when @@TRANCOUNT = 1, actually commits the transaction.
 
 EXAM TIP
-Note that it doesn’t matter at what level you issue the ROLLBACK command. A transaction can contain only one ROLLBACK command,
+Note that it doesnï¿½t matter at what level you issue the ROLLBACK command. A transaction can contain only one ROLLBACK command,
 and it will roll back the entire transaction and reset the @@TRANCOUNT counter to 0.
 
 @@TRANCOUNT- can be queried to find the level of transactions.
@@ -461,15 +461,19 @@ not lock resources, it can significantly increase the number of concurrent trans
 same level of data consistency as serializable isolation does.   
 https://www.youtube.com/watch?v=9NVu17LjPSA
 
+locks, Blocks, and Isolation Levels
+https://bornsql.ca/blog/locks-blocks-isolation-levels/
+
+
 ******************************************
 7. Scope and Type of Locks
 ******************************************
 Basic Locking
 To preserve the isolation of transactions, SQL Server implements a set of locking protocols. At the basic level, there are two general modes of locking:
 
-1. Shared locks Used for sessions that read data—that is, for readers
+1. Shared locks Used for sessions that read dataï¿½that is, for readers
 
-2.  Exclusive locks Used for changes to data—that is, writers
+2.  Exclusive locks Used for changes to dataï¿½that is, writers
 
 Can readers (shared locks) block readers?  No, because shared locks are compatible with other shared locks.
 .
