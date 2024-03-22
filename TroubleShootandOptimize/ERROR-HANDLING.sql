@@ -26,6 +26,15 @@ B. When should you recommend using a different isolation level ?
    of lowering the isolation level in order to make deadlocks less likely.  However, be aware that some transactions
    may require higher levels of isolation.
 
+Found this article helpful to understand differences between blocking and deadlocks on top of Rickâ€™s explanation below.
+https://virtual-dba.com/blog/difference-between-blocking-and-deadlocks-sql-server/
+
+r-nace  2:18 PM
+Just want to point out that this was not a 'deadlock' situation.  it was a blocking lock holding up downstream activity from moving through the system.  Just trying to point out that they are distinctly different locking conditions and want to make sure everyone understands there is a difference.  a deadlock could block downstream activity until sql killed it as the victim, but it also trips a deadlock alert and not a blocking alert in that situation with both the offender and victim transactions identified.  this alert only identified the blocking sessions and query. (edited) 
+2:20
+it's really symantics, but want to make sure we're identifying the problem correctly.
+  
+
 C. What type of error handling should you recommend ?
    You should use TRY/CATCH blocks in every stored procedure where errors might occur and encourage your team
    to standardize on that usage.  By funneling all errors to the CATCH block, you can handle all errors in just
@@ -262,7 +271,7 @@ As a result, XACT_ABORT does not provide you with error handling capability. You
 
 XACT_ABORT behaves differently when used in a TRY block. Instead of terminating the transaction as it does in unstructured
 error handling, XACT_ABORT transfers control to the CATCH block, and as expected, any error is fatal. The transaction is 
-left in an uncommittable state (and XACT_STATE() returns a –1). Therefore, you cannot commit a transaction inside a CATCH 
+left in an uncommittable state (and XACT_STATE() returns a ï¿½1). Therefore, you cannot commit a transaction inside a CATCH 
 block if XACT_ABORT is turned on; you must roll it back.
 
 *************************
