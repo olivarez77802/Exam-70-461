@@ -188,6 +188,12 @@ BEGIN TRANSACTION - Marks the starting point of an explicit, local transaction. 
 the BEGIN TRANSACTION statement and end with the COMMIT and ROLLBACK statement.
 https://docs.microsoft.com/en-us/sql/t-sql/language-elements/begin-transaction-transact-sql?view=sql-server-2017
 
+BEGIN TRANSACTION starts a local transaction for the connection issuing the statement. Depending on the current
+transaction isolation level settings, many resources acquired to support the Transact-SQL statements issued by 
+the connection are locked by the transaction until it is completed with either a COMMIT TRANSACTION or ROLLBACK TRANSACTION 
+statement. Transactions left outstanding for long periods of time can prevent other users from accessing these 
+locked resources, and also can prevent log truncation.
+
 ****************************************************************************
 4. MARK a Transaction
 ****************************************************************************

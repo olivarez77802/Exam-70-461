@@ -451,6 +451,21 @@ Ex.
   )
   SELECT TOP 1 Salary FROM Result WHERE Salary_Rank = 2
 
+  /* 
+  Another Example - Dense_Rank() seems most useful since it gives what you would expect.  If there is a tie then the same
+  number is used, there is no skipping of the numbers that are listed.
+  */
+
+  WITH RESULT AS
+(
+SELECT PyCampusCd,PyFiscalYy,PyPayCycleAcctDt,Py920FteMoSal,DENSE_RANK()  OVER (ORDER BY Py920FteMoSal DESC) AS Salary_Rank
+FROM dbo.FRSPayrollDetail
+WHERE PyFiscalYy = 2025 AND Py920FteMoSal IS NOT NULL
+)
+SELECT *
+FROM RESULT
+-- WHERE RESULT.Salary_Rank = 2
+
 You can also use RANK and DENSE_RANK functions to find the Nth highest Salary
 among Male or Female employee groups.
 

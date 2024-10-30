@@ -27,6 +27,8 @@ Is the query string executed in the linked server. The maximum length of the str
 -- SELECT * FROM OPENQUERY([SEA-FA-SQL], 'SELECT * FROM FAMISMOD.dbo.FRSTables');
 -- Works same as SEA-FA-SQL 
 SELECT * FROM OPENQUERY([FINANCE], 'SELECT * FROM FAMISMOD.dbo.FRSTables');
+-- Looks at Prod.  Like it.. will be usefull!
+SELECT * FROM OPENQUERY([SEA-FA-SQL], 'SELECT * FROM FAMISMOD.dbo.FRSTables');
 
 -- Won't work - Needs Linked Server Name.
 -- SELECT * FROM OPENQUERY([SEA-FA-SQLDEV], 'SELECT * FROM FAMISMOD.dbo.FRSTables');

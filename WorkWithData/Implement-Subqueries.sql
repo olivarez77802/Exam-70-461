@@ -240,6 +240,20 @@ SELECT ...
 FROM C2
 WHERE ...;
 
+/*
+*  Example
+*/
+WITH RESULT AS
+(
+SELECT PyCampusCd,PyFiscalYy,PyPayCycleAcctDt,Py920FteMoSal,RANK()  OVER (ORDER BY Py920FteMoSal DESC) AS Salary_Rank
+FROM dbo.FRSPayrollDetail
+WHERE PyFiscalYy = 2025
+-- AND Py920FteMoSal IS NOT NULL
+)
+SELECT *
+FROM RESULT
+-- WHERE RESULT.Salary_Rank = 2
+
 
 *************
 PIVOT

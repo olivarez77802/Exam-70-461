@@ -33,6 +33,19 @@ Best practice: When using INSERT statements, specify column names to avoid colum
 - Using SELECT INTO creates the target table using the definition of the data being inserted
 - Using SELECT INTO does not copy indexes, constraints, or triggers from the source
 
+SQL Insert INTO SELECT Statement
+https://www.w3schools.com/sql/sql_insert_into_select.asp
+
+Copy all columns from one table to another table
+INSERT INTO table2
+SELECT * FROM table1
+WHERE condition; 
+
+Create Index
+https://www.w3schools.com/sql/sql_create_index.asp
+Example:
+CREATE INDEX idxPayEmployee_UIN
+ON dbo.PayEmployee_Prod (EmUin)
 
 ----------------------------
 1A.  Using INSERT VALUES
@@ -90,6 +103,26 @@ SELECT BusinessEntityID, loginID, JobTitle, HireDate
 INTO HumanResources.Contractors
 FROM HumanResources.Employee
 WHERE SalariedFlag = 0;
+
+/*
+* Example where I created a table in dev where I only stored my UIN.
+*/
+SELECT *
+INTO dbo.PayEmployee_Test
+FROM dbo.PAYEmployee
+WHERE EMUIN = '802002713'
+
+/*
+*  Example where I copied a production table and created a new table in Dev environment.
+*  I had to create my own index to the new table so I could use to filter.
+*
+*/
+SELECT * 
+INTO dbo.PayEmployee_Prod
+FROM OPENQUERY([SEA-FA-SQL], 'SELECT * FROM FAMISMOD.dbo.PayEmployee' )
+
+CREATE INDEX idxPayEmployee_UIN
+ON dbo.PayEmployee_Prod (EmUin)
 
 ----------------------
 2. UPDATE DATA

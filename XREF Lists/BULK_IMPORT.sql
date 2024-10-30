@@ -55,17 +55,21 @@ BULK INSERT AdventureWorks2012.Sales.SalesOrderDetail
 ******************************************
 
 */
-USE TRS_BPP;
+/*  I can create a table in dev */
+USE FAMISMOD
 CREATE TABLE dbo.MyFirstImport (
-   Month  VARCHAR (02),
-   Year   VARCHAR (04),
-   WorkStation VARCHAR (05),
-   TRSJOBCategory VARCHAR (05)
-   );
+   Code  VARCHAR (03),
+   Description   VARCHAR (30)
+  );
 GO
+/*
+Can't do a Bulk Insert in Dev.
+Msg 4834, Level 16, State 4, Line 9
+You do not have permission to use the bulk load statement.
+*/
 
 BULK INSERT dbo.MyFirstImport
-FROM 'C:\Users\jesse-olivarez\Downloads\BP8508N_DETAIL_A_BULK_TEST.csv'
+FROM 'C:\Users\Jesse-Olivarez\Downloads\Earning_Codes_2.csv'
 
 /*
 *************************************************************************

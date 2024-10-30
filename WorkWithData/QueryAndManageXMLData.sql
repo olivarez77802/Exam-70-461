@@ -19,6 +19,22 @@ Query and manage XML Data
 9. XML Website Links 
 
 
+Could not get OPENROWSET to work in 'work' environment.  (See XREF Lists\Servers.sql  I got OPENQUERY to work)
+The below stored procedure should show linked servers but tried a bunch of different variations none seemed to
+work.
+See article https://learn.microsoft.com/en-us/sql/t-sql/functions/openrowset-transact-sql?view=sql-server-ver16
+See reference to using 'SQLNCLI' this seems to be closest example.
+
+EXEC sys.sp_linkedservers
+
+The below is the last variation I tried with no success.
+
+SELECT TOP (10) *
+-- FROM OPENROWSET('SQLNCLI','Data Source=sea-fa-sql',FPRDocument)
+-- FROM OPENROWSET(SQLNCI,'SEA-FA-SQLDEV','dbo.FPRDocument')
+FROM OPENROWSET('SQLNCLI','Data Source=sea-fa-sqldev.ad.tamus.edu;Initial Catalog=FamisMod;Integrated Security=True',dbo.FPRDocument)
+
+
 **********************
 1. XML Overview
 **********************
