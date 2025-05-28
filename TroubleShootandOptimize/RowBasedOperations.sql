@@ -26,6 +26,12 @@ https://www.codeproject.com/Articles/34142/Understanding-Set-based-and-Procedura
 SQL Server Cursor Analysis - When to use (or not use) cursors
 https://www.mssqltips.com/sqlservertip/1599/sql-server-cursor-example/
 
+Article I used when creating spTEFlagSync using Cursors
+ https://www.mssqltips.com/sqlservertip/1599/cursor-in-sql-server/
+
+ Article using Cursor and Try/Catch Block
+ https://www.sqlservercentral.com/forums/topic/trycatch-in-cursor-it-breaks-after-failure
+
 Examples
 GO  
 UPDATE HumanResources.Employee   

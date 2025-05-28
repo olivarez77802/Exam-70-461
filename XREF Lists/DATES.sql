@@ -109,6 +109,14 @@ SELECT DATEPART(MONTH, '2012-08-30 19:45:31.793')   -- returns 8
 SELECT DATENAME(weekday, '2012-08-30 19:45:31.793') -- returns Thursday
 SELECT DATEADD(DAY, 20, '2012-08-30 19:45:31.793')  -- Returns 2012-09-19 19:45:31.793
 SELECT DATEDIFF(MONTH, '11/30/2005', '01/31/2006')  -- Returns 2
+SELECT GETDATE()  - Current Date
+SELECT DATEPART(YEAR,GETDATE()) - Current Year
+SELECT DATEPART(MONTH,GETDATE()) - Current Month
+SELECT DATEPART(DAY,GETDATE()) - Current Day
+
+DECLARE  @FY INT = DATEPART(YEAR,GETDATE())
+IF (DATEPART(MONTH,GETDATE()) > 8) SET @FY = @FY + 1
+SELECT @FY
 
 
 -- Calculates age in years.  365.25 days x 24 hours = 8766 hours.  Note!  There is no such thing as SYSDATE

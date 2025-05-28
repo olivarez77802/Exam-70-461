@@ -44,6 +44,7 @@ OPENJSON (SQL Server).
 
 
 Temporal Tables
+https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables?view=sql-server-ver16
  - Temporal Tables were introduced in ANSI SQL 2011
  - Provide information about data in a table
  * At any point in time
