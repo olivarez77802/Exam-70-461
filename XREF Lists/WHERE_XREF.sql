@@ -66,6 +66,59 @@ SELECT col, col2
 FROM tbl_B   
 WHERE NOT EXISTS (SELECT col FROM tbl_A A2 WHERE A2.col = tbl_B.col);  
 
+***************
+* Work Example
+***************
+PRINT ('Number OF Victoria records already in dbo.SysMailCode') 
+--
+-- Create Table Variable
+--
+DECLARE @TSysMailCd TABLE (TbMcMailCd VARCHAR(05))
+INSERT INTO @TSysMailCd
+(
+    TbMcMailCd
+)
+SELECT TbMcMailCd
+FROM dbo.SYSMailCode
+WHERE TbMcMailCd LIKE 'V%'
+
+
+PRINT ('Victoria records added to dbo.SysMailCode')
+INSERT INTO dbo.SYSMailCode
+(
+    TbCampusCd,
+    TbMcMailCd,
+    TbMcDesc,
+    TbMcAddressLine_1,
+    TbMcAddressLine_2,
+    TbMcCity,
+    TbMcState,
+    TbMcZip,
+    TbMcCntry,
+    TbMcPhone,
+    TbMcPhoneExt,
+    TbMcDept
+  )
+  SELECT '**' AS TbCampusCd, 
+       TbDptDept AS TbMcMailCd,
+	   TbDptDeptName AS TBMcDesc,
+	   NULL AS TbMcAddressLine_1, 
+       NULL AS TbMcAddressLine_2, 
+       NULL AS TbMcCity, 
+       NULL AS TbMcState,
+       NULL AS TbMcZip, 
+       NULL AS TbMcCntry, 
+       NULL AS TbMcPhone, 
+       NULL AS TbMcPhoneExt, 
+       NULL AS TbMcDept 
+FROM dbo.SYSDepartment (NOLOCK) SDept
+WHERE TbCampusCd = '31'
+      AND LEFT(TbDptDept, 1) = 'V' 
+-- Check records to see if they already exist
+AND  SDept.TbDptDept NOT IN (SELECT TbMcMailCd FROM @TSysMailCd)
+
+********
+
 ******************
 5. DELETE using WHERE
 ******************
