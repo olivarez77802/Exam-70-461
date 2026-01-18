@@ -1,11 +1,11 @@
 {
   "ExpandedNodes": [
     "",
+    "\\CreateDatabaseObjects",
     "\\ModifyData",
     "\\TroubleShootandOptimize",
     "\\WorkWithData",
     "\\XREF Lists"
   ],
-  "SelectedNode": "\\ModifyData\\ModifyDataByUsingINSERT-UPDATE-and-DELETE-statements.sql",
   "PreviewInSolutionExplorer": false
 }

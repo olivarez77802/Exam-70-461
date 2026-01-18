@@ -18,6 +18,22 @@ Best practices before Modifying Data
 ---------------------------------------
 1. INSERT DATA
 ---------------------------------------
+Steps to Copy Prod Records to Dev
+1. Create a Table of Prod Data (use SEA-FA-SQL)
+2. You have to understand column names to be inserted the best way to do this 
+   is to type INSERT dbo.TableName and automatically the Insert and Values statement
+   will appear.  You will use this to make your Select col1,col2..ISN statement.  The column
+   names will not inculde FBI indexes but will include the ISN field.   The ISN created in Dev
+   will be the same as in Prod.
+3. Your finished statement should look something like this
+INSERT INTO dbo.FRSPayrollDetail
+SELECT col1,
+       col2,
+       ..
+       ISN
+FROM dbo.FRSPayroll_Detail_92001253_Prod
+4. You should now do a Select to review 
+
 
 Methods of Inserting Data
 - INSERT VALUES - Inserts single or multiple rows of data into table
