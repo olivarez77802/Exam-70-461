@@ -60,7 +60,7 @@ get a message stating 'The text for object is encrypted.'
 Create a function WITH SCHEMABINDING option:
 Schemabinding, specified the function is bound to the database objects that it references.
 When SCHEMABINDING is specified, the base objects cannot be modifed in any way that
-would affect the function defiintion.  The function definition itself must first be modified
+would affect the function definition.  The function definition itself must first be modified
 or dropped to removed dependencies on the object that is to be modified.
 https://www.youtube.com/watch?v=WNoTgfg3mGc
 
@@ -295,7 +295,7 @@ PATINDEX("%Patern%", Expression) - Returns the starting position of the first oc
 REPLACE(String Expression, Pattern, Replacement Value).  Example REPLACE('.1.2.3',',','/') substitutes all occurences of
 a dot(.) with a slash(/), returning the string '/1/2/3/'.
 
-STUFF(Orignal Expression, Start, Length, Replacement expression)
+STUFF(Original Expression, Start, Length, Replacement expression)
 https://www.youtube.com/watch?v=ALnM6d7OQUs&list=PL08903FB7ACA1C2FB&index=24
 Has four arguments.  
 1. Input string 
