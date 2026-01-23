@@ -33,7 +33,7 @@ Scalar Functions versus Stored Procedures
 UDF Performance Considerations
 How a function is used can have a dramatic impact on the performance of the queries that you execute.
 Specifically, scalar UDFs need to be very efficient because they are executed once for every row in a 
-result set or sometimes for an entire table.   A scalare UDF in the SELECT list, when applied to column
+result set or sometimes for an entire table.   A scalar UDF in the SELECT list, when applied to column
 values, is executed for every single row retrieved.   A scalar UDF in the WHERE clause that restricts
 a result set is executed once for every row in the referenced table.
 

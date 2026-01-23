@@ -221,7 +221,7 @@ Error Handling in SQL Server 2000 - @@Error
 Error Handling in SQL Server 2005 and Later - Try...Catch
 
 Note:  Sometimes, system functions that being with two at signs(@@), are called as
-global variables.  They are not variables and do not hve the same behaviors as variables,
+global variables.  They are not variables and do not have the same behaviors as variables,
 instead they are very similar to functions.
 RAISERROR('Error Message', ErrorSeverity, Error State)
 Create and return custom errors
