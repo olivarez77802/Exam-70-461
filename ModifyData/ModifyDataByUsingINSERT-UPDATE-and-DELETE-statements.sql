@@ -1,4 +1,6 @@
 /*
+See also XREF Lists/WHERE_XREF.sql
+
 Modify data by using INSERT, UPDATE, and DELETE Statements
 - Given a set of code with defaults, constraints, and triggers, determine the output of a set of DDL;
   know which SQL statements are best to solve common requirements; use output statement
@@ -85,6 +87,66 @@ INSERT INTO HumanResources.Contractors (entityID, loginID, JobTitle, HireDate)
   WHERE SalariedFlag = 0;
 
 SET IDENTITY_INSERT HumanResources.Contractors OFF;
+
+Example where I needed to copy a new Earning Code (WSPDE) using the existing
+Earning Code of 'RPS'.   Could be improved by updating dates properly instead
+of copying.
+
+INSERT INTO dbo.SYSData
+(
+    DaCampusCd,
+    DaFiscalYy,
+    DaTableType,
+    DaKeyA,
+    DaKeyB,
+    DaKeyC,
+    DaKeyD,
+    DaKeyE,
+    DaKeyUnique,
+    DaData1,
+    DaData2,
+    DaData3,
+    DaData4,
+    DaAddedDt,
+    DaAddedTime,
+    DaAddedUserid,
+    DaOnlineModifyDt,
+    DaOnlineModifyTime,
+    DaOnlineModifyPgm,
+    DaOnlineModifyUserid,
+    DaBatchModifyDt,
+    DaBatchModifyTime,
+    DaBatchModifyPgm
+   -- ISN
+)
+SELECT 
+DaCampusCd,
+    DaFiscalYy,
+    DaTableType,
+    DaKeyA = 'WSPDE',
+    DaKeyB,
+    DaKeyC,
+    DaKeyD,
+    DaKeyE,
+    DaKeyUnique,
+    DaData1,
+    DaData2,
+    DaData3,
+    DaData4,
+    DaAddedDt,
+    DaAddedTime,
+    DaAddedUserid,
+    DaOnlineModifyDt,
+    DaOnlineModifyTime,
+    DaOnlineModifyPgm,
+    DaOnlineModifyUserid,
+    DaBatchModifyDt,
+    DaBatchModifyTime,
+    DaBatchModifyPgm
+  --  ISN
+FROM dbo.SYSData
+WHERE DaFiscalYy = 2026 AND DaTableType = 'OBJ-XREF'
+AND DaKeyA = 'RPS' 
 
 ---------------------------
 1C. Using INSERT EXEC

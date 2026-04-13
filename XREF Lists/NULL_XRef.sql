@@ -16,6 +16,7 @@ NULL is a mark for a missing value- Not a value in itself.  The correct usage of
 10. AGGREGATE Functions (COUNT,SUM)
 11. TRY_CONVERT and TRY_PARSE
 12. Aggregate Functions (See also WorkWithData\ImplementAggreateFunctions).
+13. COUNT ( { [ [ ALL | DISTINCT ] expression ] | * } ) 
 
 *****************
 1. Overview
@@ -328,4 +329,20 @@ https://www.w3schools.com/sql/sql_count_avg_sum.asp
 
 Note! - Null Values are ignored
 
+-----------------------
+13. COUNT
+-----------------------
+https://docs.microsoft.com/en-us/sql/t-sql/functions/count-transact-sql?view=sql-server-ver15
+
+COUNT ( { [ [ ALL | DISTINCT ] expression ] | * } )
+If you don't write COUNT (DISTINCT ..) then COUNT (ALL ..) is implicit.
+
+COUNT(*) returns the number of items in a group. This includes NULL values and duplicates.
+
+COUNT(ALL expression) evaluates expression for each row in a group, and returns the number of nonnull values.
+
+COUNT(DISTINCT expression) evaluates expression for each row in a group, and returns the number of unique, nonnull values.
+
+-- COUNT(*) - Counts NULLS
+-- COUNT(shippeddate) - Skips NULLS
 */

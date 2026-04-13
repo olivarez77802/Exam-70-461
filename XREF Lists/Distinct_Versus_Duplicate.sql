@@ -11,9 +11,10 @@ WorkWithData\ImplementAggregateQueries
 3. INTERSECT - Distinct rows
 4. EXCEPT - Distict rows
 5a. DISTINCT - Removes Duplicates
-5b. COUNT
+5b. COUNT(*) - Includes NULL Values and Duplicates
 6. GROUP BY - Removes Duplicates
 7. ROW_NUMBER() (Used with Partition) - Can be used to remove duplicates
+8. JOIN (Includes Duplicate Rows).  You have to use DISTINCT to remove duplicates.
 
 -------------------
 4. EXCEPT
@@ -28,7 +29,7 @@ DISTINCT (Does remove duplicates)
 Note! - The bad thing about this method is that you cannnot bring in other supplemental fields, same short coming as GROUP BY
 Think of the logical order of SQL (FROM, WHERE,GROUP BY,HAVING,SELECT,ORDER BY).  When you do a DISTINCT SQL in the background 
 basically has to do an implicit 'GROUP BY' and 'ORDER BY'.  So it makes sense the columns are limited to what would be listed in 
-the 'GROUP BY' and 'ORDER BY'.
+the 'GROUP BY' and 'ORDER BY'.   Before using DISTINCT it may be best to write query using GROUP BY first and then change to DISTINCT.
 
 SELECT DISTINCT - 
 https://www.w3schools.com/sql/sql_distinct.asp

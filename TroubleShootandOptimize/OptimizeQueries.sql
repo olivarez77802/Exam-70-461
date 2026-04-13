@@ -1,3 +1,4 @@
+
 /*
 Optimize Queries
 - Understand statistics; read query plans; plan guides; DMVs; hints; statistics IO; Dynamic vs. parameterized queries;

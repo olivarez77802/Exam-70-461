@@ -280,10 +280,13 @@ ON TableA.Id = TableB.Id
 Joins
 
 Types of Joins
-1. INNER JOIN - Returns rows when there is a match in both tables.
-2. LEFT (OUTER) JOIN - Returns all rows from the left table, returns matching rows on Right table.
-3. RIGHT (OUTER) JOIN - Returns all rows from the right table, and matched records from Left Table. 
-4. FULL (OUTER) JOIN - Returns rows when there is a match in one of the tables.
+1. INNER JOIN - Returns rows when there is a match in both tables.  (Except Nulls, will include duplicates)
+2. LEFT (OUTER) JOIN - Returns all rows from the left table, in addition to matching rows on Right table.
+3. RIGHT (OUTER) JOIN - Returns all rows from the right table, in addition to matching records from Left Table. 
+4. FULL (OUTER) JOIN - Combines two tables completely.  Matching rows completely, matching rows where possible
+   and including unmatched rows from both sides.  Result set: Contains rows where the join condition matches, 
+   plus unmatched rows from the left tabe (with NULLs on the right) and unmatched rows from the right table
+   (with NULLS on the left).
 
 5. CROSS (CARTESIAN) JOIN - Returns the Cartesian product of the sets of records from two or more joined tables.
                            For example. if we have 10 rows in the Employee table and the Department table we

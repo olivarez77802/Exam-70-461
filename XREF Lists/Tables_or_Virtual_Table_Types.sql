@@ -5,6 +5,8 @@ CreateDatabaseObjects/CreateandAlterViews.sql
 
 Different ways Tables can be created or ways to simulate a table:
 1. CTE 
+1.5 Multiple CTE's  (Powerful!!)
+1.6 CTE used with UNION ALL 
 2  #TempTable - Define Columns   - Last only for session
 2. #TempTables - No Column Definition - Last only for session
 3. Table Variables - Always there - Several other advantages over #Temp Tables
@@ -55,6 +57,52 @@ Select *
 FROM ITBL  
 WHERE VAC_HOURS > 0 
 
+********************
+1.5 MULTIPLE CTE's                            
+********************  
+- This is Powerful and Underused!
+
+WITH T1(EmUin,EmNm,EmStatCd )
+AS 
+(
+SELECT EmUin,EmNm,EmStatCd
+FROM FAMISMod.dbo.PAYEmployee AS E
+WHERE E.FBI_EmStatCd = 'A'
+),
+T2(EmUin,EmNm,EmStatCd)
+AS 
+(
+SELECT EmUin,EmNm,EmStatCd
+FROM T1 AS T
+WHERE T.EmUin = '802002713'
+)
+SELECT *
+FROM T2
+
+***************************
+1.6 CTE used with UNION ALL                            
+***************************  
+
+WITH T1(EmUin,EmNm,EmStatCd )
+AS 
+(
+SELECT EmUin,EmNm,EmStatCd
+FROM FAMISMod.dbo.PAYEmployee AS E
+WHERE E.FBI_EmStatCd = 'A'
+UNION ALL
+SELECT EmUin,EmNm,EmStatCd
+FROM FAMISMod.dbo.PAYEmployee AS E
+WHERE E.FBI_EmStatCd = 'L'
+),
+T2(EmUin,EmNm,EmStatCd)
+AS 
+(
+SELECT EmUin,EmNm,EmStatCd
+FROM T1 AS T
+WHERE T.EmStatCd IN ('A','L')
+)
+SELECT *
+FROM T2
 
 ************************************
 2. Temp Table - Define Columns

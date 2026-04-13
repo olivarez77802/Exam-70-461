@@ -1,5 +1,6 @@
 /*  T-SQL versus standard SQL versus MYSQL
 -- Below will tell you we are using Microsoft SQL Server 2017 on 2022/04/27
+-- Below will tell you we are using Microsoft SQL Server 2022 on 2026/03/05
 SELECT @@VERSION
 
 T-SQL is a dialect of standard SQL.  SQL is a standard for both ISO and ANSI.  International 

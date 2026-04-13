@@ -39,6 +39,20 @@ a left or right bracket ( [] ), a double quotation mark ( " ), a left or right p
  NULL returns if an unacceptable character is supplied. If quote_character is not specified, brackets are used.
 https://docs.microsoft.com/en-us/sql/t-sql/functions/quotename-transact-sql?view=sql-server-2017
 
+Examples
+
+DECLARE @address AS NVARCHAR(60) = '5678 rue de 1''Abbaye';
+print @address
+-- Will recognize quotes as they are
+SELECT QUOTENAME(@address, ''''); -- '5678 rue de 1''Abbaye'
+-- Will use default [] put brackets same as leaving blank
+SELECT QUOTENAME(@address, ''); --  [5678 rue de 1'Abbaye]
+-- Will use default []
+SELECT QUOTENAME(@address); -- [5678 rue de 1'Abbaye]
+-- IF quote CHARACTER IS NOT supplied BRACKETS are used
+
+
+
 **************************
 2. Dynamic SQL using EXEC
 **************************
@@ -116,18 +130,3 @@ EXEC sp_executesql
 SELECT @outercount AS 'RowCount';
 
 
-************
-EXAMPLES
-************
-*/
-
-DECLARE @address AS NVARCHAR(60) = '5678 rue de 1''Abbaye';
-print @address
--- Will recognize quotes as they are
-SELECT QUOTENAME(@address, '''');
--- Will use default [] put brackets same as leaving blank
-SELECT QUOTENAME(@address, '');
--- Will use default []
-SELECT QUOTENAME(@address);
--- IF quote CHARACTER IS NOT supplied BRACKETS are used
-SELECT QUOTENAME('abc[]def');  

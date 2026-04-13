@@ -77,7 +77,7 @@ LEFT OUTER JOIN is the same as LEFT JOIN
 RIGHT OUTER JOIN is the same as RIGHT JOIN
 FULL OUTER JOIN is the same as FULL JOIN
 
-LEFT Join .. One record for every match with right table.   If there is more than one match then you will have a record for every match.
+LEFT Join .. Returns all record from the Left Table in addition to matches with right table.   If there is more than one match then you will have a record for every match.
 
 --------------------
 3. CROSS JOIN
@@ -100,6 +100,8 @@ and then match the remaining rows.
 The UNION operator returns distinct rows.  When the unified sets are disjoint, there are no duplicates to remove, but the
 SQL Server Optimizer may not realize it.  Trying to remove duplicates even when there are none involves extra cost. So
 when the sets are disjoint, it's important to use the UNION ALL operator and not UNION.
+
+A good beginner practice may be to write the query using UNION ALL, then UNION, then using a JOIN.
 
 ----------
 5. PIVOT  - Implicitly identifying grouping element.
@@ -129,6 +131,10 @@ element is identified by elimination—it’s what’s left from the queried table bes
 aggregation and spreading elements. This is why it is recommended to prepare a table expression
 for the pivot operator returning only the three elements that should be involved in the pivoting
 task.
+
+A good learning exercise may be to write the rows to a file and then import into excel and then 
+doing a PIVOT table in Excel.  You can then compare your Excel PIVOT table to the Pivot table
+you wrote in SQL.
 
 ---------------
 6. VIEWS

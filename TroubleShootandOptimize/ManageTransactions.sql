@@ -20,7 +20,7 @@ Manage Transactions
 
 All Operations that in any way write to the database are treated by SQL Server as transactions.  This includes
 1. DML - Data Manipulation Language statements such as INSERT, UPDATE, and DELETE
-2. DDL - Data Definition Languaage statements such as CREATE TABLE and CREATE INDEX.
+2. DDL - Data Definition Language statements such as CREATE TABLE and CREATE INDEX.
 Technically, even single SELECT statements are a type of transaction in SQL, these are called read-only transactions.
 
 A transaction is a group of database commands that change the data stored in a database.  A transaction, is treated as a single unit.

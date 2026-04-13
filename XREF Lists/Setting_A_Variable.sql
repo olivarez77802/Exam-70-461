@@ -1,6 +1,6 @@
 /*
 Different ways of setting a variable or declaring variable
-
+0.  Setting variable in DECLARE Stmt (DECLARE @a int = 45, @b int = 40;)  
 1.  Using SET in a CASE Statement  ( See also QueryDatabyUsingSelect; ModifyingData/CombineDatasets)
 2.  Using SET with SELECT Statement
 3.  Using SET with SELECT Statement
