@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/Exam-70-461/FileContentIndex
+/.vs/Exam-70-461/v17/TestStore/0/000.testlog
+/.vs/Exam-70-461/v17/TestStore/0/testlog.manifest
+/.vs/slnx.sqlite
