@@ -6,8 +6,8 @@ QueryDataByUsingSelectStatement.sql
 WorkWithData\ImplementAggregateQueries
 
 
-1. UNION - Distinct rows
-2. UNION ALL - Duplicate rows
+1. UNION - Distinct rows, will include one DISTINCT NULL value
+2. UNION ALL - Duplicate rows, will include NULL Values
 3. INTERSECT - Distinct rows
 4. EXCEPT - Distict rows
 5a. DISTINCT - Removes Duplicates

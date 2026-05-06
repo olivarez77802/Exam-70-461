@@ -5,13 +5,14 @@ ImplementAggregateQueries
 
 Query data by using SELECT statements
  - Use the ranking function to select top (X) rows for multiple categories in a single query; write and perform
-   queries effeciently using the new (SQL 2005/8) oode items such as synonyms, and joins (except, intersect);
-   implement logic which uses dynamic SQL and system metadata; write effecient; technically complex SQL queries,
+   queries efficiently using the new (SQL 2005/8) oode items such as synonyms, and joins (except, intersect);
+   implement logic which uses dynamic SQL and system metadata; write efficient; technically complex SQL queries,
    including all types of joins versus the use of derived tables; determine what code may or may not execute
    based on the tables provided; given a table with constraints, determine which statement set would load
    a table; use and understand different data access technologies; case versus isnull versus coalesce.
    
    1. SELECT Statement
+   1.5 SELECT Logical Order   (FROM,WHERE,GROUP BY,HAVING,SELECT,ORDER BY)
    2. LIKE Operator
    3. EXCEPT Operator
    4. INTERSECT Operator
@@ -63,6 +64,14 @@ _  -  Specifies exacly one characters
 [] -  Any character with in the brackets
 [^] - Not any character with in the brackets
 
+SELECT * FROM table WHERE column LIKE 'm_d%'  -- matches names like 'model' or 'msdb'
+SELECT * FROM items WHERE name LIKE 'car_'    -- matches cart or cars (but not car or carton !!!) so your looking for 4 characters
+
+SELECT * FROM table WHERE column LIKE '%\_%' ESCAPE '\';  -- Find rows that actually contain _ symbol
+
+Use CHARINDEX to find a literal _ without escaping.
+SELECT * FROM table WHERE CHARINDEX('_', column) > 0
+
 --------------------------------------------------------------------------------------------
 Elements of a SELECT Statement
 1. SELECT - Defines which columns to return
@@ -72,24 +81,6 @@ Elements of a SELECT Statement
 4. GROUP BY - Arranges rows by groups - Used with Aggregate Functions
 5. HAVING - Filters groups by predicate.  Filters by group.
 6. ORDER BY - Sorts the results
-
-Logical Order - The order in which a query is written is not the order
-                in which it is evaluated in SQL Server.
-
-5. SELECT   <select list>
-1. FROM     <table source>
-2. WHERE    <search condition>
-3. GROUPBY  <group by list>
-4. HAVING   <search condition>
-6. ORDER BY <order by list>
-
--A typical mistake made by people who don't understand logical query processing is attempting to
-refer in the 'WHERE' clause to a column alias defined in the 'SELECT' clause.  This isn't allowed
-because the 'WHERE' clause is evaluated before the 'SELECT' clause.
-
-- Note! - Due to SQL Optimization, a JOIN in the FROM statement may do filtering prior to the 
-  WHERE clause being processed.
-
 A very common question is, “What’s the difference between the ON and the WHERE clauses, and does it matter if you specify your predicate
 in one or the other?” The answer is that for inner joins it doesn’t matter. Both clauses perform the same filtering purpose. Both filter 
 only rows for which the predicate evaluates to true and discard rows for which the predicate evaluates to false or unknown. In terms of 
@@ -164,6 +155,37 @@ END
 See also WorkWithFunctions
 * Understand deterministic, non-determininistic; scalar and table values; apply built in scalar
   functions; create and alter user-defined functions (UDFs)
+
+****************************
+1.5 SELECT Logical Order  
+****************************
+
+Logical Order - The order in which a query is written is not the order
+                in which it is evaluated in SQL Server.
+
+5. SELECT   <select list>
+1. FROM     <table source>
+2. WHERE    <search condition>
+3. GROUPBY  <group by list>
+4. HAVING   <search condition>
+6. ORDER BY <order by list>    (See ORDER BY in NULL XREF)
+ 
+-A typical mistake made by people who don't understand logical query processing is attempting to
+refer in the 'WHERE' clause to a column alias defined in the 'SELECT' clause.  This isn't allowed
+because the 'WHERE' clause is evaluated before the 'SELECT' clause.
+
+- Note! - Due to SQL Optimization, a JOIN in the FROM statement may do filtering prior to the 
+  WHERE clause being processed.
+
+ORDER BY
+* Evaluated after SELECT (FROM,WHERE,GROUP BY,HAVING,SELECT,ORDER BY)
+* Ascending is the default order.
+* Can use column Alias.
+* If GROUP BY is used ORDER BY Columns limited to Aggregate or GROUP BY columns.
+* Use OFFSET to specify number of rows to skip before returning rows to a query.
+* Use FETCH to specify number of rows to return after OFFSET
+
+
 
 
 ***************

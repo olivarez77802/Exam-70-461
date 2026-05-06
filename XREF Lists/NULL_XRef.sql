@@ -11,12 +11,14 @@ NULL is a mark for a missing value- Not a value in itself.  The correct usage of
 5. Indexes
 6. Sorting
 7. JOINS (See also QueryDataByUsingSELECT.sql and Implicit_Defaults.sql)
-8. Subqueries
-9. SET OPERATORS - UNION, INTERSECT, EXCEPT
-10. AGGREGATE Functions (COUNT,SUM)
+8. Subqueries See NULL used in WHERE_XREF.sql and Implement-Subqueries.sql
+9. SET OPERATORS - UNION, INTERSECT, EXCEPT  (Ignores Duplicates)
+10. AGGREGATE Functions (COUNT(*))  - Includes NULLS and Duplicates, Counts number of Rows
+10. AGGREGATE Functions (COUNT(col),SUM(col),AVG(col))   - Ignores NULLS, Includes Duplicates
 11. TRY_CONVERT and TRY_PARSE
 12. Aggregate Functions (See also WorkWithData\ImplementAggreateFunctions).
 13. COUNT ( { [ [ ALL | DISTINCT ] expression ] | * } ) 
+
 
 *****************
 1. Overview
@@ -27,7 +29,7 @@ What's important from a perspective of coding with T-SQL is to realize that if t
 their treatment if far from being trivial.   You need to carefully understand what happens when NULLs are involved in the
 data your manipulating with various query constructs, like filtering, sorting, grouping, joining, or intersecting. Hence
 with every piece of code you write with T-SQL, you want to ask yourself whether NULLs are possible in the data your 
-interacting with.  If the answere is yes, you want to make sure you understand the treatment of NULLs in your query, and
+interacting with.  If the answer is yes, you want to make sure you understand the treatment of NULLs in your query, and
 ensure that your tests address treatment of NULLs specifically.
 
 ----------------------------
@@ -44,7 +46,7 @@ T-SQL provides the predicate 'IS NULL' to return true when the tested operand is
 * Query Filters  ON, WHERE, HAVING accept true cases only - rejecting false and NULL
 * IF,WHILE, and the WHEN of a CASE expression accepts true cases
   - rejecting false and NULL
-* CHECK constraint - enforcing declarative integrity - rejects false casesand hence accepts both true and NULL. 
+* CHECK constraint - enforcing declarative integrity - rejects false cases and hence accepts both true and NULL. 
 
 -- CONCATENATION
 T-SQL supports two ways to concatenate strings- one with the plus(+) operator, and another with the CONCAT function.
@@ -63,8 +65,8 @@ a NULL input with an empty string.  Example CONCAT(country, N',' + region,N',' +
 COALESCE and ISNULL can impact performance when you are combining datasets; for example, with
 joins or when you are filtering data.  Example: You have two tables T1 and T2 and you need to 
 join them based on a match between T1.col1 and T2.col1.  The attributes do allow NULLS.  Normally,
-a comparison between to NULLs yields unknown, and this causes the row to be discarded.  You want
-to treat two NULLS as equal.  What some do in sucha case is use COALESCE or ISNULL to substitute
+a comparison between two NULLs yields unknown, and this causes the row to be discarded.  You want
+to treat two NULLS as equal.  What some do in such a case is use COALESCE or ISNULL to substitute
 a NULL with a value that they know cannot appear in the data.  
 For example, if the attributes are integers, and you know that you have only positive integers 
 in your data (you can even have constraints that ensure this), you might try to use the predicate 
@@ -259,7 +261,7 @@ run time. If the scalar subquery returns an empty set, it is converted to a NULL
 9. SET OPERATORS - UNION, INTERSECT, EXCEPT
 -------------------------------------------
 
-T-SQL supports three set operators: UNION, INTERSECT, and EXCEPT; it also suuports one multiset operator: UNION ALL.
+T-SQL supports three set operators: UNION, INTERSECT, and EXCEPT; it also supports one multiset operator: UNION ALL.
 Set operators consider two NULLs as equal for the purpose of comparison.  This is quite unusual when compared to
 filtering clause like WHERE and ON.
 
@@ -268,8 +270,11 @@ the columns from two inputs like you do with joins.  Also, when set operators co
 consider them the same, which is not the case with JOINS.  When this is the desired behavior, it is 
 easier to use set operators.  With join, you have to add predicates to get such behavior.
 
+UNION treats NULL values as indistiguishable, meaing if all corresponding columns are NULL or have
+identical values, those rows are considered duplicates and are removed.
+
 ------------------------------------------
-10. AGGREGATE FUNCTIONS (COUNT,SUM,MIN,MAX)
+10. AGGREGATE FUNCTIONS (COUNT,SUM,AVG,MIN,MAX)
 ------------------------------------------
 See also:
 WorkWithData/ImplementAggregateQueries.sql
@@ -295,6 +300,12 @@ GROUP BY shipperid;
 MIN, MAX
 ----------------
 Ignores NULL Values when Evaluating.   Will return NULL if field being evaluated is NULL.
+---------------
+SUM, AVG
+---------------
+SUM and AVG ignore NULLS, treating them as if they do not exist, rather than treating
+them as zero.   If a column contains only NULL values or is empty, then NULL is returned.
+
 
 ------------------------------
 11. TRY_CONVERT and TRY_PARSE  
@@ -327,7 +338,23 @@ PARSE and CAST functions.
 COUNT(), AVERAGE(), SUM() Functions
 https://www.w3schools.com/sql/sql_count_avg_sum.asp
 
-Note! - Null Values are ignored
+-- COUNT(*) - Counts NULLS
+-- COUNT(ProductID) - Skips NULLS, Count the number of rows that have ProductId, not unique ProductID's
+
+
+SELECT AVG(Price)
+FROM Products;
+-- NULL values are ignored
+
+SELECT SUM(Quantity)
+FROM OrderDetails;
+-- NULL Values are ignored
+
+SUM(Price)  -- If all Price rows are NULLS then SUM returns NULL rather than 0
+
+DECLARE @VAL1 INT = NULL
+SELECT SUM(@VAL1)    --- Returns NULL
+SELECT COUNT(@VAL1)  --- Returns 0    (Since NULLS are not counted returns 0)
 
 -----------------------
 13. COUNT
@@ -345,4 +372,6 @@ COUNT(DISTINCT expression) evaluates expression for each row in a group, and ret
 
 -- COUNT(*) - Counts NULLS
 -- COUNT(shippeddate) - Skips NULLS
+-- COUNT(ALL shippeddate) is the same as COUNT(shippeddate) - Skips NULLS, a duplicate shipped date will be counted more than once
+-- COUNT(DISTINCT shippeddate) -- returns unique shipped date entries - Skips NULLS
 */
