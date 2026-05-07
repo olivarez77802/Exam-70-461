@@ -1,12 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\CreateDatabaseObjects",
-    "\\ModifyData",
-    "\\TroubleShootandOptimize",
-    "\\WorkWithData",
-    "\\XREF Lists"
+    ""
   ],
-  "SelectedNode": "\\TroubleShootandOptimize\\ERROR-HANDLING.sql",
   "PreviewInSolutionExplorer": false
 }

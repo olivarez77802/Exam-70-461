@@ -7,6 +7,7 @@ Different ways Tables can be created or ways to simulate a table:
 1. CTE 
 1.5 Multiple CTE's  (Powerful!!)
 1.6 CTE used with UNION ALL 
+1.7 Recursive CTE's
 2  #TempTable - Define Columns   - Last only for session
 2. #TempTables - No Column Definition - Last only for session
 3. Table Variables - Always there - Several other advantages over #Temp Tables
@@ -103,6 +104,26 @@ WHERE T.EmStatCd IN ('A','L')
 )
 SELECT *
 FROM T2
+
+************************************
+1.7 Recursive CTE's
+************************************
+https://learn.microsoft.com/en-us/sql/t-sql/queries/recursive-common-table-expression-transact-sql?view=sql-server-ver17
+https://stackoverflow.com/questions/14274942/sql-server-cte-and-recursion-example
+WITH Numbers AS
+(
+-- Anchor Member Definition
+  SELECT N=1
+-- Recursive Member Definition
+  UNION ALL 
+  SELECT N + 1
+  FROM Numbers
+  WHERE n+1 <= 10
+)
+-- Statement that executes CTE
+SELECT n
+FROM Numbers
+
 
 ************************************
 2. Temp Table - Define Columns
