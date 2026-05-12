@@ -12,12 +12,15 @@ NULL is a mark for a missing value- Not a value in itself.  The correct usage of
 6. Sorting
 7. JOINS (See also QueryDataByUsingSELECT.sql and Implicit_Defaults.sql)
 8. Subqueries See NULL used in WHERE_XREF.sql and Implement-Subqueries.sql
+
 9. SET OPERATORS - UNION, INTERSECT, EXCEPT  (Ignores Duplicates)
-10. AGGREGATE Functions (COUNT(*))  - Includes NULLS and Duplicates, Counts number of Rows
-10. AGGREGATE Functions (COUNT(col),SUM(col),AVG(col))   - Ignores NULLS, Includes Duplicates
+
+10.  AGGREGATE Functions (COUNT(*)) 
+     - Includes NULLS and Duplicates, Counts number of Rows
+10.1 AGGREGATE Functions (COUNT(col),SUM(col),AVG(col),MIN(),MAX())   
+     - Ignores NULLS, Includes Duplicates
+
 11. TRY_CONVERT and TRY_PARSE
-12. Aggregate Functions (See also WorkWithData\ImplementAggreateFunctions).
-13. COUNT ( { [ [ ALL | DISTINCT ] expression ] | * } ) 
 
 
 *****************
@@ -274,16 +277,10 @@ UNION treats NULL values as indistiguishable, meaing if all corresponding column
 identical values, those rows are considered duplicates and are removed.
 
 ------------------------------------------
-10. AGGREGATE FUNCTIONS (COUNT,SUM,AVG,MIN,MAX)
+10. AGGREGATE FUNCTIONS -  COUNT(*)   -- Includes NULLS and Duplicates
 ------------------------------------------
-See also:
-WorkWithData/ImplementAggregateQueries.sql
-XREF Lists/Implicit_Defaults.sql  (for GROUP BY and COUNT)
-XREF Lists/Distinct_Versus_Diplicate.sql (GROUP BY removes duplicates)
+See also WorkWithData\ImplementAggreateFunctions)
 
-----------
-COUNT
-----------
 SELECT shipperid,
   COUNT(*) AS numorders,
   COUNT(shippeddate) AS shippedorders,
@@ -295,6 +292,53 @@ GROUP BY shipperid;
 
 -- COUNT(*) - Counts NULLS
 -- COUNT(shippeddate) - Skips NULLS
+
+https://docs.microsoft.com/en-us/sql/t-sql/functions/count-transact-sql?view=sql-server-ver15
+
+COUNT ( { [ [ ALL | DISTINCT ] expression ] | * } )
+If you don't write COUNT (DISTINCT ..) then COUNT (ALL ..) is implicit.
+
+COUNT(*) returns the number of items in a group. This includes NULL values and duplicates.
+
+COUNT(ALL expression) evaluates expression for each row in a group, and returns the number of nonnull values.
+
+COUNT(DISTINCT expression) evaluates expression for each row in a group, and returns the number of unique, nonnull values.
+
+-- COUNT(*) - Counts NULLS
+-- COUNT(shippeddate) - Skips NULLS
+-- COUNT(ALL shippeddate) is the same as COUNT(shippeddate) - Skips NULLS, a duplicate shipped date will be counted more than once
+-- COUNT(DISTINCT shippeddate) -- returns unique shipped date entries - Skips NULLS
+
+COUNT(), AVERAGE(), SUM() Functions
+https://www.w3schools.com/sql/sql_count_avg_sum.asp
+
+-- COUNT(*) - Counts NULLS
+-- COUNT(ProductID) - Skips NULLS, Count the number of rows that have ProductId, not unique ProductID's
+
+
+SELECT AVG(Price)
+FROM Products;
+-- NULL values are ignored
+
+SELECT SUM(Quantity)
+FROM OrderDetails;
+-- NULL Values are ignored
+
+SUM(Price)  -- If all Price rows are NULLS then SUM returns NULL rather than 0
+
+DECLARE @VAL1 INT = NULL
+SELECT SUM(@VAL1)    --- Returns NULL
+SELECT COUNT(@VAL1)  --- Returns 0    (Since NULLS are not counted returns 0)
+
+
+***********************************************************************
+10.1 AGGREGATE Functions (COUNT(col),SUM(col),AVG(col),MIN(),MAX())   
+     - Ignores NULLS, Includes Duplicates
+***********************************************************************
+See also:
+WorkWithData/ImplementAggregateQueries.sql
+XREF Lists/Implicit_Defaults.sql  (for GROUP BY and COUNT)
+XREF Lists/Distinct_Versus_Diplicate.sql (GROUP BY removes duplicates)
 
 ----------------
 MIN, MAX
@@ -332,46 +376,6 @@ The first string converts to an integer, so the TRY_PARSE function returns the v
 ‘B’, will not convert to an integer, so the function returns NULL. The TRY_PARSE function follows the syntax of the 
 PARSE and CAST functions.
 
----------------------------------------------------------------------------
-12. Aggregate Functions (See also WorkWithData\ImplementAggreateFunctions).
----------------------------------------------------------------------------
-COUNT(), AVERAGE(), SUM() Functions
-https://www.w3schools.com/sql/sql_count_avg_sum.asp
-
--- COUNT(*) - Counts NULLS
--- COUNT(ProductID) - Skips NULLS, Count the number of rows that have ProductId, not unique ProductID's
 
 
-SELECT AVG(Price)
-FROM Products;
--- NULL values are ignored
-
-SELECT SUM(Quantity)
-FROM OrderDetails;
--- NULL Values are ignored
-
-SUM(Price)  -- If all Price rows are NULLS then SUM returns NULL rather than 0
-
-DECLARE @VAL1 INT = NULL
-SELECT SUM(@VAL1)    --- Returns NULL
-SELECT COUNT(@VAL1)  --- Returns 0    (Since NULLS are not counted returns 0)
-
------------------------
-13. COUNT
------------------------
-https://docs.microsoft.com/en-us/sql/t-sql/functions/count-transact-sql?view=sql-server-ver15
-
-COUNT ( { [ [ ALL | DISTINCT ] expression ] | * } )
-If you don't write COUNT (DISTINCT ..) then COUNT (ALL ..) is implicit.
-
-COUNT(*) returns the number of items in a group. This includes NULL values and duplicates.
-
-COUNT(ALL expression) evaluates expression for each row in a group, and returns the number of nonnull values.
-
-COUNT(DISTINCT expression) evaluates expression for each row in a group, and returns the number of unique, nonnull values.
-
--- COUNT(*) - Counts NULLS
--- COUNT(shippeddate) - Skips NULLS
--- COUNT(ALL shippeddate) is the same as COUNT(shippeddate) - Skips NULLS, a duplicate shipped date will be counted more than once
--- COUNT(DISTINCT shippeddate) -- returns unique shipped date entries - Skips NULLS
 */

@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\ModifyData",
+    "\\WorkWithData",
+    "\\XREF Lists"
   ],
+  "SelectedNode": "\\XREF Lists\\Tables_or_Virtual_Table_Types.sql",
   "PreviewInSolutionExplorer": false
 }
