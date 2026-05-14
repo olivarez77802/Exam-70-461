@@ -3,36 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\NULL_XRef.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:XREF Lists\\NULL_XRef.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\Tables_or_Virtual_Table_Types.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:XREF Lists\\Tables_or_Virtual_Table_Types.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\WHERE_XREF.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:XREF Lists\\WHERE_XREF.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\Implicit_Defaults_XREF.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:XREF Lists\\Implicit_Defaults_XREF.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\StepWise.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:XREF Lists\\StepWise.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\WorkWithData\\ImplementAggregateQueries.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WorkWithData\\ImplementAggregateQueries.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\NULL_XRef.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:XREF Lists\\NULL_XRef.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\Tables_or_Virtual_Table_Types.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:XREF Lists\\Tables_or_Virtual_Table_Types.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\CreateDatabaseObjects\\Indexes.sql||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CreateDatabaseObjects\\Indexes.sql||{3B902123-F8A7-4915-9F01-361F908088D0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 22,
+          "SelectedChildIndex": 19,
           "Children": [
             {
               "$type": "Bookmark",
@@ -122,73 +94,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "WHERE_XREF.sql",
-              "DocumentMoniker": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\WHERE_XREF.sql",
-              "RelativeDocumentMoniker": "XREF Lists\\WHERE_XREF.sql",
-              "ToolTip": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\WHERE_XREF.sql",
-              "RelativeToolTip": "XREF Lists\\WHERE_XREF.sql",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-05-05T13:14:31.419Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Implicit_Defaults_XREF.sql",
-              "DocumentMoniker": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\Implicit_Defaults_XREF.sql",
-              "RelativeDocumentMoniker": "XREF Lists\\Implicit_Defaults_XREF.sql",
-              "ToolTip": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\Implicit_Defaults_XREF.sql",
-              "RelativeToolTip": "XREF Lists\\Implicit_Defaults_XREF.sql",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-05-05T12:53:53.039Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "StepWise.sql",
-              "DocumentMoniker": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\StepWise.sql",
-              "RelativeDocumentMoniker": "XREF Lists\\StepWise.sql",
-              "ToolTip": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\StepWise.sql",
-              "RelativeToolTip": "XREF Lists\\StepWise.sql",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-04-28T13:54:15.718Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "NULL_XRef.sql ",
-              "DocumentMoniker": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\NULL_XRef.sql",
-              "RelativeDocumentMoniker": "XREF Lists\\NULL_XRef.sql",
-              "ToolTip": "NULL_XRef.sql ",
+              "Title": "Indexes.sql",
+              "DocumentMoniker": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\CreateDatabaseObjects\\Indexes.sql",
+              "RelativeDocumentMoniker": "CreateDatabaseObjects\\Indexes.sql",
+              "ToolTip": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\CreateDatabaseObjects\\Indexes.sql",
+              "RelativeToolTip": "CreateDatabaseObjects\\Indexes.sql",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-04-13T13:13:02.446Z",
+              "WhenOpened": "2026-05-13T13:11:47.919Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Tables_or_Virtual_Table_Types.sql ",
-              "DocumentMoniker": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\XREF Lists\\Tables_or_Virtual_Table_Types.sql",
-              "RelativeDocumentMoniker": "XREF Lists\\Tables_or_Virtual_Table_Types.sql",
-              "ToolTip": "Tables_or_Virtual_Table_Types.sql ",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-05-07T13:07:16.568Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ImplementAggregateQueries.sql",
-              "DocumentMoniker": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\WorkWithData\\ImplementAggregateQueries.sql",
-              "RelativeDocumentMoniker": "WorkWithData\\ImplementAggregateQueries.sql",
-              "ToolTip": "C:\\Users\\Jesse-Olivarez\\OneDrive - TAMUS\\Documents\\GIT-HUB-REPOSITORIES\\Exam-70-461\\WorkWithData\\ImplementAggregateQueries.sql",
-              "RelativeToolTip": "WorkWithData\\ImplementAggregateQueries.sql",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-04-28T13:29:10.263Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
             }
           ]
         }

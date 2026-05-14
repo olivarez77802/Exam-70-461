@@ -6,6 +6,19 @@ See also:
 CreateDatabaseObjects/CreateAndModifyConstraints.sql
 TroubleShootandOptimize/OptimizeQueries.sql
 
+https://www.sqlservercentral.com/blogs/clustered-vs-nonclustered-index-fundamentals-you-need-to-know
+Heap-Clustered Indexes-NonClustered Indexes
+Every table has some natural order to it.  If the order is random and not explicitly
+defined then that table is known as a heap.  Heaps don't perform well for the 
+majority of queries because SQL Server has no meta knowledge about where data
+is stored within a heap.  If you don't have a random heap, that means we have 
+defined the order that data should be stored in a table.  The physical storage
+order of our data is defined by our clustered index.
+
+Phone book is a clustered index, you can look up by name because that's the way it
+was built.
+An index in a book are non clustered indexes.
+
 
 Clustered and NonClustered Indexes
 https://www.youtube.com/watch?v=NGslt99VOCw
